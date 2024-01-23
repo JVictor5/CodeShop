@@ -1,0 +1,20 @@
+{
+  "extends": "@burand/functions/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@config/*": ["./src/core/config/*"],
+      "@models/*": ["./src/core/models/*"],
+      "@providers/*": ["./src/core/providers/*"],
+      "@repositories/*": ["./src/core/repositories/*"],
+      "@utils/*": ["./src/core/utils/*"],
+      "@middlewares/*": ["./src/http/middlewares/*"],
+      "@enums/*": ["./src/core/enums/*"],
+      "@services/*": ["./src/core/services/*"],
+      "@shared/*": ["./src/core/shared/*"],
+      "@interfaces/*": ["./src/core/interfaces/*"]
+    }
+  }
+}
