@@ -2,7 +2,6 @@ import { ApiError } from '@burand/functions/exceptions';
 import { SetDocument } from '@burand/functions/typings';
 import { singleton } from 'tsyringe';
 
-import { UserPermission } from '@enums/UserPermission.js';
 import { UserType } from '@enums/UserType.js';
 import { User } from '@models/User.js';
 import { PasswordProvider } from '@providers/PasswordProvider.js';
@@ -43,13 +42,7 @@ export class CreateAdminUseCase {
       await this._user.set(userData);
 
       await this._auth.setCustomClaims(id, {
-        type: UserType.ADMIN,
-        permissions: [
-          UserPermission.READ_ADMINS,
-          UserPermission.WRITE_ADMINS,
-          UserPermission.READ_USERS,
-          UserPermission.WRITE_USERS
-        ]
+        type: UserType.ADMIN
       });
 
       return id;

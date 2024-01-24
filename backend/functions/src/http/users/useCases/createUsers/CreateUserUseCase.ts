@@ -42,8 +42,7 @@ export class CreateUserUseCase {
       await this._user.set(userData);
 
       await this._auth.setCustomClaims(id, {
-        type: UserType.USER,
-        permissions: []
+        type: UserType.USER
       });
 
       return id;

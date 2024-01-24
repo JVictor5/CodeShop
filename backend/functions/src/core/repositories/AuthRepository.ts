@@ -1,7 +1,6 @@
 import { CreateRequest, UpdateRequest, UserRecord, getAuth } from 'firebase-admin/auth';
 import { singleton } from 'tsyringe';
 
-import { UserPermission } from '@enums/UserPermission.js';
 import { UserType } from '@enums/UserType.js';
 
 const fireAuth = getAuth();
@@ -16,7 +15,6 @@ interface ParamsUpdate extends UpdateRequest {
 }
 
 interface ClaimsParams {
-  permissions: UserPermission[];
   type: UserType;
 }
 
