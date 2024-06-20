@@ -1,1 +1,47 @@
-<p>navbar works!</p>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+
+<header>
+  <nav class="navbar" [class.menu-open]="isMenuOpen">
+    <div class="navbar-brand">
+      <img src="logo-empresa.png" alt="Logo da Empresa" />
+    </div>
+
+    <div class="navbar-icons">
+      <div
+        class="buscar-box"
+        [class.expanded]="isExpanded"
+        (mouseenter)="isHovering = true"
+        (mouseleave)="isHovering = false"
+      >
+        <div class="lupa-buscar" (click)="isExpanded = !isExpanded">
+          <i class="fa fa-search"></i>
+        </div>
+        <div class="input-buscar" *ngIf="isExpanded">
+          <input type="text" />
+        </div>
+      </div>
+
+      <button class="icon-button">
+        <i class="fa fa-shopping-cart"></i>
+      </button>
+      <button class="icon-button" (click)="toggleMenu()">
+        <i class="fa" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
+    </div>
+
+    <div class="side-menu" [class.open]="isMenuOpen">
+      <ul>
+        <li><a href="">Home</a></li>
+        <li>About</li>
+        <li>Courses</li>
+        <li><a href="/login">cadastro</a></li>
+        <li>{{ username }}</li>
+        <a href="/perfil"><img [src]="avatar" alt="Avatar" /></a>
+        <li><button (click)="logout()">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+</header>

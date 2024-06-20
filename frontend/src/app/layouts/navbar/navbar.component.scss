@@ -1,0 +1,141 @@
+.navbar-icons {
+  position: relative;
+}
+
+.buscar-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  width: 50px; /* Largura inicial da caixa de busca */
+  transition: width 0.5s ease; /* Animação suave para a expansão da caixa */
+}
+
+.buscar-box.expanded {
+  width: 250px; /* Largura final da caixa de busca quando expandida */
+}
+
+.input-buscar input {
+  flex-grow: 1; /* Faz o input ocupar todo o espaço disponível */
+  border: none;
+}
+
+.lupa-buscar,
+.fechar {
+  margin: 0 5px;
+}
+
+.lupa-buscar i,
+.fechar i {
+  cursor: pointer;
+}
+
+// navbar
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  position: relative;
+
+  &.menu-open {
+    .navbar-icons {
+      transform: translateX(-300px);
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+
+  .navbar-brand img {
+    height: 40px;
+  }
+
+  .navbar-icons {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+
+    .buscar-box {
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      .lupa-buscar {
+        cursor: pointer;
+        padding: 5px;
+        i {
+          font-size: 20px;
+        }
+      }
+
+      .input-buscar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        input {
+          width: 200px;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+        }
+      }
+
+      &.expanded {
+        .input-buscar {
+          display: block;
+        }
+      }
+    }
+
+    .icon-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-left: 15px;
+      i {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .side-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    &.open {
+      right: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 20px 0;
+
+        a {
+          text-decoration: none;
+          color: #333;
+          font-size: 18px;
+        }
+      }
+
+      img {
+        margin-top: 20px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+}

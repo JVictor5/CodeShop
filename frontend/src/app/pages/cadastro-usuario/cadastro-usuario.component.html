@@ -1,0 +1,39 @@
+<form [formGroup]="form">
+  <label>
+    Email:
+    <input type="email" formControlName="email" />
+  </label>
+
+  <label>
+    Name:
+    <input type="name" formControlName="name" />
+  </label>
+
+  <label>
+    Senha:
+    <input type="password" formControlName="password" />
+  </label>
+  <label>
+    document:
+    <input type="document" formControlName="document" />
+  </label>
+  <label>
+    phone:
+    <input type="phone" formControlName="phone" />
+  </label>
+
+  <button (click)="handleSubmit()">Criar</button>
+</form>
+
+<form [formGroup]="login" (ngSubmit)="onSubmit()">
+  <label>
+    Email:
+    <input type="email" formControlName="email" required />
+  </label>
+
+  <label>
+    Senha:
+    <input type="password" formControlName="password" required />
+  </label>
+  <button type="submit" [disabled]="!login.valid">Login</button>
+</form>

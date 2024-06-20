@@ -8,5 +8,9 @@ export interface User extends Model {
   email: string;
   lastAccess: Date | null;
   name: string;
+  document: string;
+  documentType: 'CPF' | 'CNPJ';
   type: UserType;
+  phone: string;
+  nivel: number;
 }

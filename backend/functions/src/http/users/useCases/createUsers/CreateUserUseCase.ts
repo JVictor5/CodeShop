@@ -4,7 +4,7 @@ import { singleton } from 'tsyringe';
 
 import { UserType } from '@enums/UserType.js';
 import { User } from '@models/User.js';
-import { PasswordProvider } from '@providers/PasswordProvider.js';
+// import { PasswordProvider } from '@providers/PasswordProvider.js';
 import { AuthRepository } from '@repositories/AuthRepository.js';
 import { UserRepository } from '@repositories/UserRepository.js';
 import { UserParams } from './CreateUserValidation.js';
@@ -13,26 +13,31 @@ import { UserParams } from './CreateUserValidation.js';
 export class CreateUserUseCase {
   constructor(
     private _user: UserRepository,
-    private _auth: AuthRepository,
-    private _password: PasswordProvider
+    private _auth: AuthRepository
+    // ,private _password: PasswordProvider
   ) {}
 
-  async execute({ email, name }: UserParams): Promise<string> {
+  async execute({ email, password, name, document, documentType, phone, nivel }: UserParams): Promise<string> {
     let id = null;
 
     try {
-      const password = this._password.defaultPassword;
+      // const password = this._password.defaultPassword;
 
       id = await this._auth.create({
         email,
         password,
-        displayName: name
+        displayName: name,
+        phoneNumber: phone
       });
 
       const userData: SetDocument<User> = {
         id,
         name,
         email,
+        document,
+        documentType,
+        phone,
+        nivel,
         active: true,
         avatar: null,
         type: UserType.USER,
@@ -50,6 +55,7 @@ export class CreateUserUseCase {
       if (id) {
         await this._auth.delete(id);
       }
+      // console.error(error);
 
       throw new ApiError('User create failed', 'application/create-user', 500);
     }
