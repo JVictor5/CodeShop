@@ -11,7 +11,7 @@ import {
 import { LocalStorage } from '@burand/angular';
 import { BehaviorSubject, first, lastValueFrom } from 'rxjs';
 import { environment } from '../../../environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CadastroForm } from '../interfaces/cadastro-form.interfece';
 import { UpdateForms } from '../interfaces/update-form.interface';
 
@@ -48,12 +48,22 @@ export class AuthService {
   };
 
   async cad(form: CadastroForm) {
-    return lastValueFrom(this.http.post(`${environment.urlApi}/users`, form));
+    try {
+      const response = await lastValueFrom(
+        this.http.post(`${environment.urlApi}/users`, form)
+      );
+      console.log(response);
+    } catch (error) {
+      console.error('Erro ao cadastrar usuário:', error);
+    }
   }
-
-  async update(form: UpdateForms) {
+  async update(form: UpdateForms, id: string) {
+    const token = await this.getBearerToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
     return lastValueFrom(
-      this.http.post(`${environment.urlApi}/users/:id`, form)
+      this.http.put(`${environment.urlApi}/users/${id}`, form, { headers })
     );
   }
 
@@ -71,10 +81,10 @@ export class AuthService {
       if (user) {
         this.currentUserSubject.next(user);
         if (typeof window !== 'undefined') {
-          const { uid, email, displayName, photoURL } = user;
+          const { uid, email, displayName } = user;
           LocalStorage.setItem(
             'user',
-            JSON.stringify({ uid, email, displayName, photoURL })
+            JSON.stringify({ uid, email, displayName })
           );
         }
       } else {

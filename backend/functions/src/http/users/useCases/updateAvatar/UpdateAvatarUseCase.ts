@@ -25,9 +25,13 @@ export class UpdateAvatarUseCase {
         fs.mkdirSync(userDir);
       }
 
-      const filepath = path.join(userDir, `${file.fieldname}.${file.ext}`);
-
-      fs.writeFileSync(filepath, file.buffer);
+      if (file.mime.startsWith('image/')) {
+        const newFilename = `${file.fieldname}.jpg`;
+        const filepath = path.join(userDir, newFilename);
+        fs.writeFileSync(filepath, file.buffer);
+      } else {
+        console.warn(`Arquivo ${file.fieldname} não é uma imagem e não será convertido.`);
+      }
     });
   }
 }

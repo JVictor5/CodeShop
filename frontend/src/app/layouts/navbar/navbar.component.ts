@@ -1,9 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { CommonModule } from '@angular/common';
-import { environment } from '../../../environment/environment';
-import { HttpClient } from '@angular/common/http';
+
+import { UserRepository } from '../../core/repositories/user.repository';
 
 @Component({
   selector: 'app-navbar',
@@ -13,9 +13,12 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
+  [x: string]: any;
   isExpanded = false;
   isHovering = false;
   router: any;
+
+  private userRepository = inject(UserRepository);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -25,10 +28,11 @@ export class NavbarComponent {
   }
 
   username: string = '';
-  avatar: string =
-    'http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/users/Tu81S35L63XGdWJAPcv3bwBilcq2/avatar';
+  id: string = '';
+  avatar: string = '';
+  nivel = 0;
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService) {}
 
   isMenuOpen = false;
 
@@ -38,45 +42,22 @@ export class NavbarComponent {
       this.isExpanded = false;
     }
   }
-
-  ngOnInit() {
-    this.authService.currentUser.subscribe((user) => {
-      if (user) {
-        this.username = user.displayName;
-        this.getAvatar(); // Chame o método para obter o avatar
-      } else {
-        this.username = '';
+  async ngOnInit() {
+    // this.doc = userr.document;
+    this.authService.currentUser.subscribe(async (user) => {
+      if (!user) {
+        this.username = 'Usuário';
         this.avatar = 'assets/avatar/avatarPadrao.jpg';
       }
+      this.username = user.displayName;
+      this.id = user.uid;
+      this.avatar = `http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/users/${this.id}/avatar`;
+      const userFromApi = await this.userRepository.getById(`${this.id}`);
+      this.nivel = userFromApi.nivel;
     });
   }
 
   logout() {
     this.authService.signOut();
-  }
-
-  // teste
-
-  getAvatar() {
-    this.http
-      .get(`${environment.urlApi}/users/:id/avatar`, {
-        responseType: 'arraybuffer',
-      })
-      .subscribe(
-        (data: ArrayBuffer) => {
-          // Converta o ArrayBuffer em uma URL de dados (base64) para exibir a imagem
-          const blob = new Blob([data], { type: 'image/jpeg' }); // Assumindo que o avatar é uma imagem JPEG
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.avatar = reader.result as string;
-          };
-          reader.readAsDataURL(blob);
-        },
-        (error: any) => {
-          console.error('Erro ao obter o avatar:', error);
-          this.avatar =
-            'http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/users/Tu81S35L63XGdWJAPcv3bwBilcq2/avatar';
-        }
-      );
   }
 }

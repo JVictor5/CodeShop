@@ -1,5 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -12,12 +11,11 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-cadastro-usuario',
   standalone: true,
-  imports: [RouterOutlet, ReactiveFormsModule, HttpClientModule],
+  imports: [RouterOutlet, ReactiveFormsModule],
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.scss',
 })
 export class CadastroUsuarioComponent {
-  private http = inject(HttpClient);
   private builder = inject(NonNullableFormBuilder);
 
   username: string = '';

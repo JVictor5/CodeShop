@@ -11,7 +11,10 @@ export class UpdateUserUseCase {
     private _auth: AuthRepository
   ) {}
 
-  async execute(id: string, { email, password }: UpdateParams): Promise<void> {
+  async execute(
+    id: string,
+    { email, password, name, document, documentType, phone, nivel }: UpdateParams
+  ): Promise<void> {
     if (email) {
       await this._auth.update({
         id,
@@ -20,7 +23,12 @@ export class UpdateUserUseCase {
 
       await this._user.update({
         id,
-        email
+        email,
+        name,
+        document,
+        documentType,
+        phone,
+        nivel
       });
     }
 
