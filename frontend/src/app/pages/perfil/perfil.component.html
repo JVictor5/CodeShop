@@ -1,2 +1,117 @@
-<input type="file" (change)="onFileSelected($event)" />
-<button (click)="uploadFile()">Enviar Arquivo</button>
+<div class="cont text-center">
+  <div class="profile">
+    <div class="avatar">
+      <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        ><img class="rounded-circle" src="{{ avatar }}" alt=""
+      /></a>
+    </div>
+    <h2>{{ username }}</h2>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel">
+          Alterar Perfil
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" id="formModal">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              [value]="username"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              id="email"
+              value=""
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Senha</label>
+            <input
+              type="text"
+              formControlName="password"
+              class="form-control"
+              id="password"
+              value=""
+            />
+          </div>
+          <div class="mb-3">
+            <label for="document" class="form-label">documento</label>
+            <input
+              type="text"
+              formControlName="document"
+              class="form-control"
+              id="document"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Telefone</label>
+            <input
+              type="text"
+              formControlName="phone"
+              class="form-control"
+              id="phone"
+              value=""
+            />
+          </div>
+          <div class="mb-3">
+            <label for="file" class="form-label">Imagem de Perfil</label>
+            <input
+              type="file"
+              class="form-control"
+              id="inputGroupFile01"
+              (change)="onFileSelected($event)"
+            />
+          </div>
+          <button type="submit" (click)="submit()" class="btn btn-primary">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="menu">
+  <div>
+    <a href="">Sair</a>
+  </div>
+  <div>
+    <a href="">Sair</a>
+  </div>
+</div>
+
+<!-- <input type="file" (change)="onFileSelected($event)" />
+<button (click)="uploadFile()">Enviar Arquivo</button> -->
+
+<!--
+Para o produto!
+<form (submit)="uploadImages($event)">
+  <input type="file" multiple (change)="onFileSelected($event)" />
+  <button (click)="uploadFile()" type="submit">Enviar</button>
+</form> -->

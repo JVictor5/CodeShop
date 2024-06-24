@@ -23,7 +23,6 @@
           <input type="text" />
         </div>
       </div>
-
       <button class="icon-button">
         <i class="fa fa-shopping-cart"></i>
       </button>
@@ -35,12 +34,26 @@
     <div class="side-menu" [class.open]="isMenuOpen">
       <ul>
         <li><a href="">Home</a></li>
-        <li>About</li>
-        <li>Courses</li>
-        <li><a href="/login">cadastro</a></li>
-        <li>{{ username }}</li>
-        <a href="/perfil"><img [src]="avatar" alt="Avatar" /></a>
-        <li><button (click)="logout()">Logout</button></li>
+        <li>
+          <a href="/login">cadastro</a>
+        </li>
+        <li *ngIf="nivel >= 2" class="username">Cadastrar Produto</li>
+        <div class="profile">
+          <a href="/perfil " *ngIf="id != ''; else elsePerfil"
+            ><img [src]="avatar" alt="Avatar" class="avatar"
+          /></a>
+          <ng-template #elsePerfil>
+            <a href="/login "
+              ><img [src]="avatar" alt="Avatar" class="avatar"
+            /></a>
+          </ng-template>
+          <li class="username">{{ username }}</li>
+          <li>
+            <button (click)="logout()" class="logout-button">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </li>
+        </div>
       </ul>
     </div>
   </nav>
