@@ -5,24 +5,36 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-cadastro-usuario',
   standalone: true,
-  imports: [RouterOutlet, ReactiveFormsModule],
+  imports: [RouterOutlet, ReactiveFormsModule, NgxMaskDirective, NgxMaskPipe],
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.scss',
 })
 export class CadastroUsuarioComponent {
+  [x: string]: any;
+  isSignUpMode: boolean = false;
+
+  switchToSignUp() {
+    this.isSignUpMode = true;
+  }
+
+  switchToSignIn() {
+    this.isSignUpMode = false;
+  }
+
   private builder = inject(NonNullableFormBuilder);
 
   username: string = '';
 
   async ngOnInit() {}
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login = this.builder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -37,7 +49,6 @@ export class CadastroUsuarioComponent {
     documentType: ['', [Validators.required]],
     phone: ['', [Validators.required]],
     nivel: [1, [Validators.required]],
-    avatar: ['assets/avatar/avatarPadrao.jpg', [Validators.required]],
   });
 
   setDocumentType() {
@@ -68,13 +79,38 @@ export class CadastroUsuarioComponent {
     } catch (error) {
       console.error(error);
     }
-    console.log(this.fValue);
   }
 
   onSubmit() {
     if (this.login.valid) {
       const { email, password } = this.login.value;
-      this.authService.signIn(email!, password!);
+      this.authService
+        .signIn(email!, password!)
+        .then(() => {
+          this.router.navigate(['/']).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((error) => {
+          console.error('Erro ao fazer login:', error);
+        });
+    }
+  }
+
+  recover() {
+    console.log(this.login.value.email);
+    if (this.login.value.email) {
+      this.authService.recoverPass(this.login.value.email);
+    } else {
+      console.error('O email não foi fornecido.');
+    }
+  }
+  recoverPassword() {
+    if (this.login.value.email) {
+      this.authService.recoverPassword(this.login.value.email);
+      console.log(this.login.value.email);
+    } else {
+      console.error('O email não foi fornecido.');
     }
   }
 }

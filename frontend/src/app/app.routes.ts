@@ -1,9 +1,4 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
-
-import { CommonModule } from '@angular/common';
-import { HomeComponent } from './pages/home/home.component';
+import { Routes } from '@angular/router';
 import { LayoutComponent } from './layouts/layout.component';
 
 export const routes: Routes = [
@@ -32,6 +27,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/perfil/perfil.component').then(
             (a) => a.PerfilComponent
+          ),
+      },
+      {
+        path: 'trocar-senha',
+        title: 'Troca de Senha',
+        loadComponent: () =>
+          import('./pages/recover-passoword/recover-passoword.component').then(
+            (c) => c.RecoverPassowordComponent
           ),
       },
     ],

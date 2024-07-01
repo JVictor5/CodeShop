@@ -6,5 +6,4 @@ export interface CadastroForm {
   documentType: string;
   phone: string;
   nivel: number;
-  avatar: string;
 }
