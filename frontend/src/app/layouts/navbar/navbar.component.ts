@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 import { UserRepository } from '../../core/repositories/user.repository';
@@ -8,7 +8,7 @@ import { UserRepository } from '../../core/repositories/user.repository';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
@@ -42,6 +42,7 @@ export class NavbarComponent {
       this.isExpanded = false;
     }
   }
+
   async ngOnInit() {
     // this.doc = userr.document;
     this.authService.currentUser.subscribe(async (user) => {

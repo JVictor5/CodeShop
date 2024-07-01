@@ -1,39 +1,123 @@
-<form [formGroup]="form">
-  <label>
-    Email:
-    <input type="email" formControlName="email" />
-  </label>
+<div class="cont" [class.sign-up-mode]="isSignUpMode">
+  <div class="forms-container">
+    <div class="signin-signup">
+      <!-- Login Form -->
+      <form [formGroup]="login" (ngSubmit)="onSubmit()" class="sign-in-form">
+        <h2 class="title">Login</h2>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            placeholder="Email"
+            formControlName="email"
+            required
+          />
+        </div>
 
-  <label>
-    Name:
-    <input type="name" formControlName="name" />
-  </label>
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            placeholder="Senha"
+            formControlName="password"
+            required
+          />
+        </div>
 
-  <label>
-    Senha:
-    <input type="password" formControlName="password" />
-  </label>
-  <label>
-    document:
-    <input type="document" formControlName="document" />
-  </label>
-  <label>
-    phone:
-    <input type="phone" formControlName="phone" />
-  </label>
+        <a class="recover" type="submit" (click)="recover()"
+          >Esqueci minha senha</a
+        >
+        <input
+          type="submit"
+          value="Login"
+          class="btn solid"
+          [disabled]="!login.valid"
+        />
+      </form>
 
-  <button (click)="handleSubmit()">Criar</button>
-</form>
+      <!-- Signup Form -->
 
-<form [formGroup]="login" (ngSubmit)="onSubmit()">
-  <label>
-    Email:
-    <input type="email" formControlName="email" required />
-  </label>
+      <form
+        action="#"
+        class="sign-up-form"
+        [formGroup]="form"
+        (ngSubmit)="handleSubmit()"
+      >
+        <h2 class="title">Cadastro</h2>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Username" formControlName="name" />
+        </div>
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input type="text" placeholder="Email" formControlName="email" />
+        </div>
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+          />
+        </div>
+        <div class="input-field">
+          <i class="fa-solid fa-address-card"></i>
+          <input
+            type="document"
+            mask="CPF_CNPJ"
+            formControlName="document"
+            placeholder="CPF/CNPJ"
+          />
+        </div>
+        <div class="input-field">
+          <i class="fa-solid fa-phone"></i>
+          <input
+            type="text"
+            mask=" (00) 0000-0000|| (00) 00000-0000"
+            prefix="+55"
+            formControlName="phone"
+            placeholder="(00) 00000-0000"
+          />
+        </div>
+        <input type="submit" value="Cadastrar" class="btn solid" />
+      </form>
+    </div>
+  </div>
 
-  <label>
-    Senha:
-    <input type="password" formControlName="password" required />
-  </label>
-  <button type="submit" [disabled]="!login.valid">Login</button>
-</form>
+  <div class="panels-container">
+    <div class="panel left-panel">
+      <div class="content">
+        <h3>Ainda não tem conta ?</h3>
+        <p>Crie uma agora mesmo</p>
+        <button
+          class="btn transparent"
+          id="sign-up-btn"
+          (click)="switchToSignUp()"
+        >
+          Cadastro
+        </button>
+      </div>
+
+      <img src="../../../assets/imgs/login.svg" class="image" alt="" />
+    </div>
+    <div class="panel right-panel">
+      <div class="content">
+        <h3>Bem Vindo Novamente!</h3>
+        <p>Faça o login e se conecte no CodeShop</p>
+        <button
+          class="btn transparent"
+          id="sign-in-btn"
+          (click)="switchToSignIn()"
+        >
+          Login
+        </button>
+      </div>
+
+      <img
+        src="../../../assets/imgs/undraw_access_account_re_8spm.svg"
+        class="image imgAccount"
+        alt=""
+      />
+    </div>
+  </div>
+</div>

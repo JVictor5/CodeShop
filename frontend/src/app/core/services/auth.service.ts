@@ -1,26 +1,28 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   Auth,
   User as FireUser,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
   authState,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
 } from '@angular/fire/auth';
 import { LocalStorage } from '@burand/angular';
 import { BehaviorSubject, first, lastValueFrom } from 'rxjs';
 import { environment } from '../../../environment/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CadastroForm } from '../interfaces/cadastro-form.interfece';
 import { UpdateForms } from '../interfaces/update-form.interface';
+import { Form } from '@angular/forms';
+import { Recover } from '../interfaces/recover';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  [x: string]: any;
-
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
@@ -57,6 +59,7 @@ export class AuthService {
       console.error('Erro ao cadastrar usuário:', error);
     }
   }
+
   async update(form: UpdateForms, id: string) {
     const token = await this.getBearerToken();
     const headers = new HttpHeaders({
@@ -110,5 +113,40 @@ export class AuthService {
 
   getFirebaseUser(): Promise<FireUser | null> {
     return lastValueFrom(authState(this.auth).pipe(first()));
+  }
+
+  async recoverPassword(email: string) {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+      console.log('success');
+      return { error: null };
+    } catch (error: any) {
+      return { error };
+    }
+  }
+  async recoverPass(email: string) {
+    console.log('email:', email);
+    const code = btoa(email);
+    const url = `http://localhost:4200/trocar-senha?code=${code}`;
+    try {
+      const response = await lastValueFrom(
+        this.http.post(`${environment.urlApi}/users/email`, { email, url })
+      );
+      console.log(response);
+    } catch (error) {
+      console.error('Erro ao enviar o email para o usuário:', error);
+    }
+  }
+
+  async newPass(form: Recover) {
+    console.log('form:', form);
+    try {
+      const response = await lastValueFrom(
+        this.http.post(`${environment.urlApi}/users/pass`, form)
+      );
+      console.log(response);
+    } catch (error) {
+      console.error('Erro ao trocar a senha do usuário:', error);
+    }
   }
 }

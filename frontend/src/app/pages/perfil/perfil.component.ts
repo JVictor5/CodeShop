@@ -85,7 +85,6 @@ export class PerfilComponent {
   async update() {
     this.setDocumentType();
     try {
-      debugger;
       const response = await this.authService.update(this.fValue, this.id);
       console.log(response);
     } catch (error) {
