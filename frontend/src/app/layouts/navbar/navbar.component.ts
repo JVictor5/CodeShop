@@ -30,16 +30,23 @@ export class NavbarComponent {
   username: string = '';
   id: string = '';
   avatar: string = '';
+  email: string = '';
+
   nivel = 0;
 
   constructor(private authService: AuthService) {}
 
-  isMenuOpen = false;
+  isOpen = true;
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-    if (this.isMenuOpen) {
-      this.isExpanded = false;
+  toggleMenu(): void {
+    this.isOpen = !this.isOpen;
+  }
+
+  toggleMen(event: Event): void {
+    const arrowParent = (event.target as HTMLElement).parentElement
+      ?.parentElement;
+    if (arrowParent) {
+      arrowParent.classList.toggle('showMenu');
     }
   }
 

@@ -1,24 +1,34 @@
-import { Component, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 
-import { RouterOutlet, Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { Observable, OperatorFunction, distinctUntilChanged, map } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-cadastro-usuario',
   standalone: true,
-  imports: [RouterOutlet, ReactiveFormsModule, NgxMaskDirective, NgxMaskPipe],
+  imports: [
+    RouterOutlet,
+    ReactiveFormsModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    NgbModule,
+  ],
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
 export class CadastroUsuarioComponent {
-  [x: string]: any;
   isSignUpMode: boolean = false;
+  showDomainSuggestions: boolean = false;
 
   switchToSignUp() {
     this.isSignUpMode = true;
@@ -27,6 +37,21 @@ export class CadastroUsuarioComponent {
   switchToSignIn() {
     this.isSignUpMode = false;
   }
+
+  search: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) =>
+    text$.pipe(
+      distinctUntilChanged(),
+      map((term) => {
+        if (!term || term.indexOf('@') >= 0 || term.length < 1) {
+          return [];
+        }
+        return ['@gmail.com', '@hotmail.com', '@yahoo.com', '@outlook.com'].map(
+          (domain) => `${term}${domain}`
+        );
+      })
+    );
 
   private builder = inject(NonNullableFormBuilder);
 
@@ -46,7 +71,7 @@ export class CadastroUsuarioComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
     document: ['', [Validators.required]],
-    documentType: ['', [Validators.required]],
+    documentType: [''],
     phone: ['', [Validators.required]],
     nivel: [1, [Validators.required]],
   });
@@ -97,18 +122,10 @@ export class CadastroUsuarioComponent {
     }
   }
 
-  recover() {
+  recoverPassword() {
     console.log(this.login.value.email);
     if (this.login.value.email) {
       this.authService.recoverPass(this.login.value.email);
-    } else {
-      console.error('O email não foi fornecido.');
-    }
-  }
-  recoverPassword() {
-    if (this.login.value.email) {
-      this.authService.recoverPassword(this.login.value.email);
-      console.log(this.login.value.email);
     } else {
       console.error('O email não foi fornecido.');
     }

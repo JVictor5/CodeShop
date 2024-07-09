@@ -1,3 +1,4 @@
+// Variáveis
 $primary-color: #8c00ff;
 $secondary-color: #ab37f8;
 $gradient-colors: linear-gradient(
@@ -7,7 +8,6 @@ $gradient-colors: linear-gradient(
   #b5862d 51%,
   #e4d27a 86%
 );
-
 $gradient-mult: linear-gradient(
   -48deg,
   rgba(62, 46, 73, 1) 1%,
@@ -17,6 +17,7 @@ $gradient-mult: linear-gradient(
   #8757a3 89%
 );
 
+// Reset
 * {
   margin: 0;
   padding: 0;
@@ -28,6 +29,47 @@ input {
   font-family: "Poppins", sans-serif;
 }
 
+::ng-deep .dropdown-menu {
+  --bs-dropdown-zindex: 1000;
+  --bs-dropdown-max-width: 23.75rem;
+  --bs-dropdown-min-width: 90%;
+  --bs-dropdown-padding-y: 0.5rem;
+  --bs-dropdown-spacer: 0.125rem;
+  --bs-dropdown-font-size: 1rem;
+  --bs-dropdown-bg: var(--bs-body-bg);
+  --bs-dropdown-border-color: var(--bs-border-color-translucent);
+  --bs-dropdown-border-radius: var(--bs-border-radius);
+  --bs-dropdown-border-width: var(--bs-border-width);
+  --bs-dropdown-inner-border-radius: calc(
+    var(--bs-border-radius) - var(--bs-border-width)
+  );
+  --bs-dropdown-divider-bg: var(--bs-border-color-translucent);
+  --bs-dropdown-link-active-color: #fff;
+  --bs-dropdown-link-active-bg: purple;
+  --bs-dropdown-link-disabled-color: var(--bs-tertiary-color);
+  --bs-dropdown-item-padding-x: 1rem;
+  --bs-dropdown-item-padding-y: 0.25rem;
+  --bs-dropdown-header-color: #6c757d;
+  --bs-dropdown-header-padding-x: 1rem;
+  --bs-dropdown-header-padding-y: 0.5rem;
+  position: relative;
+  z-index: var(--bs-dropdown-zindex);
+  display: none;
+  min-width: 280px;
+  margin: 0 -10% !important;
+  font-size: var(--bs-dropdown-font-size);
+  color: var(--bs-dropdown-color);
+  text-align: left;
+  list-style: none;
+  background-color: var(--bs-dropdown-bg);
+  background-clip: padding-box;
+  border: 2px solid black;
+  border-radius: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+// Contêiner principal
 .cont {
   position: relative;
   width: 100%;
@@ -393,5 +435,18 @@ form {
         left: 50%;
       }
     }
+  }
+}
+
+// Aplicar estilos adicionais para alinhar o dropdown
+.input-field {
+  position: relative;
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
   }
 }

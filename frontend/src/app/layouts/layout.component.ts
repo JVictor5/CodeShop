@@ -16,9 +16,16 @@ import { NavbarComponent } from './navbar/navbar.component';
 })
 export class LayoutComponent {
   hide = this.isLoginRoute();
-  constructor(private router: Router) {}
+
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   isLoginRoute(): boolean {
-    return this.router.url === '/login';
+    const currentUrl = this.router.url;
+    const base64Prefix = '/trocar-senha?code=';
+    
+    if (currentUrl.startsWith(base64Prefix)) {
+      return true;
+    }
+    return currentUrl === '/login';
   }
 }

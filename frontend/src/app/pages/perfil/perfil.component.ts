@@ -7,17 +7,30 @@ import {
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
+import { CadastroUsuarioComponent } from '../cadastro-usuario/cadastro-usuario.component';
+import { CommonModule } from '@angular/common';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [ReactiveFormsModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss',
+  imports: [
+    ReactiveFormsModule,
+    CadastroUsuarioComponent,
+    CommonModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+  ],
 })
 export class PerfilComponent {
   selectedFile: File | null = null;
   username: string = '';
+  documentType: string = '';
+  document: string = '';
+  email: string = '';
+  phone: string = '';
   avatar: string = '';
   id: string = '';
 
@@ -28,6 +41,19 @@ export class PerfilComponent {
     private imgService: ImgService,
     private authService: AuthService
   ) {}
+
+  exibirConteudo = true; // Opção padrão inicialmente visível
+  opcaoSelecionada: string | null = null;
+
+  mostrarConteudo() {
+    this.exibirConteudo = true;
+    this.opcaoSelecionada = null; // Limpa a seleção de outras opções
+  }
+
+  exibirOpcao(opcao: string) {
+    this.exibirConteudo = false; // Esconde o conteúdo principal
+    this.opcaoSelecionada = opcao; // Define a opção selecionada
+  }
 
   form = this.builder.group({
     name: ['', []],
@@ -49,6 +75,10 @@ export class PerfilComponent {
       this.avatar = `http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/users/${this.id}/avatar`;
       const userFromApi = await this.userRepository.getById(`${this.id}`);
       this.username = userFromApi.name;
+      this.document = userFromApi.document;
+      this.email = userFromApi.email;
+      this.documentType = userFromApi.documentType;
+      this.phone = userFromApi.phone;
 
       this.form.patchValue({
         name: userFromApi.name,

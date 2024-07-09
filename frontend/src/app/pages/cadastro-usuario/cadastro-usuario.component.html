@@ -10,6 +10,7 @@
             type="text"
             placeholder="Email"
             formControlName="email"
+            [ngbTypeahead]="search"
             required
           />
         </div>
@@ -24,7 +25,7 @@
           />
         </div>
 
-        <a class="recover" type="submit" (click)="recover()"
+        <a class="recover" type="submit" (click)="recoverPassword()"
           >Esqueci minha senha</a
         >
         <input
@@ -50,7 +51,13 @@
         </div>
         <div class="input-field">
           <i class="fas fa-envelope"></i>
-          <input type="text" placeholder="Email" formControlName="email" />
+          <input
+            type="text"
+            placeholder="Email"
+            formControlName="email"
+            [ngbTypeahead]="search"
+            class="custom-typeahead"
+          />
         </div>
         <div class="input-field">
           <i class="fas fa-lock"></i>
@@ -79,7 +86,12 @@
             placeholder="(00) 00000-0000"
           />
         </div>
-        <input type="submit" value="Cadastrar" class="btn solid" />
+        <input
+          type="submit"
+          value="Cadastrar"
+          class="btn solid"
+          [disabled]="!form.valid"
+        />
       </form>
     </div>
   </div>

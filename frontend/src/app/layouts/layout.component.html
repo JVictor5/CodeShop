@@ -1,9 +1,7 @@
-<div>
-  <div [hidden]="hide">
-    <app-navbar></app-navbar>
-  </div>
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-  <app-footer [hidden]="hide"></app-footer>
-</div>
+<app-navbar [hidden]="hide"></app-navbar>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer [hidden]="hide"></app-footer>

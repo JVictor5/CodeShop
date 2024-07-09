@@ -115,15 +115,6 @@ export class AuthService {
     return lastValueFrom(authState(this.auth).pipe(first()));
   }
 
-  async recoverPassword(email: string) {
-    try {
-      await sendPasswordResetEmail(this.auth, email);
-      console.log('success');
-      return { error: null };
-    } catch (error: any) {
-      return { error };
-    }
-  }
   async recoverPass(email: string) {
     console.log('email:', email);
     const code = btoa(email);
