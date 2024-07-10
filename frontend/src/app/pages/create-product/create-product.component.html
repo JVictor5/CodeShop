@@ -1,0 +1,29 @@
+<p>create-product works!</p>
+<form [formGroup]="form">
+    <label>
+        Nome:
+        <input type="text" formControlName="name" />
+    </label>
+    <label>
+        Descrição:
+        <input type="text" formControlName="description" />
+    </label>
+    <label>
+        Preço:
+        <input type="number" formControlName="price" />
+    </label>
+    <label>
+        Quantidade:
+        <input type="number" formControlName="quantity" />
+    </label>
+    <label>
+        Capa:
+        <input type="file" (change)="onCapaChange($event)" formControlName="capa" />
+    </label>
+    <label>
+        Imagens:
+        <input type="file" (change)="onImagesChange($event)" formControlName="images" multiple />
+    </label>
+
+    <button (click)="handleSubmit()">Criar</button>
+</form>

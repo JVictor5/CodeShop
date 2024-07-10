@@ -51,7 +51,7 @@ export class ImgService {
     const formData = new FormData();
 
     // Convert a coleção de arquivos em um array
-    const fileArray = Array.from(files);
+    const fileArray = files;
 
     fileArray.forEach((file, index) => {
       formData.append(`file${index}`, file, file.name);

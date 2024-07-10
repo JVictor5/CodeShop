@@ -1,0 +1,21 @@
+<p>update-product works!</p>
+<form [formGroup]="form">
+    <label>
+        Nome:
+        <input type="text" formControlName="name" />
+    </label>
+    <label>
+        Descrição:
+        <input type="text" formControlName="description" />
+    </label>
+    <label>
+        Preço:
+        <input type="number" formControlName="price" />
+    </label>
+    <label>
+        Quantidade:
+        <input type="number" formControlName="quantity" />
+    </label>
+
+    <button (click)="handleSubmit()">Atualizar</button>
+</form>

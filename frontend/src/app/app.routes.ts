@@ -37,6 +37,22 @@ export const routes: Routes = [
             (c) => c.RecoverPassowordComponent
           ),
       },
+      {
+        path: 'novo-produto',
+        title: 'Novo produto',
+        loadComponent: () => 
+          import('./pages/create-product/create-product.component').then(
+            (a) => a.CreateProductComponent
+          )
+      },
+      {
+        path: 'atualizar-produto/:id',
+        title: 'Atualizar produto',
+        loadComponent: () => 
+          import('./pages/update-product/update-product.component').then(
+            (a) => a.UpdateProductComponent
+          )
+      }
     ],
   },
 ];
