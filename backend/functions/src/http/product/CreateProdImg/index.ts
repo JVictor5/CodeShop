@@ -12,7 +12,7 @@ export async function handleFileUpload(request: Request, response: Response): Pr
 
   const productMediaUpload = container.resolve(ProductMediaUploadUseCase);
 
-  await productMediaUpload.execute(userId, productId, request.files);
+  const savedPaths = await productMediaUpload.execute(userId, productId, request.files);
 
-  return response.status(204).json();
+  return response.status(200).json({ savedPaths });
 }

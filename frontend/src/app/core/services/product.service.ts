@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { CreateProduct } from "../interfaces/create-product-interface";
 import { UpdateProduct } from "../interfaces/update-product-interface";
-import { ProductRepository } from "../repositories/product.repository"; 
+import { ProductRepository } from "../repositories/product.repository";
 import { Product } from "../models/product";
+import { UpdateDocument } from "@burand/angular";
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +38,7 @@ export class ProductService {
         }
     }
 
-    async update(data: UpdateProduct) {
+    async update(data: UpdateDocument<Product>) {
         try {
             await this.productRepository.update(data);
         } catch(error) {

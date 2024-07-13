@@ -7,13 +7,14 @@ import {
 } from '@angular/forms';
 import { CreateProduct } from '../../core/interfaces/create-product-interface';
 import { ImgService } from '../../core/services/img.service';
+import { UpdateProduct } from '../../core/interfaces/update-product-interface';
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './create-product.component.html',
-  styleUrl: './create-product.component.scss'
+  styleUrl: './create-product.component.scss',
 })
 export class CreateProductComponent {
   private productService = inject(ProductService);
@@ -21,6 +22,8 @@ export class CreateProductComponent {
   private builder = inject(NonNullableFormBuilder);
   selectedCapa: File[] = [];
   selectedImages: File[] = [];
+  selectedVideos: File[] = [];
+
   onImagesChange(event: any) {
     if (event.target.files.length > 0) {
       this.selectedImages = Array.from(event.target.files);
@@ -31,14 +34,20 @@ export class CreateProductComponent {
       this.selectedCapa = Array.from(event.target.files);
     }
   }
+  onVideosChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedVideos = Array.from(event.target.files);
+    }
+  }
 
   form = this.builder.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
-    price: ['', Validators.required],
-    quantity: ['', Validators.required],
-    capa: [[], Validators.required],
-    images: [[], Validators.required]
+    price: [0.0, Validators.required],
+    quantity: [0, Validators.required],
+    capaUrl: [[], Validators.required],
+    videosUrls: [[], Validators.required],
+    imgUrls: [[], Validators.required],
   });
 
   get f() {
@@ -51,15 +60,26 @@ export class CreateProductComponent {
 
   async handleSubmit() {
     try {
-      const data: CreateProduct = {
-        name: this.fValue.name,
-        description: this.fValue.description,
-        price: parseFloat(this.fValue.price),
-        quantity: parseInt(this.fValue.quantity)
-      };
-      const id: string = await this.productService.create(data);
-      const allImages = this.selectedCapa.concat(this.selectedImages);
-      await this.imgService.uploadProductMedia(id, allImages);
+      const id: string = await this.productService.create(this.fValue);
+      const capaUrl = await this.imgService.uploadProductMedia(
+        id,
+        this.selectedCapa
+      );
+      const imgUrls = await this.imgService.uploadProductMedia(
+        id,
+        this.selectedVideos
+      );
+      const videosUrls = await this.imgService.uploadProductMedia(
+        id,
+        this.selectedImages
+      );
+      console.log(capaUrl, imgUrls, videosUrls);
+      await this.productService.update({
+        id,
+        capaUrl: capaUrl[0],
+        imgUrls,
+        videosUrls,
+      });
     } catch (error) {
       console.log(error);
     }

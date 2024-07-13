@@ -40,19 +40,35 @@ export const routes: Routes = [
       {
         path: 'novo-produto',
         title: 'Novo produto',
-        loadComponent: () => 
+        loadComponent: () =>
           import('./pages/create-product/create-product.component').then(
             (a) => a.CreateProductComponent
-          )
+          ),
       },
       {
         path: 'atualizar-produto/:id',
         title: 'Atualizar produto',
-        loadComponent: () => 
+        loadComponent: () =>
           import('./pages/update-product/update-product.component').then(
             (a) => a.UpdateProductComponent
-          )
-      }
+          ),
+      },
+      {
+        path: 'produtos',
+        title: 'Produtos',
+        loadComponent: () =>
+          import('./pages/tela-produto/tela-produto.component').then(
+            (p) => p.TelaProdutoComponent
+          ),
+      },
+      {
+        path: 'detalhe-produto/:id',
+        title: 'Detalhe do Produto',
+        loadComponent: () =>
+          import('./pages/detalhe-produto/detalhe-produto.component').then(
+            (m) => m.DetalheProdutoComponent
+          ),
+      },
     ],
   },
 ];

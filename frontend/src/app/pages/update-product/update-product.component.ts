@@ -19,13 +19,14 @@ export class UpdateProductComponent implements OnInit {
   form: FormGroup = this.builder.group({});
   productId: string = '';
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private productService: ProductService,
     private builder: NonNullableFormBuilder
   ) {}
 
   ngOnInit(): void {
     this.form = this.builder.group({
+      id: [''],
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: ['', Validators.required],
@@ -55,14 +56,14 @@ export class UpdateProductComponent implements OnInit {
 
   async handleSubmit() {
     try {
-      const data: UpdateProduct = { 
-        id: this.productId,
-        name: this.fValue.name, 
-        description: this.fValue.description, 
-        price: parseFloat(this.fValue.price), 
-        quantity: parseInt(this.fValue.quantity) 
-      };
-      await this.productService.update(data);
+      // id: this.productId,
+      // const data: UpdateProduct = {
+      //   name: this.fValue.name,
+      //   description: this.fValue.description,
+      //   price: parseFloat(this.fValue.price),
+      //   quantity: parseInt(this.fValue.quantity)
+      // };
+      await this.productService.update(this.fValue);
     } catch (error) {
       console.log(error);
     }

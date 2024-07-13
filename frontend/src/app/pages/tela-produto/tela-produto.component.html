@@ -1,0 +1,20 @@
+<div class="total">
+  <div *ngFor="let product of products">
+    <a href="detalhe-produto/{{ product.id }}">
+      <div class="card key" style="width: 18rem">
+        <img
+          class="card-img-top"
+          src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
+            product.capaUrl
+          }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">R$ {{ product.price }}</li>
+        </ul>
+      </div>
+    </a>
+  </div>
+</div>

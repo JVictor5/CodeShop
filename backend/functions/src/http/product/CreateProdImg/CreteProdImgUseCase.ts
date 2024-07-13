@@ -2,6 +2,7 @@ import { injectable } from 'tsyringe';
 import fs from 'fs';
 import { File } from '@interfaces/file.js';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 @injectable()
 export class ProductMediaUploadUseCase {
@@ -17,7 +18,8 @@ export class ProductMediaUploadUseCase {
     }
   }
 
-  public async execute(userId: string, productId: string, files: File[]): Promise<void> {
+  public async execute(userId: string, productId: string, files: File[]): Promise<string[]> {
+    const urls: string[] = [];
     const userDir = path.join(this.baseDir, userId);
 
     if (!fs.existsSync(userDir)) {
@@ -30,11 +32,14 @@ export class ProductMediaUploadUseCase {
       fs.mkdirSync(productDir, { recursive: true });
     }
 
-    files.forEach((file, index) => {
-      const filename = `file${index + 1}.${file.ext}`;
+    files.forEach(file => {
+      const filename = `${uuidv4()}.${file.ext}`;
       const filepath = path.join(productDir, filename);
 
       fs.writeFileSync(filepath, file.buffer);
+      urls.push(`${productId}/${filename}`);
     });
+
+    return urls;
   }
 }

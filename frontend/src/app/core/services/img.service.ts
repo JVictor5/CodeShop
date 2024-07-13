@@ -1,15 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  Auth,
-  User as FireUser,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-  authState,
-} from '@angular/fire/auth';
-
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../environment/environment';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -42,15 +33,17 @@ export class ImgService {
     }
   }
 
-  async uploadProductMedia(productId: string, files: File[]): Promise<void> {
+  async uploadProductMedia(
+    productId: string,
+    files: File[]
+  ): Promise<string[]> {
     if (files.length === 0) {
       console.error('Nenhum arquivo selecionado.');
-      return;
+      return [];
     }
-
+    const urls: string[] = [];
     const formData = new FormData();
 
-    // Convert a coleção de arquivos em um array
     const fileArray = files;
 
     fileArray.forEach((file, index) => {
@@ -59,18 +52,21 @@ export class ImgService {
 
     try {
       const token = await this.authService.getBearerToken();
+      console.log(token);
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`,
       });
 
       const url = `${environment.urlApi}/prods/${productId}/upload`;
 
-      this.http.post(url, formData, { headers }).subscribe({
-        next: (response: any) => console.log('Upload bem-sucedido:', response),
-        error: (error: any) => console.error('Erro ao fazer o upload:', error),
-      });
+      const response = await lastValueFrom(
+        this.http.post<{ savedPaths: string[] }>(url, formData, { headers })
+      );
+      console.log(response);
+      return response.savedPaths;
     } catch (error) {
       console.error('Erro ao obter o token:', error);
+      return [];
     }
   }
 }

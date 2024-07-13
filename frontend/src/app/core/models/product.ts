@@ -5,4 +5,7 @@ export interface Product extends Model {
   description: string;
   price: number;
   quantity: number;
+  capaUrl: string | string[];
+  imgUrls: string[];
+  videosUrls: string[];
 }
