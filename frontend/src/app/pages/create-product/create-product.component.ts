@@ -67,13 +67,12 @@ export class CreateProductComponent {
       );
       const imgUrls = await this.imgService.uploadProductMedia(
         id,
-        this.selectedVideos
+        this.selectedImages
       );
       const videosUrls = await this.imgService.uploadProductMedia(
         id,
-        this.selectedImages
+        this.selectedVideos
       );
-      console.log(capaUrl, imgUrls, videosUrls);
       await this.productService.update({
         id,
         capaUrl: capaUrl[0],

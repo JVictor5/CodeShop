@@ -9,10 +9,12 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { environment } from '../environment/environment';
 import { routes } from './app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    provideAnimations(),
     provideClientHydration(),
     provideEnvironmentNgxMask(),
     provideHttpClient(),

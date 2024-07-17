@@ -4,6 +4,6 @@ export interface CreateProduct {
   price: number;
   quantity: number;
   capaUrl: string;
-  imgUrls: string[];
   videosUrls: string[];
+  imgUrls: string[];
 }

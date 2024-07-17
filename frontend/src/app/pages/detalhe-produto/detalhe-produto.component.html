@@ -1,4 +1,56 @@
-<div class="total">
-  <p>{{ infoProduto.name }}</p>
+<div class="carousel">
+  <swiper-container
+    style="--swiper-navigation-color: #000"
+    class="mySwiper"
+    thumbs-swiper=".mySwiper2"
+    space-between="10"
+    navigation="true"
+  >
+    <swiper-slide *ngFor="let item of infoProduto.videosUrls">
+      <video controls controlsList="nodownload" height="650px" width="100%">
+        <source
+          src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
+            item
+          }}"
+        />
+      </video>
+    </swiper-slide>
+
+    <swiper-slide *ngFor="let item of infoProduto.imgUrls">
+      <img
+        src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
+          item
+        }}"
+      />
+    </swiper-slide>
+  </swiper-container>
+</div>
+<div class="carousel">
+  <swiper-container
+    class="mySwiper2"
+    space-between="10"
+    slides-per-view="4"
+    free-mode="true"
+    watch-slides-progress="true"
+  >
+    <swiper-slide *ngFor="let item of infoProduto.videosUrls">
+      <video height="100%" width="100%">
+        <source
+          src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
+            item
+          }}"
+        />
+      </video>
+    </swiper-slide>
+
+    <swiper-slide *ngFor="let item of infoProduto.imgUrls">
+      <img
+        src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
+          item
+        }}"
+      />
+    </swiper-slide>
+  </swiper-container>
 </div>
 
+<p>{{ infoProduto.name }}</p>
