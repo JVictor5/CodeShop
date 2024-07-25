@@ -1,4 +1,10 @@
 <div class="main">
+  <div class="mt-2 text-center">
+    <h3>Bem vindo a tela de cadastro de produto</h3>
+  </div>
+  <div class="mt-2 text-center">
+    <h5>Vendedor! Cadastre o seu produto na CodeShop.</h5>
+  </div>
   <form [formGroup]="form" class="container mt-4">
     <div class="mb-3">
       <label for="name" class="form-label">Nome:</label>
@@ -57,7 +63,7 @@
         class="form-control"
       />
     </div>
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="imgUrls" class="form-label">Imagens:</label>
       <input
         type="file"
@@ -67,8 +73,170 @@
         multiple
         class="form-control"
       />
+    </div> -->
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="card-header-title">Imagens</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <dropzone 
+            [config]="config" 
+            >
+          </dropzone>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="productCategory">Selecione a categoria do produto:</label>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="gameCode" value="Código de Jogos" (change)="onProductCategoryChange('Código de Jogos')">
+          <label class="form-check-label" for="gameCode">
+            Código de Jogos
+          </label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="giftCard" value="Gift Card" (change)="onProductCategoryChange('Gift Card')">
+          <label class="form-check-label" for="giftCard">
+            Gift Card
+          </label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="serviceSubscription" value="Assinatura de Serviços" (change)="onProductCategoryChange('Assinatura de Serviços')">
+          <label class="form-check-label" for="serviceSubscription">
+            Assinatura de Serviços
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="virtualCredits" value="Créditos Virtuais" (change)="onProductCategoryChange('Créditos Virtuais')">
+          <label class="form-check-label" for="virtualCredits">
+            Créditos Virtuais
+          </label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="additionalContent" value="Conteúdos Adicionais e Expansões" (change)="onProductCategoryChange('Conteúdos Adicionais e Expansões')">
+          <label class="form-check-label" for="additionalContent">
+            Conteúdos Adicionais e Expansões
+          </label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="software" value="Software e Aplicativos" (change)="onProductCategoryChange('Software e Aplicativos')">
+          <label class="form-check-label" for="software">
+            Software e Aplicativos
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" formControlName="category" type="radio" name="category" id="otherDigitalProducts" value="Outros Produtos Digitais" (change)="onProductCategoryChange('Outros Produtos Digitais')">
+          <label class="form-check-label" for="otherDigitalProducts">
+            Outros Produtos Digitais
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3" *ngIf="showGameGenres" class="form-group" formArrayName="genres">
+      <label>Selecione os gêneros do jogo:</label>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" name="Ação" formControlName="0" value="Ação" id="action">
+          <label class="form-check-label" for="action">Ação</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" name="Aventura" formControlName="1" value="Aventura" id="adventure">
+          <label class="form-check-label" for="adventure">Aventura</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="2" value="Estratégia" id="strategy">
+          <label class="form-check-label" for="strategy">Estratégia</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="3" value="Simulação" id="simulation">
+          <label class="form-check-label" for="simulation">Simulação</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="4" value="Indie" id="indie">
+          <label class="form-check-label" for="indie">Indie</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="5" value="Esporte" id="sports">
+          <label class="form-check-label" for="sports">Esporte</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="6" value="Tiro em primeira pessoa (FPS)" id="fps">
+          <label class="form-check-label" for="fps">Tiro em primeira pessoa (FPS)</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="7" value="Casual" id="casual">
+          <label class="form-check-label" for="casual">Casual</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="8" value="Horror psicológico" id="psychologicalHorror">
+          <label class="form-check-label" for="psychologicalHorror">Horror psicológico</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="9" value="Sandbox" id="sandbox">
+          <label class="form-check-label" for="sandbox">Sandbox</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="10" value="Plataforma 2D" id="platform2D">
+          <label class="form-check-label" for="platform2D">Plataforma 2D</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="11" value="Plataforma 3D" id="platform3D">
+          <label class="form-check-label" for="platform3D">Plataforma 3D</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="12" value="Roguelike" id="roguelike">
+          <label class="form-check-label" for="roguelike">Roguelike</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="13" value="Roguelite" id="roguelite">
+          <label class="form-check-label" for="roguelite">Roguelite</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="14" value="Co-op (Cooperativo)" id="coop">
+          <label class="form-check-label" for="coop">Co-op (Cooperativo)</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="15" value="PvP (Jogador contra Jogador)" id="pvp">
+          <label class="form-check-label" for="pvp">PvP (Jogador contra Jogador)</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="16" value="PvE (Jogador contra Ambiente)" id="pve">
+          <label class="form-check-label" for="pve">PvE (Jogador contra Ambiente)</label>
+        </div>
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="17" value="Narrativa (Point & Click)" id="narrative">
+          <label class="form-check-label" for="narrative">Narrativa (Point & Click)</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-check col-4">
+          <input class="form-check-input" type="checkbox" formControlName="18" value="Quebra-cabeças (Puzzle)" id="puzzle">
+          <label class="form-check-label" for="puzzle">Quebra-cabeças (Puzzle)</label>
+        </div>
+      </div>
     </div>
 
-    <button (click)="handleSubmit()" class="btn btn-primary">Criar</button>
+    <div class="row mt-3 text-center">
+      <div class="col">
+        <button (click)="handleSubmit()" class="btn btn-primary w-100">Criar</button>
+      </div>
+    </div>
   </form>
 </div>

@@ -6,4 +6,6 @@ export interface CreateProduct {
   capaUrl: string;
   videosUrls: string[];
   imgUrls: string[];
+  category: string;
+  genres: string[];
 }
