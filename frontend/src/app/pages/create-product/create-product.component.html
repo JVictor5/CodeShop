@@ -1,242 +1,280 @@
-<div class="main">
-  <div class="mt-2 text-center">
-    <h3>Bem vindo a tela de cadastro de produto</h3>
-  </div>
-  <div class="mt-2 text-center">
-    <h5>Vendedor! Cadastre o seu produto na CodeShop.</h5>
-  </div>
-  <form [formGroup]="form" class="container mt-4">
-    <div class="mb-3">
-      <label for="name" class="form-label">Nome:</label>
-      <input
-        type="text"
-        id="name"
-        formControlName="name"
-        class="form-control"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="description" class="form-label">Descrição:</label>
-      <input
-        type="text"
-        id="description"
-        formControlName="description"
-        class="form-control"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="price" class="form-label">Preço:</label>
-      <input
-        type="number"
-        id="price"
-        formControlName="price"
-        class="form-control"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="quantity" class="form-label">Quantidade:</label>
-      <input
-        type="number"
-        id="quantity"
-        formControlName="quantity"
-        class="form-control"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="capaUrl" class="form-label">Capa:</label>
-      <input
-        type="file"
-        id="capaUrl"
-        (change)="onCapaChange($event)"
-        formControlName="capaUrl"
-        class="form-control"
-      />
-    </div>
-    <div class="mb-3">
-      <label for="videosUrls" class="form-label">Videos:</label>
-      <input
-        type="file"
-        id="videosUrls"
-        (change)="onVideosChange($event)"
-        formControlName="videosUrls"
-        multiple
-        class="form-control"
-      />
-    </div>
-    <!-- <div class="mb-3">
-      <label for="imgUrls" class="form-label">Imagens:</label>
-      <input
-        type="file"
-        id="imgUrls"
-        (change)="onImagesChange($event)"
-        formControlName="imgUrls"
-        multiple
-        class="form-control"
-      />
-    </div> -->
-    <div class="card mb-3">
-      <div class="card-header">
-        <div class="card-header-title">Imagens</div>
-      </div>
-      <div class="card-body">
-        <div>
-          <dropzone 
-            [config]="config" 
-            >
-          </dropzone>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="productCategory">Selecione a categoria do produto:</label>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="gameCode" value="Código de Jogos" (change)="onProductCategoryChange('Código de Jogos')">
-          <label class="form-check-label" for="gameCode">
-            Código de Jogos
-          </label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="giftCard" value="Gift Card" (change)="onProductCategoryChange('Gift Card')">
-          <label class="form-check-label" for="giftCard">
-            Gift Card
-          </label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="serviceSubscription" value="Assinatura de Serviços" (change)="onProductCategoryChange('Assinatura de Serviços')">
-          <label class="form-check-label" for="serviceSubscription">
-            Assinatura de Serviços
-          </label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="virtualCredits" value="Créditos Virtuais" (change)="onProductCategoryChange('Créditos Virtuais')">
-          <label class="form-check-label" for="virtualCredits">
-            Créditos Virtuais
-          </label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="additionalContent" value="Conteúdos Adicionais e Expansões" (change)="onProductCategoryChange('Conteúdos Adicionais e Expansões')">
-          <label class="form-check-label" for="additionalContent">
-            Conteúdos Adicionais e Expansões
-          </label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="software" value="Software e Aplicativos" (change)="onProductCategoryChange('Software e Aplicativos')">
-          <label class="form-check-label" for="software">
-            Software e Aplicativos
-          </label>
-        </div>
-      </div>
+<div class="d-flex justify-content-center p-4">
+  <div class="main-container-create-product">
+    <p-stepper [linear]="true" [(activeStep)]="activeIndex">
+      <p-stepperPanel header="Categoria">
+        <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
+          <div class="">
+            <h5 class="mb-4">Escolha uma categoria:</h5>
+            <p-toast />
+            <form [formGroup]="step1FormGroup">
+              <div
+                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                <div class="row">
+                  <div class="col-3 mb-3">
+                    <input class="" formControlName="category" type="radio" name="category" id="gameCode" value="Jogos"
+                      (change)="onProductCategoryChange('Jogos')">
+                    <div class="card">
+                      <label for="gameCode" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/jogo-logo-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Jogos</div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3 mb-3">
+                    <input class="form-check-input" formControlName="category" type="radio" name="category"
+                      id="giftCard" value="Gift Card" (change)="onProductCategoryChange('Gift Card')">
+                    <div class="card">
+                      <label for="giftCard" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/cartao-presente-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Gift Card</div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3 mb-3">
+                    <input class="form-check-input" formControlName="category" type="radio" name="category"
+                      id="serviceSubscription" value="Assinatura de Serviços"
+                      (change)="onProductCategoryChange('Assinatura de Serviços')">
+                    <div class="card">
+                      <label for="serviceSubscription" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/assinatura-logo-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Assinatura de Serviços</div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3 mb-3">
+                    <input class="form-check-input" formControlName="category" type="radio" name="category"
+                      id="virtualCredits" value="Créditos Virtuais"
+                      (change)="onProductCategoryChange('Créditos Virtuais')">
+                    <div class="card">
+                      <label for="virtualCredits" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/credito-logo-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Créditos Virtuais</div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3 mb-3">
+                    <input class="form-check-input" formControlName="category" type="radio" name="category"
+                      id="software" value="Software e Aplicativos"
+                      (change)="onProductCategoryChange('Software e Aplicativos')">
+                    <div class="card">
+                      <label for="software" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/apps-logo-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Software e Aplicativos</div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3 mb-3">
+                    <input class="form-check-input" formControlName="category" type="radio" name="category"
+                      id="additionalContent" value="Conteúdos Adicionais e Expansões"
+                      (change)="onProductCategoryChange('Conteúdos Adicionais e Expansões')">
+                    <div class="card">
+                      <label for="additionalContent" class="w-100 labelBtn p-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <img class="img-fluid" src="../../../assets/imgs/adicional-logo-form.png" />
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">Conteúdos Adicionais</div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="d-flex pt-4 justify-content-end">
+              <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+            </div>
+          </div>
+        </ng-template>
+      </p-stepperPanel>
+      <p-stepperPanel header="Descrição">
+        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
+          let-index="index">
+          <div class="">
+            <h5 class="mb-4">Preencha as informações:</h5>
+            <p-toast />
+            <form [formGroup]="step2FormGroup">
+              <div
+                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Nome:</label>
+                  <input type="text" id="name" formControlName="name" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label">Descrição:</label>
+                  <input type="text" id="description" formControlName="description" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="price" class="form-label">Preço:</label>
+                  <input type="number" id="price" formControlName="price" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="capaUrl" class="form-label">Capa:</label>
+                  <input type="file" id="capaUrl" (change)="onCapaChange($event)" formControlName="capaUrl"
+                    class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="videosUrls" class="form-label">Videos:</label>
+                  <input type="file" id="videosUrls" (change)="onVideosChange($event)" formControlName="videosUrls"
+                    multiple class="form-control" />
+                </div>
 
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" formControlName="category" type="radio" name="category" id="otherDigitalProducts" value="Outros Produtos Digitais" (change)="onProductCategoryChange('Outros Produtos Digitais')">
-          <label class="form-check-label" for="otherDigitalProducts">
-            Outros Produtos Digitais
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3" *ngIf="showGameGenres" class="form-group" formArrayName="genres">
-      <label>Selecione os gêneros do jogo:</label>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" name="Ação" formControlName="0" value="Ação" id="action">
-          <label class="form-check-label" for="action">Ação</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" name="Aventura" formControlName="1" value="Aventura" id="adventure">
-          <label class="form-check-label" for="adventure">Aventura</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="2" value="Estratégia" id="strategy">
-          <label class="form-check-label" for="strategy">Estratégia</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="3" value="Simulação" id="simulation">
-          <label class="form-check-label" for="simulation">Simulação</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="4" value="Indie" id="indie">
-          <label class="form-check-label" for="indie">Indie</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="5" value="Esporte" id="sports">
-          <label class="form-check-label" for="sports">Esporte</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="6" value="Tiro em primeira pessoa (FPS)" id="fps">
-          <label class="form-check-label" for="fps">Tiro em primeira pessoa (FPS)</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="7" value="Casual" id="casual">
-          <label class="form-check-label" for="casual">Casual</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="8" value="Horror psicológico" id="psychologicalHorror">
-          <label class="form-check-label" for="psychologicalHorror">Horror psicológico</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="9" value="Sandbox" id="sandbox">
-          <label class="form-check-label" for="sandbox">Sandbox</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="10" value="Plataforma 2D" id="platform2D">
-          <label class="form-check-label" for="platform2D">Plataforma 2D</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="11" value="Plataforma 3D" id="platform3D">
-          <label class="form-check-label" for="platform3D">Plataforma 3D</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="12" value="Roguelike" id="roguelike">
-          <label class="form-check-label" for="roguelike">Roguelike</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="13" value="Roguelite" id="roguelite">
-          <label class="form-check-label" for="roguelite">Roguelite</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="14" value="Co-op (Cooperativo)" id="coop">
-          <label class="form-check-label" for="coop">Co-op (Cooperativo)</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="15" value="PvP (Jogador contra Jogador)" id="pvp">
-          <label class="form-check-label" for="pvp">PvP (Jogador contra Jogador)</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="16" value="PvE (Jogador contra Ambiente)" id="pve">
-          <label class="form-check-label" for="pve">PvE (Jogador contra Ambiente)</label>
-        </div>
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="17" value="Narrativa (Point & Click)" id="narrative">
-          <label class="form-check-label" for="narrative">Narrativa (Point & Click)</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-check col-4">
-          <input class="form-check-input" type="checkbox" formControlName="18" value="Quebra-cabeças (Puzzle)" id="puzzle">
-          <label class="form-check-label" for="puzzle">Quebra-cabeças (Puzzle)</label>
-        </div>
-      </div>
-    </div>
+                <div class="mb-3">
+                  <label class="mb-1">Imagens:</label>
+                  <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true"
+                    accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload($event)"
+                    (onSelect)="onSelectedFiles($event)">
 
-    <div class="row mt-3 text-center">
-      <div class="col">
-        <button (click)="handleSubmit()" class="btn btn-primary w-100">Criar</button>
-      </div>
-    </div>
-  </form>
+                    <!-- Template do Header -->
+                    <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback"
+                      let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
+                      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div class="d-flex gap-2">
+                          <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
+                            [outlined]="true" />
+                          <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" [rounded]="true"
+                            [outlined]="true" severity="success" [disabled]="!files || files.length === 0" />
+                          <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true"
+                            severity="danger" [disabled]="!files || files.length === 0" />
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <!-- Template do Conteúdo -->
+                    <ng-template pTemplate="content" let-files let-uploadedFiles="uploadedFiles"
+                      let-removeFileCallback="removeFileCallback"
+                      let-removeUploadedFileCallback="removeUploadedFileCallback">
+
+                      <!-- Arquivos Pendentes de Upload -->
+                      <div *ngIf="files?.length > 0">
+                        <h5>Pendente</h5>
+                        <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
+                          <div *ngFor="let file of files; let i = index"
+                            class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3">
+                            <div>
+                              <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="img-fluid" />
+                            </div>
+                            <span class="font-semibold">{{ file.name }}</span>
+                            <div>{{ formatSize(file.size) }}</div>
+                            <p-badge value="Pendente" severity="warning" />
+                            <p-button icon="pi pi-times"
+                              (onClick)="onRemoveTemplatingFile($event, file, removeFileCallback, i)" [outlined]="true"
+                              [rounded]="true" severity="danger" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Arquivos já Carregados -->
+                      <div *ngIf="uploadedFiles?.length > 0">
+                        <h5>Completo</h5>
+                        <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
+                          <div *ngFor="let file of uploadedFiles; let i = index"
+                            class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3">
+                            <div>
+                              <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="img-fluid" />
+                            </div>
+                            <span class="font-semibold">{{ file.name }}</span>
+                            <div>{{ formatSize(file.size) }}</div>
+                            <p-badge value="Completo" class="mt-3" severity="success" />
+                            <p-button icon="pi pi-times" (onClick)="removeUploadedFile(removeUploadedFileCallback, i)"
+                              [outlined]="true" [rounded]="true" severity="danger" />
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <!-- Template Vazio -->
+                    <ng-template pTemplate="empty">
+                      <div class="d-flex align-items-center justify-content-center flex-column">
+                        <i
+                          class="pi pi-cloud-upload border border-2 rounded-circle p-5 fs-1 text-secondary border-secondary"></i>
+                        <p class="mt-4 mb-0">Arraste e solte as imagens aqui para fazer upload.</p>
+                      </div>
+                    </ng-template>
+                  </p-fileUpload>
+                </div>
+
+                <div class="mt-3 mb-3" *ngIf="showGameGenres">
+                  <p-multiSelect inputId="genres" class="w-100" [options]="genres" formControlName="genres"
+                    placeholder="Selecione os gêneros do jogo" optionLabel="name" display="chip" [showClear]="true" />
+                </div>
+
+              </div>
+            </form>
+          </div>
+          <div class="d-flex pt-4 justify-content-end">
+            <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+          </div>
+        </ng-template>
+      </p-stepperPanel>
+      <p-stepperPanel header="Código">
+        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
+          let-index="index">
+          <div class="">
+            <h5 class="mb-4">Cadastre as suas chaves:</h5>
+            <p-toast />
+            <form [formGroup]="step3FormGroup">
+              <div
+                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                <div *ngIf="form.get('step3.keysInput')?.invalid && form.get('step3.keysInput')?.touched">
+                  <small class="p-error">É obrigatório</small>
+                </div>
+                <div class="mb-3">
+                  <textarea class="form-control" formControlName="keysInput" rows="3">
+                    </textarea>
+                  <button class="btn btn-primary mt-3 mb-3" type="button" (click)="addKeys()">Adicionar</button>
+                </div>
+
+                <div *ngIf="keys.length > 0">
+                  <h5 class="mb-4">Chaves cadastradas</h5>
+                  <p-listbox [options]="keys" />
+                </div>
+
+              </div>
+            </form>
+          </div>
+          <div class="d-flex pt-4 justify-content-end">
+            <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+          </div>
+        </ng-template>
+      </p-stepperPanel>
+      <p-stepperPanel header="Conclusão">
+        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
+          <div class="">
+            <div class="row">
+              <div class="container-card col-6 p-4">
+                <div class="card-animation">
+                  <div>
+                    <img class="rounded img" src="{{ capaUrl[0] }}" alt="Foto do {{ this.fValue.step2.name }}" />
+                  </div>
+                  <div class="mt-3">
+                    <h5>{{ this.fValue.step2.name }}</h5>
+                    <h3 class="text-color">R$ {{ this.fValue.step2.price }}</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 d-flex flex-column justify-content-center">
+                <h3>Seu produto está pronto!</h3>
+                <p class="mb-4">Agora ele está disponível para ser comprado.</p>
+                <div class="d-flex justify-content-between">
+                  <a href="detalhe-produto/{{ this.idProduct }}" class="btn btn-success">Ver o produto na loja</a>
+                  <a href="" class="btn btn-primary">Voltar para os seus produtos</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-stepperPanel>
+    </p-stepper>
+  </div>
 </div>

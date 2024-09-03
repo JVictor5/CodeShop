@@ -8,4 +8,5 @@ export interface CreateProduct {
   imgUrls: string[];
   category: string;
   genres: string[];
+  keys: string[];
 }

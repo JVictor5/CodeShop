@@ -4,7 +4,9 @@ export interface UpdateProduct {
   description: string;
   price: number;
   quantity: number;
-  capaUrl: string[];
+  capaUrl: string;
   imgUrls: string[];
   videosUrls: string[];
+  genres: string[];
+  keys: string[];
 }
