@@ -6,23 +6,17 @@
     space-between="10"
     navigation="true"
   >
-    <swiper-slide *ngFor="let item of infoProduto.videosUrls">
+    @for (item of infoProduto.videosUrls; track item) {
+    <swiper-slide>
       <video controls controlsList="nodownload" height="650px" width="100%">
-        <source
-          src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
-            item
-          }}"
-        />
+        <source [src]="item" />
       </video>
     </swiper-slide>
-
-    <swiper-slide *ngFor="let item of infoProduto.imgUrls">
-      <img
-        src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
-          item
-        }}"
-      />
+    } @for (item of infoProduto.imgUrls; track item) {
+    <swiper-slide>
+      <img [src]="item" />
     </swiper-slide>
+    }
   </swiper-container>
 </div>
 <div class="carousel">
@@ -33,23 +27,17 @@
     free-mode="true"
     watch-slides-progress="true"
   >
-    <swiper-slide *ngFor="let item of infoProduto.videosUrls">
+    @for (item of infoProduto.videosUrls; track item) {
+    <swiper-slide>
       <video height="100%" width="100%">
-        <source
-          src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
-            item
-          }}"
-        />
+        <source src="{{ item }}" />
       </video>
     </swiper-slide>
-
-    <swiper-slide *ngFor="let item of infoProduto.imgUrls">
-      <img
-        src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
-          item
-        }}"
-      />
+    } @for (item of infoProduto.imgUrls; track item) {
+    <swiper-slide>
+      <img src="{{ item }}" />
     </swiper-slide>
+    }
   </swiper-container>
 </div>
 

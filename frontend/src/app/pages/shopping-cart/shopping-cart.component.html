@@ -1,0 +1,75 @@
+<div class="contain">
+  <div class="cart">
+    <div class="menuCart">
+      <h2>Items do Carrinho</h2>
+      <button (click)="clearCart()">
+        <i class="pi pi-trash"></i> Limpar Carrinho
+      </button>
+    </div>
+    <div class="fullCart">
+      <div class="itemsCart p-2">
+        @for(item of cartItems$ | async; track item ){
+        <div class="item p-3">
+          <div class="itemImg"><img src="{{ item.capaUrl }}" /></div>
+          <div class="itemName">
+            <div class="name">
+              <h4>{{ item.name }}</h4>
+              <p>Generos: {{ getDescriptionText(item.description, 100) }}</p>
+            </div>
+            <h5>{{ item.price | currency : "BRL" }}</h5>
+          </div>
+          <div class="itemQuantity">
+            <P>Quant.</P>
+            <div class="counter">
+              <button
+                (click)="decreaseQuantity(item.id)"
+                [disabled]="item.quantity === 1"
+              >
+                -
+              </button>
+              <p>{{ item.quantity }}</p>
+              <button
+                (click)="increaseQuantity(item.id)"
+                [disabled]="item.quantity === item.maximumQuantity"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <div class="itemRemove">
+            <button (click)="removeItem(item.id)">
+              <i class="pi pi-times"></i> Remover
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="summaryCart">
+    <div class="coupon">
+      <div class="content">
+        <p-floatLabel>
+          <input pInputText id="coupon" />
+          <label for="coupon">Cupom de Desconto</label>
+        </p-floatLabel>
+        <button type="button" pButton class="p-button-danger">Aplicar</button>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="content">
+        <div class="title">
+          <i class="bx bx-file-find"></i>
+          <h3>Resumo</h3>
+        </div>
+        <hr />
+        <h4>Valor Total: R$ {{ totalPrice$ | async }}</h4>
+        <br />
+        <div class="buttons">
+          <button class="pay">Finalizar Compra</button>
+          <button class="shop">Continuar Comprando</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

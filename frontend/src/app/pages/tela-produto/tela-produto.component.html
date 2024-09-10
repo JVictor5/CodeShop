@@ -1,16 +1,13 @@
 <div class="main-container">
-  <div
-    class="card-container" 
-    *ngFor="let product of products">
-    <a href="detalhe-produto/{{ product.id }}">
-      <div class="card">
-        <div class="card-body">
+  @for(product of products; track $index){
+  <div class="card-container">
+    <div class="card">
+      <div class="card-body" role="button">
+        <div routerLink="/detalhe-produto/{{ product.id }}">
           <div>
             <img
               class="rounded img"
-              src="http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/prods/lh7uqhyTJMhm6FjX5OJQ7rx8umo2/{{
-                product.capaUrl
-              }}"
+              src="{{ product.capaUrl }}"
               alt="Foto do {{ product.name }}"
             />
           </div>
@@ -18,11 +15,19 @@
             <h5>{{ product.name }}</h5>
             <h3 class="text-color">R$ {{ product.price }}</h3>
           </div>
-          <div class="message mt-3 d-flex justify-content-center align-items-center">
-            <button class="btn btn-outline-light w-100 m-3">Comprar</button>
-          </div> 
+        </div>
+        <div
+          class="message mt-3 d-flex justify-content-center align-items-center"
+        >
+          <button
+            class="btn btn-outline-light w-100 m-3"
+            (click)="addToCart(product)"
+          >
+            Comprar
+          </button>
         </div>
       </div>
-    </a>
+    </div>
   </div>
+  }
 </div>
