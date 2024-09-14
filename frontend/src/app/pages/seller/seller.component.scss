@@ -1,0 +1,75 @@
+@import "../../../styles.scss";
+
+.contain {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+
+  .containForm {
+    display: flex;
+    width: 98%;
+    height: 75vh;
+    align-items: stretch;
+
+    .img {
+      width: 80%;
+      height: 80%;
+      background-image: url("../../../assets/imgs/shopping.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(5px 5px 5px $purpleColor);
+    }
+
+    .form {
+      margin: 3.5% auto;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.3125rem;
+      .text {
+        margin: 0 auto;
+        width: 90%;
+      }
+
+      .input-field {
+        margin: 0 auto;
+        width: 90%;
+        p-floatLabel {
+          input {
+            width: 100%;
+          }
+        }
+      }
+      button {
+        margin: 0 auto;
+        width: 90%;
+        background-color: $whiteColor;
+        border: 1px solid $purpleColor;
+        color: $purpleColor;
+        border-radius: 10px;
+        transition: 0.6s;
+        font-size: 1.125rem;
+        padding: 0.625rem;
+        &:hover {
+          background-color: $hoverPurpleColor;
+          border: 1px solid $hoverPurpleColor;
+          color: $whiteColor;
+        }
+      }
+    }
+  }
+}
+
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+.ng-invalid.ng-touched ~ label {
+  color: red !important;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  padding: 0;
+}

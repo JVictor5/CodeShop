@@ -1,0 +1,116 @@
+<div class="contain">
+  <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+    <div class="containForm">
+      <div class="img"></div>
+      <div class="form">
+        <div class="text">
+          <h2>Cadastre sua Loja</h2>
+        </div>
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="name"
+              formControlName="name"
+              [ngClass]="{
+                'ng-invalid':
+                  form.get('name')?.invalid && form.get('name')?.touched
+              }"
+            />
+            <label for="name">Nome da loja</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+            class="error"
+          >
+            Nome da loja é obrigatório.
+          </div>
+        </div>
+
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="email"
+              formControlName="email"
+              [ngClass]="{
+                'ng-invalid':
+                  form.get('email')?.invalid && form.get('email')?.touched
+              }"
+            />
+            <label for="email">Email PagSeguro</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            class="error"
+          >
+            <span *ngIf="form.get('email')?.errors?.['required']"
+              >Email é obrigatório.</span
+            >
+            <span *ngIf="form.get('email')?.errors?.['email']"
+              >Formato de email inválido.</span
+            >
+          </div>
+        </div>
+
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="discription"
+              formControlName="discription"
+              [ngClass]="{
+                'ng-invalid':
+                  form.get('discription')?.invalid &&
+                  form.get('discription')?.touched
+              }"
+            />
+            <label for="discription">Descrição da loja</label>
+          </p-floatLabel>
+          <div
+            *ngIf="
+              form.get('discription')?.invalid &&
+              form.get('discription')?.touched
+            "
+            class="error"
+          >
+            Descrição é obrigatória.
+          </div>
+        </div>
+
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              #tel
+              pInputText
+              id="phone"
+              formControlName="phone"
+              mask="(00) 0000-0000||(00) 00000-0000"
+              prefix="+55 "
+              [ngClass]="{
+                'ng-invalid':
+                  form.get('phone')?.invalid && form.get('phone')?.touched
+              }"
+            />
+            <label for="phone">Telefone da loja</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched"
+            class="error"
+          >
+            <span *ngIf="form.get('phone')?.errors?.['required']"
+              >Telefone é obrigatório.</span
+            >
+            <span *ngIf="form.get('phone')?.errors?.['pattern']"
+              >Formato de telefone inválido.</span
+            >
+          </div>
+        </div>
+
+        <button type="submit" value="Cadastrar Loja" class="button">
+          Cadastrar Loja
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

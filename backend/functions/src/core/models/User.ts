@@ -13,4 +13,5 @@ export interface User extends Model {
   type: UserType;
   phone: string;
   nivel: number;
+  idShop?: string;
 }

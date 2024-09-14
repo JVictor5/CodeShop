@@ -48,7 +48,9 @@ export function fetchFile(request: Request, _response: Response, nextFunction: N
               fieldname,
               buffer,
               mime: fileResult.mime,
-              ext: fileResult.ext
+              ext: fileResult.ext,
+              originalname: undefined,
+              mimetype: undefined
             });
 
             try {

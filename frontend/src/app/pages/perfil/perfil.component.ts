@@ -10,6 +10,7 @@ import {
 import { CadastroUsuarioComponent } from '../cadastro-usuario/cadastro-usuario.component';
 import { CommonModule } from '@angular/common';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { SellerComponent } from "../seller/seller.component";
 
 @Component({
   selector: 'app-perfil',
@@ -22,7 +23,8 @@ import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
     CommonModule,
     NgxMaskDirective,
     NgxMaskPipe,
-  ],
+    SellerComponent
+],
 })
 export class PerfilComponent {
   selectedFile: File | null = null;
