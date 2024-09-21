@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
-import { CreateProduct } from "../interfaces/create-product-interface";
-import { UpdateProduct } from "../interfaces/update-product-interface";
 import { ProductRepository } from "../repositories/product.repository";
 import { Product } from "../models/product";
-import { UpdateDocument } from "@burand/angular";
+import { AddDocument, UpdateDocument } from "@burand/angular";
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +27,7 @@ export class ProductService {
         }
     }
 
-    async create(data: CreateProduct): Promise<string> {
+    async create(data: AddDocument<Product>): Promise<string> {
         try {
             const id = await this.productRepository.add(data);
             return id;

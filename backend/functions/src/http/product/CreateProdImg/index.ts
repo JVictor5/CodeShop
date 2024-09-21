@@ -8,11 +8,11 @@ export async function handleFileUpload(request: Request, response: Response): Pr
   }
 
   const userId = request.user.uid;
-  const { productId } = request.params;
+  const { productId, typeMedia } = request.params;
 
   const productMediaUpload = container.resolve(ProductMediaUploadUseCase);
 
-  const savedPaths = await productMediaUpload.execute(userId, productId, request.files);
+  const savedPaths = await productMediaUpload.execute(userId, productId, typeMedia, request.files);
 
   return response.status(200).json({ savedPaths });
 }

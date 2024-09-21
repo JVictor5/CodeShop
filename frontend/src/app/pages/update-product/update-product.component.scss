@@ -1,0 +1,97 @@
+.main-container-create-product {
+  width: 90%;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.card-animation {
+  margin: 0 auto;
+  padding: 1em;
+  background: #ededf9;
+  width: 300px;
+  text-align: center;
+  border-radius: 10px;
+  position: relative;
+}
+
+.card-animation::after,
+.card-animation::before {
+  content: '';
+  position: absolute;
+  height: 102%;
+  width: 102%;
+  background-image: conic-gradient(from var(--angle), transparent 70%, blue);
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+  padding: 3px;
+  border-radius: 10px;
+  animation: 3s spin linear infinite;
+}
+
+.card-animation::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+
+  to {
+    --angle: 360deg;
+  }
+}
+
+.container-card {
+  z-index: 0;
+}
+
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.labelBtn {
+  cursor: pointer;
+}
+
+p-fileUpload img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.imgFinalCard {
+  width: 100%;
+  height: 200px;
+}
+
+[type=radio]+.card:hover {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  transform: scale(1.025);
+  z-index: 2;
+}
+
+[type=radio]:checked+.card {
+  outline: 2px solid #290e4d !important;
+}
+
+li {
+  list-style: none;
+}
+
+li:hover {
+  background-color: #F8F8F8;
+}
+
+.margin-right {
+  margin-right: 5px;
+}

@@ -112,7 +112,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="description" class="form-label">Descrição:</label>
-                  <input type="text" id="description" formControlName="description" class="form-control" />
+                  <textarea id="description" formControlName="description" class="form-control" rows="6"></textarea>
                 </div>
                 <div class="mb-3">
                   <label for="price" class="form-label">Preço:</label>
@@ -141,11 +141,13 @@
                       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                         <div class="d-flex gap-2">
                           <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
-                            [outlined]="true" />
+                            [outlined]="true" pTooltip="Escolher imagens" tooltipPosition="top" />
                           <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" [rounded]="true"
-                            [outlined]="true" severity="success" [disabled]="!files || files.length === 0" />
+                            [outlined]="true" severity="success" [disabled]="!files || files.length === 0"
+                            pTooltip="Fazer upload" tooltipPosition="top" />
                           <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true"
-                            severity="danger" [disabled]="!files || files.length === 0" />
+                            severity="danger" [disabled]="!files || files.length === 0" pTooltip="Remover imagens"
+                            tooltipPosition="top" />
                         </div>
                       </div>
                     </ng-template>
@@ -209,6 +211,38 @@
                     placeholder="Selecione os gêneros do jogo" optionLabel="name" display="chip" [showClear]="true" />
                 </div>
 
+                <div class="card mb-3" *ngIf="showGameGenres">
+                  <div class="card-header">Requisitos mínimos do sistema</div>
+                  <div class="card-body">
+                    <label for="minimumOs" class="form-label">Sistema operacional:</label>
+                    <input type="text" id="minimumOs" formControlName="minimumOs" class="form-control" />
+                    <label for="minimumCpu" class="form-label mt-3">Processador:</label>
+                    <input type="text" id="minimumCpu" formControlName="minimumCpu" class="form-control" />
+                    <label for="minimumStorage" class="form-label mt-3">Armazenamento:</label>
+                    <input type="text" id="minimumStorage" formControlName="minimumStorage" class="form-control" />
+                    <label for="minimumMemory" class="form-label mt-3">Memória:</label>
+                    <input type="text" id="minimumMemory" formControlName="minimumMemory" class="form-control" />
+                    <label for="minimumGpu" class="form-label mt-3">Placa de vídeo:</label>
+                    <input type="text" id="minimumGpu" formControlName="minimumGpu" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="card mb-3" *ngIf="showGameGenres">
+                  <div class="card-header">Requisitos recomendados do sistema</div>
+                  <div class="card-body">
+                    <label for="recommendedOs" class="form-label mt-3">Sistema operacional:</label>
+                    <input type="text" id="recommendedOs" formControlName="recommendedOs" class="form-control" />
+                    <label for="recommendedCpu" class="form-label mt-3">Processador:</label>
+                    <input type="text" id="recommendedCpu" formControlName="recommendedCpu" class="form-control" />
+                    <label for="recommendedStorage" class="form-label mt-3">Armazenamento:</label>
+                    <input type="text" id="recommendedStorage" formControlName="recommendedStorage" class="form-control" />
+                    <label for="recommendedMemory" class="form-label mt-3">Memória:</label>
+                    <input type="text" id="recommendedMemory" formControlName="recommendedMemory" class="form-control" />
+                    <label for="recommendedGpu" class="form-label mt-3">Placa de vídeo:</label>
+                    <input type="text" id="recommendedGpu" formControlName="recommendedGpu" class="form-control" />
+                  </div>
+                </div>
+
               </div>
             </form>
           </div>
@@ -226,12 +260,8 @@
             <form [formGroup]="step3FormGroup">
               <div
                 class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div *ngIf="form.get('step3.keysInput')?.invalid && form.get('step3.keysInput')?.touched">
-                  <small class="p-error">É obrigatório</small>
-                </div>
                 <div class="mb-3">
-                  <textarea class="form-control" formControlName="keysInput" rows="3">
-                    </textarea>
+                  <textarea class="form-control" formControlName="keysInput" rows="3"></textarea>
                   <button class="btn btn-primary mt-3 mb-3" type="button" (click)="addKeys()">Adicionar</button>
                 </div>
 
@@ -255,7 +285,7 @@
               <div class="container-card col-6 p-4">
                 <div class="card-animation">
                   <div>
-                    <img class="rounded img" src="{{ capaUrl[0] }}" alt="Foto do {{ this.fValue.step2.name }}" />
+                    <img class="rounded imgFinalCard" src="{{ capaUrl.sm }}" alt="Foto do {{ this.fValue.step2.name }}" />
                   </div>
                   <div class="mt-3">
                     <h5>{{ this.fValue.step2.name }}</h5>

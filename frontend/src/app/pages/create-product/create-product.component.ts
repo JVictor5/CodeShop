@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
+import { AuthService } from '../../core/services/auth.service';
 import {
   FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CreateProduct } from '../../core/interfaces/create-product-interface';
 import { ImgService } from '../../core/services/img.service';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +19,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-create-product',
@@ -35,6 +36,7 @@ import { FormsModule } from '@angular/forms';
     ProgressBarModule,
     MultiSelectModule,
     FormsModule,
+    TooltipModule,
   ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
@@ -42,12 +44,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class CreateProductComponent {
   private productService = inject(ProductService);
+  private authService = inject(AuthService);
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
 
   idProduct: string = '';
-  capaUrl: string[] = [];
+  capaUrl: { sm: string, lg: string } = { sm: '', lg: '' };
 
   selectedCapa: File[] = [];
   selectedImages: File[] = [];
@@ -89,7 +92,6 @@ export class CreateProductComponent {
     this.step1FormGroup = this.form.get('step1') as FormGroup;
     this.step2FormGroup = this.form.get('step2') as FormGroup;
     this.step3FormGroup = this.form.get('step3') as FormGroup;
-    this.form.get('step2.genres')?.setValue([]);
   }
 
   /**
@@ -114,7 +116,7 @@ export class CreateProductComponent {
         this.activeIndex++;
       }
     } else if (index == 1) {
-      if (!this.fValue.step2.name) {
+      if (!this.fValue.step2.genres) {
         this.showToast('error', 'Atenção', 'Preencha o campo nome!');
       } else if (!this.fValue.step2.description) {
         this.showToast('error', 'Atenção', 'Preencha o campo descrição!');
@@ -130,6 +132,18 @@ export class CreateProductComponent {
         }
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
         this.showToast('error', 'Atenção', 'Escolha gêneros para o jogo!');
+      } else if (this.showGameGenres && (!this.fValue.step2.minimumCpu
+        || !this.fValue.step2.minimumGpu
+        || !this.fValue.step2.minimumMemory
+        || !this.fValue.step2.minimumOs
+        || !this.fValue.step2.minimumStorage
+        || !this.fValue.step2.recommendedCpu
+        || !this.fValue.step2.recommendedGpu
+        || !this.fValue.step2.recommendedMemory
+        || !this.fValue.step2.recommendedStorage
+        || !this.fValue.step2.recommendedOs
+      )) {
+        this.showToast('error', 'Atenção', 'Preencha os requisitos de sistema!');
       } else {
         this.activeIndex++;
       }
@@ -225,16 +239,25 @@ export class CreateProductComponent {
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: [0.0, Validators.required],
-      capaUrl: [[], Validators.required],
-      videosUrls: [[], Validators.required],
-      imgUrls: [[], Validators.required],
-      genres: [[''], Validators.required]
+      capaUrl: ['', Validators.required],
+      videosUrls: [[] as string[], Validators.required],
+      imgUrls: [[] as string[], Validators.required],
+      genres: [[] as string[], Validators.required],
+      minimumOs: '',
+      minimumCpu: '',
+      minimumStorage: '',
+      minimumMemory: '',
+      minimumGpu: '',
+      recommendedOs: '',
+      recommendedCpu: '',
+      recommendedStorage: '',
+      recommendedMemory: '',
+      recommendedGpu: '',
     }),
     step3: this.builder.group({
       keysInput: ['', Validators.required],
     })
   });
-
 
   get f() {
     return this.form.controls;
@@ -246,36 +269,74 @@ export class CreateProductComponent {
 
   async handleSubmit() {
     try {
-      const formValue: CreateProduct = {
-        category: this.fValue.step1.category,
-        name: this.fValue.step2.name,
-        description: this.fValue.step2.description,
-        price: this.fValue.step2.price,
-        genres: this.fValue.step2.genres,
-        keys: this.keys,
-        quantity: this.quantity,
-        capaUrl: '',
-        imgUrls: [''],
-        videosUrls: ['']
-      };
+      let formValue;
+      if (this.showGameGenres) {
+        formValue = {
+          category: this.fValue.step1.category,
+          name: this.fValue.step2.name,
+          description: this.fValue.step2.description,
+          price: this.fValue.step2.price,
+          keys: this.keys,
+          quantity: this.quantity,
+          idUser: this.authService.getUser().uid,
+          capaUrl: { sm: '', lg: '' },
+          imgUrls: { sm: [] as string[], lg: [] as string[] },
+          videosUrls: [''],
+          genres: Array.isArray(this.fValue.step2.genres) ? this.fValue.step2.genres : [this.fValue.step2.genres],
+          minimumSystemRequirements: {
+            os: this.fValue.step2.minimumOs,
+            cpu: this.fValue.step2.minimumCpu,
+            storage: this.fValue.step2.minimumStorage,
+            memory: this.fValue.step2.minimumMemory,
+            gpu: this.fValue.step2.minimumGpu,
+          },
+          recommendedSystemRequirements: {
+            os: this.fValue.step2.recommendedOs,
+            cpu: this.fValue.step2.recommendedCpu,
+            storage: this.fValue.step2.recommendedStorage,
+            memory: this.fValue.step2.recommendedMemory,
+            gpu: this.fValue.step2.recommendedGpu,
+          }
+        };
+      } else {
+        formValue = {
+          category: this.fValue.step1.category,
+          name: this.fValue.step2.name,
+          description: this.fValue.step2.description,
+          price: this.fValue.step2.price,
+          keys: this.keys,
+          quantity: this.quantity,
+          idUser: this.authService.getUser().uid,
+          capaUrl: { sm: '', lg: '' },
+          imgUrls: { sm: [] as string[], lg: [] as string[] },
+          videosUrls: ['']
+        };
+      }
 
       const id: string = await this.productService.create(formValue);
       this.idProduct = id;
-      this.capaUrl = await this.imgService.uploadProductMedia(
+      const capaUrlArray = await this.imgService.uploadProductMedia(
         id,
+        'capa',
         this.selectedCapa
       );
+      this.capaUrl = {
+        sm: capaUrlArray.sm[0],
+        lg: capaUrlArray.lg[0]
+      }
       const imgUrls = await this.imgService.uploadProductMedia(
         id,
+        'images',
         this.selectedImages
       );
-      const videosUrls = await this.imgService.uploadProductMedia(
+      const videosUrls = await this.imgService.uploadProductVideos(
         id,
         this.selectedVideos
       );
+      // const videosUrls = [] as string[];
       await this.productService.update({
         id,
-        capaUrl: this.capaUrl[0],
+        capaUrl: this.capaUrl,
         imgUrls,
         videosUrls,
       });
