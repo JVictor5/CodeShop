@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { AuthService } from '../../core/services/auth.service';
+import { UserRepository } from '../../core/repositories/user.repository';
 import {
   FormGroup,
   NonNullableFormBuilder,
@@ -45,11 +46,15 @@ import { TooltipModule } from 'primeng/tooltip';
 export class CreateProductComponent {
   private productService = inject(ProductService);
   private authService = inject(AuthService);
+  private userRepository = inject(UserRepository);
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
 
   idProduct: string = '';
+  idUser: string = '';
+  userInfo: any;
+
   capaUrl: { sm: string, lg: string } = { sm: '', lg: '' };
 
   selectedCapa: File[] = [];
@@ -92,6 +97,11 @@ export class CreateProductComponent {
     this.step1FormGroup = this.form.get('step1') as FormGroup;
     this.step2FormGroup = this.form.get('step2') as FormGroup;
     this.step3FormGroup = this.form.get('step3') as FormGroup;
+
+    this.authService.currentUser.subscribe(async (user) => {
+      this.idUser = user.uid;
+      this.userInfo = await this.userRepository.getById(`${this.idUser}`);
+    });
   }
 
   /**
@@ -278,7 +288,7 @@ export class CreateProductComponent {
           price: this.fValue.step2.price,
           keys: this.keys,
           quantity: this.quantity,
-          idUser: this.authService.getUser().uid,
+          idUser: this.userInfo.idShop,
           capaUrl: { sm: '', lg: '' },
           imgUrls: { sm: [] as string[], lg: [] as string[] },
           videosUrls: [''],
@@ -306,7 +316,7 @@ export class CreateProductComponent {
           price: this.fValue.step2.price,
           keys: this.keys,
           quantity: this.quantity,
-          idUser: this.authService.getUser().uid,
+          idUser: this.userInfo.idShop,
           capaUrl: { sm: '', lg: '' },
           imgUrls: { sm: [] as string[], lg: [] as string[] },
           videosUrls: ['']
