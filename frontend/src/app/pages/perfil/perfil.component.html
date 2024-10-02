@@ -1,10 +1,11 @@
-<div class="espaco">
+<div class="contain">
   <div class="cont text-center">
     <div class="profile">
       <div class="avatar">
         <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
-          ><img class="rounded-circle" src="{{ avatar }}" alt=""
-        /></a>
+          ><img class="rounded-circle" src="{{ avatar }}" alt="" />
+          <i class="fa fa-pencil edit-icon"></i
+        ></a>
       </div>
       <h2>{{ username }}</h2>
     </div>
@@ -41,14 +42,14 @@
             />
           </div>
           <div class="mb-3"></div>
-          <button type="submit" (click)="submit()" class="btn btn-primary">
+          <button type="submit" (click)="uploadFile()" class="btn btn-primary">
             Submit
           </button>
         </div>
       </div>
     </div>
   </div>
-  <a href="#biblioteca">teste</a>
+
   <div class="menu">
     <button class="module" (click)="mostrarConteudo()">Visão Geral</button>
     <div class="listra"></div>
@@ -59,86 +60,29 @@
     <button class="module" (click)="exibirOpcao('Compras')">
       Suas Compras
     </button>
+    @if(nivel == 1){
     <div class="listra"></div>
     <button class="module" (click)="exibirOpcao('Seller')">
       Seja um Vendedor
     </button>
+    }
   </div>
+  @if(logado == true){
   <div *ngIf="exibirConteudo" class="mx-auto">
-    <div class="dados mx-auto">
-      <h1>Dados</h1>
-      <p>Nome: {{ username }}</p>
-      <p>Email: {{ email }}</p>
-      <p>Documento {{ documentType }}: {{ document | mask : "CPF_CNPJ" }}</p>
-      <p>Telefone: {{ phone | mask : "+00 (00) 00000-0000" }}</p>
-    </div>
-    <form [formGroup]="form" id="formModal">
-      <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input
-          type="text"
-          formControlName="name"
-          class="form-control"
-          [value]="username"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input
-          type="email"
-          formControlName="email"
-          class="form-control"
-          id="email"
-          value=""
-        />
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Senha</label>
-        <input
-          type="text"
-          formControlName="password"
-          class="form-control"
-          id="password"
-          value=""
-        />
-      </div>
-      <div class="mb-3">
-        <label for="document" class="form-label">documento</label>
-        <input
-          type="text"
-          formControlName="document"
-          class="form-control"
-          id="document"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="phone" class="form-label">Telefone</label>
-        <input
-          type="text"
-          formControlName="phone"
-          class="form-control"
-          id="phone"
-          value=""
-        />
-      </div>
-    </form>
+    <app-user-dados></app-user-dados>
   </div>
+
   <div *ngIf="opcaoSelecionada === 'Biblioteca'" id="biblioteca">
-    <a href="">aaaa</a>
+    <a href="">Em Desenvolvimento</a>
   </div>
   <div *ngIf="opcaoSelecionada === 'Compras'">
-    <a href="">bbbbbb</a>
+    <a href="">Em Desenvolvimento</a>
   </div>
+  @if(nivel == 1){
   <div *ngIf="opcaoSelecionada === 'Seller'">
     <app-seller></app-seller>
   </div>
+  } }@else {
+  <h1>Logue-se para acessar esta página</h1>
+  }
 </div>
-<!-- <input type="file" (change)="onFileSelected($event)" />
-<button (click)="uploadFile()">Enviar Arquivo</button> -->
-
-<!--
-Para o produto!
-<form (submit)="uploadImages($event)">
-  <input type="file" multiple (change)="onFileSelected($event)" />
-  <button (click)="uploadFile()" type="submit">Enviar</button>
-</form> -->

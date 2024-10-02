@@ -1,0 +1,164 @@
+<div class="user">
+  <div class="userDados">
+    <div class="menu">
+      <div>
+        <h1>Dados do Usuário</h1>
+      </div>
+    </div>
+
+    <div class="borderCard">
+      <div class="card">
+        <div class="card-details">
+          <div class="values">
+            <p-floatLabel>
+              <input
+                id="username"
+                type="text"
+                pInputText
+                [disabled]="true"
+                [value]="username"
+              />
+              <label for="username">Nome</label>
+            </p-floatLabel>
+
+            <p-floatLabel>
+              <input
+                id="email"
+                type="text"
+                pInputText
+                [disabled]="true"
+                [value]="email"
+              />
+              <label for="email">Email</label>
+            </p-floatLabel>
+
+            <p-floatLabel>
+              <input
+                id="document"
+                type="text"
+                pInputText
+                mask="CPF_CNPJ"
+                [disabled]="true"
+                [value]="document"
+              />
+              <label for="document">{{ documentType }}</label>
+            </p-floatLabel>
+
+            <p-floatLabel>
+              <input
+                id="phone"
+                type="text"
+                pInputText
+                [disabled]="true"
+                [value]="phone"
+              />
+              <label for="phone">Telefone</label>
+            </p-floatLabel>
+            <button
+              class="card-button"
+              *ngIf="!isEditing"
+              (click)="openModal()"
+            >
+              <i class="fa fa-pencil edit-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="img"></div>
+  <p-dialog
+    header="Edição de dados"
+    [(visible)]="isEditing"
+    [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '50vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    (onHide)="onCloseModal()"
+    contentStyleClass="custom-dialog-content"
+  >
+    <div class="form">
+      <form [formGroup]="form" (ngSubmit)="update()">
+        <div class="editable-field">
+          <p-floatLabel>
+            <input pInputText formControlName="name" type="text" />
+            <label for="username">Nome</label>
+          </p-floatLabel>
+          <div
+            *ngIf="
+              form.get('username')?.invalid && form.get('username')?.touched
+            "
+            class="error"
+          >
+            Nome é obrigatório.
+          </div>
+        </div>
+
+        <div class="editable-field">
+          <p-floatLabel>
+            <input pInputText formControlName="email" type="email" />
+            <label for="email">Email</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            class="error"
+          >
+            Email inválido.
+          </div>
+        </div>
+
+        <div class="editable-field">
+          <p-floatLabel>
+            <input pInputText formControlName="password" type="password" />
+            <label for="password">Senha</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            class="error"
+          >
+            Email inválido.
+          </div>
+        </div>
+
+        <div class="editable-field">
+          <p-floatLabel>
+            <input pInputText formControlName="document" type="text" />
+            <label for="document">Documento</label>
+          </p-floatLabel>
+          <div
+            *ngIf="
+              form.get('document')?.invalid && form.get('document')?.touched
+            "
+            class="error"
+          >
+            Documento é obrigatório.
+          </div>
+        </div>
+
+        <div class="editable-field">
+          <p-floatLabel>
+            <input pInputText formControlName="phone" type="text" />
+            <label for="phone">Telefone</label>
+          </p-floatLabel>
+          <div
+            *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched"
+            class="error"
+          >
+            Telefone esta inválido.
+          </div>
+        </div>
+
+        <div class="edit-buttons">
+          <button type="submit" class="save">Salvar</button>
+          <button type="button" class="cancel" (click)="onCloseModal()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </p-dialog>
+</div>

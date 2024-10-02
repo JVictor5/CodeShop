@@ -66,7 +66,6 @@ export class SellerComponent {
         ?.setValue(`+55${phoneValue}`, { emitEvent: false });
     }
     if (this.form.valid) {
-      console.log(this.fValue);
       const response = await this.shopService.cad(this.fValue);
     } else {
       this.form.markAllAsTouched();
