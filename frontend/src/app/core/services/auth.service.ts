@@ -44,7 +44,9 @@ export class AuthService {
       );
       this.currentUserSubject.next(result.user);
       console.log(result);
+      return true;
     } catch (err) {
+      return false;
       console.error(err);
     }
   };

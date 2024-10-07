@@ -62,14 +62,14 @@
 }
 
 .ng-invalid.ng-touched {
-  border-color: red;
+  border-color: $RedColor;
 }
 .ng-invalid.ng-touched ~ label {
-  color: red !important;
+  color: $RedColor !important;
 }
 
 .error {
-  color: red;
+  color: $RedColor;
   font-size: 0.875rem;
   padding: 0;
 }

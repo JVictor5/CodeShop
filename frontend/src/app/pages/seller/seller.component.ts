@@ -59,14 +59,8 @@ export class SellerComponent {
     });
   }
   async handleSubmit() {
-    const phoneValue = this.form.get('phone')?.value;
-    if (phoneValue && !phoneValue.startsWith('+55')) {
-      this.form
-        .get('phone')
-        ?.setValue(`+55${phoneValue}`, { emitEvent: false });
-    }
     if (this.form.valid) {
-      const response = await this.shopService.cad(this.fValue);
+      await this.shopService.cad(this.fValue);
     } else {
       this.form.markAllAsTouched();
     }

@@ -4,8 +4,18 @@
       <!-- Login Form -->
       <form [formGroup]="login" (ngSubmit)="onSubmit()" class="sign-in-form">
         <h2 class="title">Login</h2>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              (login.get('email')?.invalid && login.get('email')?.touched) ||
+              loginError ||
+              emailError
+          }"
+        >
           <i class="fas fa-user"></i>
+
           <input
             type="text"
             placeholder="Email"
@@ -13,9 +23,29 @@
             [ngbTypeahead]="search"
             required
           />
+
+          <div
+            *ngIf="login.get('email')?.invalid && login.get('email')?.touched"
+            class="error"
+          >
+            <span *ngIf="login.get('email')?.errors?.['required']">
+              Email é obrigatório.
+            </span>
+            <span *ngIf="login.get('email')?.errors?.['email']">
+              Email inválido.
+            </span>
+          </div>
         </div>
 
-        <div class="input-field">
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              (login.get('password')?.invalid &&
+                login.get('password')?.touched) ||
+              loginError
+          }"
+        >
           <i class="fas fa-lock"></i>
           <input
             type="password"
@@ -23,11 +53,27 @@
             formControlName="password"
             required
           />
+
+          <div
+            *ngIf="
+              login.get('password')?.invalid && login.get('password')?.touched
+            "
+            class="error"
+          >
+            <span *ngIf="login.get('password')?.errors?.['required']"
+              >Senha é obrigatória.</span
+            >
+          </div>
+        </div>
+
+        <div *ngIf="loginError" class="login-error">
+          <span>Email ou senha estão incorretos.</span>
         </div>
 
         <a class="recover" type="submit" (click)="recoverPassword()"
           >Esqueci minha senha</a
         >
+
         <input
           type="submit"
           value="Login"
@@ -45,29 +91,86 @@
         (ngSubmit)="handleSubmit()"
       >
         <h2 class="title">Cadastro</h2>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid': form.get('name')?.invalid && form.get('name')?.touched
+          }"
+        >
           <i class="fas fa-user"></i>
           <input type="text" placeholder="Username" formControlName="name" />
+          <div
+            *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+            class="error"
+          >
+            <span *ngIf="form.get('name')?.errors?.['required']">
+              Username é obrigatório.
+            </span>
+          </div>
         </div>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              form.get('email')?.invalid && form.get('email')?.touched
+          }"
+        >
           <i class="fas fa-envelope"></i>
           <input
             type="text"
             placeholder="Email"
             formControlName="email"
             [ngbTypeahead]="search"
-            class="custom-typeahead"
+            required
           />
+          <div
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            class="error"
+          >
+            <span *ngIf="form.get('email')?.errors?.['required']"
+              >Email é obrigatório.</span
+            >
+            <span *ngIf="form.get('email')?.errors?.['email']"
+              >Formato de email inválido.</span
+            >
+          </div>
         </div>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              form.get('password')?.invalid && form.get('password')?.touched
+          }"
+        >
           <i class="fas fa-lock"></i>
           <input
             type="password"
             placeholder="Password"
             formControlName="password"
           />
+          <div *ngIf="form.get('password')?.touched" class="error">
+            <span *ngIf="form.get('password')?.errors?.['required']">
+              Senha é obrigatória.
+            </span>
+            <span
+              *ngIf="!form.get('password')?.errors?.['required'] && form.get('password')?.errors?.['passwordStrength']"
+            >
+              A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um
+              número.
+            </span>
+          </div>
         </div>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              form.get('document')?.invalid && form.get('document')?.touched
+          }"
+        >
           <i class="fa-solid fa-address-card"></i>
           <input
             type="document"
@@ -75,17 +178,52 @@
             formControlName="document"
             placeholder="CPF/CNPJ"
           />
+          <div
+            *ngIf="
+              form.get('document')?.invalid && form.get('document')?.touched
+            "
+            class="error"
+          >
+            <span *ngIf="form.get('document')?.errors?.['required']">
+              CPF/CNPJ é obrigatório.
+            </span>
+            <span *ngIf="form.get('document')?.errors?.['invalidCpf']">
+              CPF é inválido.
+            </span>
+            <span *ngIf="form.get('document')?.errors?.['invalidCnpj']">
+              CNPJ é inválido.
+            </span>
+          </div>
         </div>
-        <div class="input-field">
+
+        <div
+          class="input-field"
+          [ngClass]="{
+            'ng-invalid':
+              form.get('phone')?.invalid && form.get('phone')?.touched
+          }"
+        >
           <i class="fa-solid fa-phone"></i>
           <input
             type="text"
-            mask=" (00) 0000-0000|| (00) 00000-0000"
-            prefix="+55"
+            mask="(00) 0000-0000||(00) 00000-0000"
+            prefix="+55 "
             formControlName="phone"
             placeholder="(00) 00000-0000"
           />
+          <div
+            *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched"
+            class="error"
+          >
+            <span *ngIf="form.get('phone')?.errors?.['required']">
+              Telefone é obrigatório.
+            </span>
+            <span *ngIf="form.get('phone')?.errors?.['pattern']">
+              Formato de telefone inválido.
+            </span>
+          </div>
         </div>
+
         <input
           type="submit"
           value="Cadastrar"

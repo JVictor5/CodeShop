@@ -1,13 +1,7 @@
+@import "../../../styles.scss";
 // Variáveis
 $primary-color: #8c00ff;
 $secondary-color: #ab37f8;
-$gradient-colors: linear-gradient(
-  48deg,
-  rgba(126, 87, 32, 1) 0%,
-  #e3d09a 24%,
-  #b5862d 51%,
-  #e4d27a 86%
-);
 $gradient-mult: linear-gradient(
   -48deg,
   rgba(62, 46, 73, 1) 1%,
@@ -45,7 +39,7 @@ input {
   );
   --bs-dropdown-divider-bg: var(--bs-border-color-translucent);
   --bs-dropdown-link-active-color: #fff;
-  --bs-dropdown-link-active-bg: purple;
+  --bs-dropdown-link-active-bg: #8b5cf6;
   --bs-dropdown-link-disabled-color: var(--bs-tertiary-color);
   --bs-dropdown-item-padding-x: 1rem;
   --bs-dropdown-item-padding-y: 0.25rem;
@@ -183,14 +177,26 @@ form {
   max-width: 380px;
   width: 100%;
   background-color: #f0f0f0;
-  margin: 10px 0;
+  margin: 18px 0;
   height: 60px;
   border-radius: 55px;
   display: grid;
   grid-template-columns: 15% 85%;
   padding: 0 0.4rem;
-  position: relative;
-  border: 2px solid black;
+
+  &.ng-invalid {
+    i {
+      color: $RedColor;
+    }
+
+    input {
+      color: $RedColor;
+
+      &::placeholder {
+        color: $RedColor;
+      }
+    }
+  }
 
   i {
     text-align: center;
@@ -218,8 +224,8 @@ form {
 
 .btn {
   width: 150px;
-  background-color: #8757a3;
-  border: 2px solid #290e4d;
+  background-color: $purpleColor;
+  border: 2px solid $boderPurpleColor;
   outline: none;
   height: 49px;
   border-radius: 49px;
@@ -231,7 +237,7 @@ form {
   transition: 0.5s;
 
   &:hover {
-    background-color: #5d0c8a;
+    background-color: $hoverPurpleColor;
   }
 
   &.transparent {
@@ -449,4 +455,15 @@ form {
     width: 100%;
     z-index: 1000;
   }
+}
+
+.error {
+  width: 380px;
+  color: $RedColor;
+  font-size: 0.875rem;
+  padding: 0;
+}
+.login-error {
+  color: $RedColor;
+  margin-bottom: 0.3125rem;
 }
