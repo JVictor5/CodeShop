@@ -17,7 +17,6 @@ import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastrService } from 'ngx-toastr';
-import { ErrorToast } from '../../../assets/toast/erro.toast';
 @Component({
   selector: 'app-cadastro-usuario',
   standalone: true,
@@ -105,13 +104,13 @@ export class CadastroUsuarioComponent {
       return { invalidCnpj: true };
     }
 
-    return null; // Valid document
+    return null;
   }
   passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.value;
 
-      // Check for minimum length, uppercase letter, and number
+
       const hasUpperCase = /[A-Z]/.test(password);
       const hasNumber = /\d/.test(password);
       const isValidLength = password.length >= 8;

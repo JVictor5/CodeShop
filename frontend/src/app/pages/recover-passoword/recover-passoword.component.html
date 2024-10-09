@@ -1,8 +1,111 @@
-<form [formGroup]="form">
-  <label>
-    Senha:
-    <input type="password" formControlName="password" required />
-  </label>
+<div class="containner">
+  <div class="contain">
+    <div class="heading">Recuperar Senha</div>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <div
+        class="input-field"
+        [ngClass]="{
+          'has-error':
+            form.get('password')?.touched && form.get('password')?.invalid
+        }"
+      >
+        <label>
+          Nova Senha:
+          <input
+            [type]="passwordVisible ? 'text' : 'password'"
+            formControlName="password"
+            class="input"
+            required
+            placeholder="Senha"
+          />
+          <button
+            type="button"
+            class="toggle-visibility"
+            (click)="togglePasswordVisibility()"
+          >
+            <i
+              class="fas"
+              [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"
+            ></i>
+          </button>
+        </label>
+        <div *ngIf="form.get('password')?.touched" class="error">
+          <span *ngIf="form.get('password')?.errors?.['required']">
+            Senha é obrigatória.
+          </span>
+          <span
+            *ngIf="!form.get('password')?.errors?.['required'] && form.get('password')?.errors?.['passwordStrength']"
+          >
+            A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um
+            número.
+          </span>
+        </div>
+      </div>
 
-  <button (click)="handleSubmit()">Trocar</button>
-</form>
+      <div
+        class="input-field"
+        [ngClass]="{
+          'has-error':
+            form.get('confirmPassword')?.touched &&
+            form.get('confirmPassword')?.invalid
+        }"
+      >
+        <label>
+          Confirmar Nova Senha:
+          <input
+            [type]="confirmPasswordVisible ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            class="input"
+            required
+            placeholder="Confirmar Senha"
+          />
+          <button
+            type="button"
+            class="toggle-visibility"
+            (click)="toggleConfirmPasswordVisibility()"
+          >
+            <i
+              class="fas"
+              [ngClass]="confirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"
+            ></i>
+          </button>
+        </label>
+        <div *ngIf="form.get('confirmPassword')?.touched" class="error">
+          <span *ngIf="form.get('confirmPassword')?.errors?.['required']">
+            Confirmar senha é obrigatória.
+          </span>
+          <span
+            *ngIf="!form.get('confirmPassword')?.errors?.['required'] && form.hasError('notMatching')"
+          >
+            As senhas não coincidem.
+          </span>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="login-button btn solid"
+        [disabled]="!form.valid"
+      >
+        Trocar
+      </button>
+    </form>
+  </div>
+  <p-dialog
+    [(visible)]="displayModal"
+    [modal]="true"
+    header="Aviso"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="false"
+    [closeOnEscape]="false"
+    [dismissableMask]="true"
+  >
+    <p>
+      O link expirou. Por favor, solicite um novo link para recuperar sua senha.
+    </p>
+    <div class="button">
+      <button type="button" (click)="closeModal()">Ok<span></span></button>
+    </div>
+  </p-dialog>
+</div>

@@ -1,0 +1,179 @@
+@import "../../../styles.scss";
+
+.containner {
+  background-color: $blackColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 100%;
+  height: 100vh;
+  width: 100%;
+
+  .contain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 43.75rem;
+    height: 80%;
+    background: linear-gradient(0deg, #fff 0%, #f4f7fb 100%);
+    border-radius: 40px;
+    padding: 25px 35px;
+    border: 5px solid #fff;
+    box-shadow: $purpleColor 0px 30px 30px -20px;
+    margin: 20px;
+  }
+
+  .heading {
+    text-align: center;
+    font-weight: 900;
+    font-size: 30px;
+    color: $hoverPurpleColor;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+
+    .input {
+      width: 100%;
+      background: #f1f1f1cb;
+      border: none;
+      padding: 15px 20px;
+      border-radius: 20px;
+      margin-top: 5px;
+      box-shadow: #e9cfff 0px 10px 10px -5px;
+      border-inline: 2px solid transparent;
+
+      &:focus {
+        outline: none;
+        border-inline: 2px solid $boderPurpleColor; /* Corrigido para $borderPurpleColor */
+      }
+    }
+  }
+
+  .error {
+    color: $RedColor;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .login-button {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: linear-gradient(45deg, $hoverPurpleColor 0%, $purpleColor 100%);
+    color: white;
+    padding-block: 15px;
+    margin: 20px auto;
+    border-radius: 20px;
+    box-shadow: $purpleColor 0px 20px 10px -15px;
+    border: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: $purpleColor 0px 23px 10px -20px;
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: $purpleColor 0px 15px 10px -10px;
+    }
+  }
+
+  .button {
+    button {
+      border: none;
+      display: block;
+      position: relative;
+      padding: 0.7em 2.4em;
+      font-size: 18px;
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      color: $greenColor;
+      z-index: 1;
+      font-family: inherit;
+      font-weight: 500;
+      border-radius: 0.625rem;
+      float: right;
+
+      span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: -1;
+        border: 4px solid $greenColor;
+
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 8%;
+          height: 500%;
+          background: $whiteColor;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-60deg);
+          transition: all 0.3s;
+        }
+      }
+
+      &:hover {
+        color: $whiteColor;
+
+        span::before {
+          transform: translate(-50%, -50%) rotate(-90deg);
+          width: 100%;
+          background: $greenColor;
+        }
+      }
+
+      &:active {
+        span::before {
+          background: #27cd2f;
+        }
+      }
+    }
+
+    .error {
+      width: 380px;
+      color: $RedColor;
+      font-size: 0.875rem;
+      padding: 0;
+    }
+  }
+
+  .input-field {
+    position: relative;
+
+    &.has-error .toggle-visibility {
+      top: 53%;
+    }
+
+    .toggle-visibility {
+      position: absolute;
+      right: 10px;
+      top: 69%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+
+      &:focus {
+        outline: none;
+      }
+
+      i {
+        font-size: 1.2em;
+        color: #333;
+      }
+    }
+  }
+}

@@ -119,8 +119,9 @@ export class AuthService {
 
   async recoverPass(email: string) {
     console.log('email:', email);
+    const timestamp = Date.now();
     const code = btoa(email);
-    const url = `http://localhost:4200/trocar-senha?code=${code}`;
+    const url = `http://localhost:4200/trocar-senha?code=${code}&time=${timestamp}`;
     try {
       const response = await lastValueFrom(
         this.http.post(`${environment.urlApi}/users/email`, { email, url })
