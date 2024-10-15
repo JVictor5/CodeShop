@@ -1,15 +1,24 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ProductRepository } from '../../core/repositories/product.repository';
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/shoppingCart.service';
 
 @Component({
   selector: 'app-tela-produto',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './tela-produto.component.html',
   styleUrl: './tela-produto.component.scss',
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class TelaProdutoComponent implements OnInit {
   products: any[] = [];
@@ -20,9 +29,22 @@ export class TelaProdutoComponent implements OnInit {
 
   ngOnInit() {
     this.productRepository.getAll().then((data: any[]) => {
-      console.log(data);
       this.products = data;
     });
+  }
+  toggleFavorite(product: any) {
+    product.isFavorite = !product.isFavorite;
+
+    const heartIcon = document.querySelector(`.heart-icon-${product.id}`);
+    if (heartIcon) {
+      if (product.isFavorite) {
+        heartIcon.classList.add('active');
+      } else {
+        heartIcon.classList.remove('active');
+      }
+    } else {
+      console.warn('Elemento heartIcon não encontrado!');
+    }
   }
 
   addToCart(product: any) {
@@ -36,5 +58,28 @@ export class TelaProdutoComponent implements OnInit {
       maximumQuantity: product.quantity,
     });
     console.log(product.description);
+  }
+
+  toggleHover(product: any, isHovering: boolean) {
+    product.isHovered = isHovering;
+  }
+
+  // Filtro
+  @ViewChild('filtro', { static: true }) filtro!: ElementRef<HTMLDivElement>;
+
+  private originalHeight = '100vh';
+  private newHeight = '95vh';
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition + windowHeight >= documentHeight) {
+      this.filtro.nativeElement.style.height = this.newHeight;
+    } else {
+      this.filtro.nativeElement.style.height = this.originalHeight;
+    }
   }
 }
