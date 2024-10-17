@@ -22,7 +22,7 @@ export class LayoutComponent {
   isLoginRoute(): boolean {
     const currentUrl = this.router.url;
     const base64Prefix = '/trocar-senha?code=';
-    
+
     if (currentUrl.startsWith(base64Prefix)) {
       return true;
     }

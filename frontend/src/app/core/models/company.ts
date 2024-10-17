@@ -1,5 +1,10 @@
-import { Model } from "@burand/angular";
+import { Model } from '@burand/angular';
 
-export interface company extends Model {
-    
+export interface Company extends Model {
+  avatar: string | null;
+  name: string;
+  phone: string;
+  email: string;
+  discription: string;
+  idUser: string;
 }
