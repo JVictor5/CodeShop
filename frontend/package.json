@@ -28,6 +28,7 @@
     "bootstrap": "^5.3.3",
     "boxicons": "^2.1.4",
     "dropzone": "^6.0.0-beta.2",
+    "fast-average-color": "^9.4.0",
     "ngx-dropzone-wrapper": "^17.0.0",
     "ngx-image-cropper": "^8.0.0",
     "ngx-mask": "^17.0.8",

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -16,9 +16,14 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { BadgeModule } from 'primeng/badge';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+import { gameGenres } from '../../data/game-genres';
+import { playerModes } from '../../data/player-modes';
+import { DialogModule } from 'primeng/dialog';
+import { FastAverageColor } from 'fast-average-color';
 
 @Component({
   selector: 'app-update-product',
@@ -35,10 +40,12 @@ import { FormsModule } from '@angular/forms';
     ProgressBarModule,
     MultiSelectModule,
     FormsModule,
+    CalendarModule,
+    DialogModule,
   ],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.scss',
-  providers: [MessageService]
+  providers: [MessageService, PrimeNGConfig]
 })
 export class UpdateProductComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -46,14 +53,21 @@ export class UpdateProductComponent implements OnInit {
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
+  private primengConfig = inject(PrimeNGConfig);
   productId: string = '';
 
+  // variáveis que buscam os dados para popular o multi-select
+  genres = gameGenres;
+  playerModes = playerModes;
+
+  // variável que recebe url após a inserção no supabase
   capaUrl: { sm: string; lg: string; } = { sm: '', lg: '' };
 
   selectedCapa: File[] = [];
   currentCapa: string = '';
   showCapaInput: boolean = false;
 
+  // variáveis de manipulação do dropzone
   unchangedImages: { sm: string[]; lg: string[]; } = { sm: [], lg: [] };
   newImages: any[] = [];
   deletedImages: string[] = [];
@@ -65,43 +79,31 @@ export class UpdateProductComponent implements OnInit {
   selectedVideos: File[] = [];
   currentVideos: string[] = [];
 
+  // controle dos códigos inseridos
   keys: string[] = [];
   editedIndex: number | null = null;
   quantity: number = 0;
 
+  // variáveis de controle dos diferentes forms correspondentes a cada passo do stepper
   step1FormGroup!: FormGroup;
   step2FormGroup!: FormGroup;
   step3FormGroup!: FormGroup;
+  step4FormGroup!: FormGroup;
 
   showGameGenres = false;
   activeIndex: number = 0;
+  showSpinner: boolean = false;
+  visibleModalWelcome: boolean = true;
 
-  genres = [
-    { name: 'Ação', code: 'acao' },
-    { name: 'Aventura', code: 'aventura' },
-    { name: 'Casual', code: 'casual' },
-    { name: 'Co-op (Cooperativo)', code: 'coop' },
-    { name: 'Esporte', code: 'esporte' },
-    { name: 'Estratégia', code: 'estrategia' },
-    { name: 'Horror psicológico', code: 'horror_psicologico' },
-    { name: 'Indie', code: 'indie' },
-    { name: 'Narrativa (Point & Click)', code: 'narrativa' },
-    { name: 'Plataforma 2D', code: 'plataforma_2d' },
-    { name: 'Plataforma 3D', code: 'plataforma_3d' },
-    { name: 'PvE (Jogador contra Ambiente)', code: 'pve' },
-    { name: 'PvP (Jogador contra Jogador)', code: 'pvp' },
-    { name: 'Quebra-cabeças (Puzzle)', code: 'quebra_cabecas' },
-    { name: 'Roguelike', code: 'roguelike' },
-    { name: 'Roguelite', code: 'roguelite' },
-    { name: 'Sandbox', code: 'sandbox' },
-    { name: 'Simulação', code: 'simulacao' },
-    { name: 'Tiro em primeira pessoa (FPS)', code: 'fps' }
-  ];
+  // variáveis para personalizar o card final do produto
+  backgroundColorCardAnimation!: string;
+  colorCardAnimation!: string;
 
   ngOnInit(): void {
     this.step1FormGroup = this.form.get('step1') as FormGroup;
     this.step2FormGroup = this.form.get('step2') as FormGroup;
     this.step3FormGroup = this.form.get('step3') as FormGroup;
+    this.step4FormGroup = this.form.get('step4') as FormGroup;
 
     this.route.paramMap.subscribe(params => {
       this.productId = params.get('id') ?? '';
@@ -117,25 +119,42 @@ export class UpdateProductComponent implements OnInit {
           name: p.name,
           description: p.description,
           price: p.price,
-          genres: p.genres,
-          minimumOs: p.minimumSystemRequirements?.os,
-          minimumCpu: p.minimumSystemRequirements?.cpu,
-          minimumStorage: p.minimumSystemRequirements?.storage,
-          minimumMemory: p.minimumSystemRequirements?.memory,
-          minimumGpu: p.minimumSystemRequirements?.gpu,
-          recommendedOs: p.recommendedSystemRequirements?.os,
-          recommendedCpu: p.recommendedSystemRequirements?.cpu,
-          recommendedStorage: p.recommendedSystemRequirements?.storage,
-          recommendedMemory: p.recommendedSystemRequirements?.memory,
-          recommendedGpu: p.recommendedSystemRequirements?.gpu,
+          releaseDate: p.releaseDate.bruteFormat,
         },
       });
       this.showGameGenres = (p.category === 'Jogos');
+      if (this.showGameGenres) {
+        this.form.patchValue({
+          step2: {
+            genres: p.genres,
+            playerModes: p.playerModes,
+            minimumOs: p.minimumSystemRequirements?.os,
+            minimumCpu: p.minimumSystemRequirements?.cpu,
+            minimumStorage: p.minimumSystemRequirements?.storage,
+            minimumMemory: p.minimumSystemRequirements?.memory,
+            minimumGpu: p.minimumSystemRequirements?.gpu,
+            recommendedOs: p.recommendedSystemRequirements?.os,
+            recommendedCpu: p.recommendedSystemRequirements?.cpu,
+            recommendedStorage: p.recommendedSystemRequirements?.storage,
+            recommendedMemory: p.recommendedSystemRequirements?.memory,
+            recommendedGpu: p.recommendedSystemRequirements?.gpu,
+          }
+        });
+      }
       this.currentCapa = p.capaUrl.sm;
       this.capaUrl = { sm: p.capaUrl.sm, lg: p.capaUrl.lg };
       this.keys = p.keys;
       this.quantity = this.keys.length;
       this.beforeUpdateImages = p.imgUrls.sm;
+    });
+
+    this.primengConfig.setTranslation({
+      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      dayNamesMin: ['Do', 'Se', 'Te', 'Qa', 'Qi', 'Se', 'Sa'],
+      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dateFormat: "dd/mm/yy"
     });
   }
 
@@ -159,10 +178,9 @@ export class UpdateProductComponent implements OnInit {
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: [0.0, Validators.required],
-      capaUrl: ['', Validators.required],
-      videosUrls: [[] as string[], Validators.required],
-      imgUrls: [[] as string[], Validators.required],
+      releaseDate: ['', Validators.required],
       genres: [[] as string[], Validators.required],
+      playerModes: [[] as string[], Validators.required],
       minimumOs: '',
       minimumCpu: '',
       minimumStorage: '',
@@ -175,6 +193,13 @@ export class UpdateProductComponent implements OnInit {
       recommendedGpu: '',
     }),
     step3: this.builder.group({
+      capaUrl: ['', Validators.required],
+      videosUrls: [[] as string[], Validators.required],
+      imgUrls: [[] as string[], Validators.required],
+      capaDestaqueUrl: ['', Validators.required],
+      descriptionDestaque: ['', Validators.required]
+    }),
+    step4: this.builder.group({
       keysInput: ['', Validators.required],
     })
   });
@@ -207,14 +232,12 @@ export class UpdateProductComponent implements OnInit {
         this.showToast('error', 'Atenção', 'Preencha o campo descrição!');
       } else if (!this.fValue.step2.price) {
         this.showToast('error', 'Atenção', 'Preencha o campo preço!');
-      } else if (this.uploadedImages.length == 0) {
-        if (this.pendingImages.length > 0) {
-          this.showToast('error', 'Atenção', 'Faça o upload das imagens!');
-        } else {
-          this.showToast('error', 'Atenção', 'Escolha as imagens!');
-        }
+      } else if (!this.fValue.step2.releaseDate) {
+        this.showToast('error', 'Atenção', 'Escolha uma data de lançamento!');
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
         this.showToast('error', 'Atenção', 'Escolha gêneros para o jogo!');
+      } else if (this.showGameGenres && this.fValue.step2.playerModes.length == 0) {
+        this.showToast('error', 'Atenção', 'Escolha modos de jogadores para o jogo!');
       } else if (this.showGameGenres && (!this.fValue.step2.minimumCpu
         || !this.fValue.step2.minimumGpu
         || !this.fValue.step2.minimumMemory
@@ -231,19 +254,55 @@ export class UpdateProductComponent implements OnInit {
         this.activeIndex++;
       }
     } else if (index == 2) {
+      if (this.uploadedImages.length == 0) {
+        if (this.pendingImages.length > 0) {
+          this.showToast('error', 'Atenção', 'Faça o upload das imagens!');
+        } else {
+          this.showToast('error', 'Atenção', 'Escolha as imagens!');
+        }
+      } else {
+        this.activeIndex++;
+      }
+    } else if (index == 3) {
       if (this.keys.length == 0) {
         this.showToast('error', 'Atenção', 'Cadastre chave para o produto!');
       } else {
+        this.showSpinner = true;
         if (await this.handleSubmit()) {
-          this.activeIndex++;
+          this.applyColorToDiv();
+          setTimeout(() => {
+            this.activeIndex++;
+            setTimeout(() => {
+              this.showToast('success', 'Conclusão', 'Chegamos ao fim! Obrigado por confiar na CodeShop.');
+            }, 400);
+          }, 1000);
         }
       }
     }
   }
 
+  validateImage(fileType: string): boolean {
+    if (fileType == "image/png"
+      || fileType == "image/jpg"
+      || fileType == "image/jpeg"
+      || fileType == "image/webp"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   onCapaChange(event: any) {
     if (event.target.files.length > 0) {
-      this.selectedCapa = Array.from(event.target.files);
+      let fileType = event.target.files[0].type;
+      if (this.validateImage(fileType)) {
+        this.selectedCapa = Array.from(event.target.files);
+      } else {
+        this.form.get('step3.capaUrl')?.reset();
+        this.selectedCapa = [];
+        this.showToast('error', 'Atenção', 'Somente imagens são aceitas!');
+      }
     }
   }
   /*onVideosChange(event: any) {
@@ -255,6 +314,29 @@ export class UpdateProductComponent implements OnInit {
   // Função para detectar mudança de categoria e mostrar o select de gêneros de jogos
   onProductCategoryChange(category: string): void {
     this.showGameGenres = (category === 'Jogos');
+  }
+
+  // Função para aplicar a cor ao card final do produto
+  applyColorToDiv(): void {
+    const fac = new FastAverageColor();
+    fac.getColorAsync(this.capaUrl.sm)
+      .then(color => {
+        this.backgroundColorCardAnimation = color.rgba;
+        this.colorCardAnimation = color.isDark ? '#fff' : '#000';
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0
+    });
+  }
+
+  onVisibleModalWelcome() {
+    this.visibleModalWelcome = false;
   }
 
   showCapaInputClick(): void {
@@ -272,7 +354,7 @@ export class UpdateProductComponent implements OnInit {
 
   // Função para adicionar as chaves do produto
   addKeys(): void {
-    const keysInput: string | undefined = this.form.get('step3.keysInput')?.value;
+    const keysInput: string | undefined = this.form.get('step4.keysInput')?.value;
     if (keysInput) {
       const newKeys = keysInput.split(/[\s,]+/).filter(key => key.trim() !== '');
 
@@ -284,18 +366,84 @@ export class UpdateProductComponent implements OnInit {
         this.quantity = this.keys.length;
       }
 
-      this.form.get('step3.keysInput')?.reset();
+      this.form.get('step4.keysInput')?.reset();
     }
   }
 
   editKey(index: number): void {
-    this.form.get('step3.keysInput')?.setValue(this.keys[index]);
+    this.form.get('step4.keysInput')?.setValue(this.keys[index]);
     this.editedIndex = index;
   }
 
   removeKey(index: number): void {
     this.keys.splice(index, 1);
   }
+
+  formatDate(inputString: any): string {
+    let formattedDate = '';
+    if (inputString instanceof Date) {
+      formattedDate = this.setFormattedDate(inputString);
+    }
+    return formattedDate;
+  }
+
+  setFormattedDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Meses são indexados em 0
+    const year = date.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
+  }
+
+  // -- Início - Funções para o dropzone e a manipulação de imagens  
+  onUpload(event: any) {
+    for (let file of event.files) {
+      this.uploadedImages.push(file);
+    }
+
+    this.pendingImages = [];
+    this.showToast('success', 'Sucesso', 'Upload feito.');
+  }
+
+  onSelectedFiles(event: any) {
+    this.pendingImages.push(...event.files);
+    this.showToast('info', 'Escolha feita', 'Não se esqueça de fazer o upload.');
+  }
+
+  // Função para formatar o tamanho do arquivo
+  formatSize(bytes: number): string {
+    if (bytes === 0) {
+      return '0 B';
+    }
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // Função para remover arquivo antes do upload
+  onRemoveTemplatingFile(event: Event, file: any, removeFileCallback: Function, index: number) {
+    this.pendingImages.splice(index, 1);
+    removeFileCallback(index);
+  }
+
+  // Função para iniciar o processo de upload manualmente
+  uploadEvent(uploadCallback: Function) {
+    uploadCallback();
+  }
+
+  // Função para escolher arquivos manualmente
+  choose(event: Event, chooseCallback: Function) {
+    chooseCallback();
+  }
+
+  // Função para remover arquivos já carregados
+  removeUploadedFile(removeUploadedFileCallback: Function, index: number) {
+    removeUploadedFileCallback(index);
+    this.uploadedImages.splice(index, 1);
+    this.showToast('success', 'Sucesso', 'Imagem removida.');
+  }
+  // -- Fim - Funções para o dropzone e a manipulação de imagens
 
   get f() {
     return this.form.controls;
@@ -343,6 +491,7 @@ export class UpdateProductComponent implements OnInit {
           price: this.fValue.step2.price,
           keys: this.keys,
           quantity: this.quantity,
+          playerModes: Array.isArray(this.fValue.step2.playerModes) ? this.fValue.step2.playerModes : [this.fValue.step2.playerModes],
           genres: Array.isArray(this.fValue.step2.genres) ? this.fValue.step2.genres : [this.fValue.step2.genres],
           minimumSystemRequirements: {
             os: this.fValue.step2.minimumOs,
@@ -357,7 +506,11 @@ export class UpdateProductComponent implements OnInit {
             storage: this.fValue.step2.recommendedStorage,
             memory: this.fValue.step2.recommendedMemory,
             gpu: this.fValue.step2.recommendedGpu,
-          }
+          },
+          releaseDate: {
+            dateFormat: this.formatDate(this.fValue.step2.releaseDate),
+            bruteFormat: this.fValue.step2.releaseDate
+          },
         };
       } else {
         formValue = {
@@ -369,6 +522,10 @@ export class UpdateProductComponent implements OnInit {
           genres: this.fValue.step2.genres,
           keys: this.keys,
           quantity: this.quantity,
+          releaseDate: {
+            dateFormat: this.formatDate(this.fValue.step2.releaseDate),
+            bruteFormat: this.fValue.step2.releaseDate
+          },
         };
       }
       await this.productService.update(formValue);
@@ -434,53 +591,5 @@ export class UpdateProductComponent implements OnInit {
       console.log(error);
       return false;
     }
-  }
-
-  onUpload(event: any) {
-    for (let file of event.files) {
-      this.uploadedImages.push(file);
-    }
-
-    this.pendingImages = [];
-    this.showToast('success', 'Sucesso', 'Upload feito.');
-  }
-
-  onSelectedFiles(event: any) {
-    this.pendingImages.push(...event.files);
-    this.showToast('info', 'Escolha feita', 'Não se esqueça de fazer o upload.');
-  }
-
-  // Função para formatar o tamanho do arquivo
-  formatSize(bytes: number): string {
-    if (bytes === 0) {
-      return '0 B';
-    }
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  // Função para remover arquivo antes do upload
-  onRemoveTemplatingFile(event: Event, file: any, removeFileCallback: Function, index: number) {
-    this.pendingImages.splice(index, 1);
-    removeFileCallback(index);
-  }
-
-  // Função para iniciar o processo de upload manualmente
-  uploadEvent(uploadCallback: Function) {
-    uploadCallback();
-  }
-
-  // Função para escolher arquivos manualmente
-  choose(event: Event, chooseCallback: Function) {
-    chooseCallback();
-  }
-
-  // Função para remover arquivos já carregados
-  removeUploadedFile(removeUploadedFileCallback: Function, index: number) {
-    removeUploadedFileCallback(index);
-    this.uploadedImages.splice(index, 1);
-    this.showToast('success', 'Sucesso', 'Imagem removida.');
   }
 }

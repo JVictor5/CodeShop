@@ -1,6 +1,31 @@
+.main-container-detalhe-produto {
+  width: 80%;
+}
+
+.img-capa {
+  width: 185px;
+  height: 126px;
+  object-fit: contain;
+}
+
+.background-img {
+  width: 100%;
+  height: 400px;
+  position: absolute;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
 .carousel {
   margin: 0 auto;
-  width: 80%;
+  // width: 80%;
   // max-height: 650px;
   // height: 100%;
   .custom-carousel {
@@ -78,4 +103,20 @@ swiper-slide img {
 }
 vg-play-pause{
   color: #fff;
+}
+
+.title {
+  color: #ffff
+}
+
+.description {
+  text-align: justify;
+}
+
+.divider {
+  border-top: 2px solid
+}
+
+.text-output {
+  white-space: pre-wrap;
 }

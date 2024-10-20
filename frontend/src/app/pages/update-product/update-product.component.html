@@ -1,5 +1,12 @@
 <div class="d-flex justify-content-center p-4">
   <div class="main-container-create-product">
+    <p-dialog header="Edição de produto" [modal]="true" [(visible)]="visibleModalWelcome" [style]="{ width: '25rem' }">
+      <span class="p-text-secondary block mb-5">Bem vindo! Aqui você irá editar o seu produto na CodeShop.</span>
+      <div class="d-flex justify-content-end mt-4 me-2">
+        <button class="btn btn-primary" (click)="onVisibleModalWelcome()">Vamos lá!</button>
+      </div>
+    </p-dialog>
+
     <p-stepper [linear]="true" [(activeStep)]="activeIndex">
       <p-stepperPanel header="Categoria">
         <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
@@ -10,7 +17,7 @@
               <div
                 class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
                 <div class="row">
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="" formControlName="category" type="radio" name="category" id="gameCode" value="Jogos"
                       (change)="onProductCategoryChange('Jogos')">
                     <div class="card">
@@ -22,7 +29,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="form-check-input" formControlName="category" type="radio" name="category"
                       id="giftCard" value="Gift Card" (change)="onProductCategoryChange('Gift Card')">
                     <div class="card">
@@ -34,7 +41,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="form-check-input" formControlName="category" type="radio" name="category"
                       id="serviceSubscription" value="Assinatura de Serviços"
                       (change)="onProductCategoryChange('Assinatura de Serviços')">
@@ -49,7 +56,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="form-check-input" formControlName="category" type="radio" name="category"
                       id="virtualCredits" value="Créditos Virtuais"
                       (change)="onProductCategoryChange('Créditos Virtuais')">
@@ -62,7 +69,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="form-check-input" formControlName="category" type="radio" name="category"
                       id="software" value="Software e Aplicativos"
                       (change)="onProductCategoryChange('Software e Aplicativos')">
@@ -75,7 +82,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-3 mb-3">
+                  <div class="col-sm-12 col-md-3 mb-3">
                     <input class="form-check-input" formControlName="category" type="radio" name="category"
                       id="additionalContent" value="Conteúdos Adicionais e Expansões"
                       (change)="onProductCategoryChange('Conteúdos Adicionais e Expansões')">
@@ -92,7 +99,8 @@
               </div>
             </form>
             <div class="d-flex pt-4 justify-content-end">
-              <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+              <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
+                (onClick)="onNextStep(index)" />
             </div>
           </div>
         </ng-template>
@@ -106,19 +114,86 @@
             <form [formGroup]="step2FormGroup">
               <div
                 class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div class="mb-3">
+                <div class="mb-4">
                   <label for="name" class="form-label">Nome:</label>
                   <input type="text" id="name" formControlName="name" class="form-control" />
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                   <label for="description" class="form-label">Descrição:</label>
                   <textarea id="description" formControlName="description" class="form-control" rows="6"></textarea>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                   <label for="price" class="form-label">Preço:</label>
                   <input type="number" id="price" formControlName="price" class="form-control" />
                 </div>
-                <div class="card mb-3">
+                <div class="mb-4">
+                  <label for="releaseDate" class="form-label d-block">Data de lançamento:</label>
+                  <p-calendar id="releaseDate" formControlName="releaseDate"
+                    pTooltip="Data em que seu produto foi lançado." />
+                </div>
+                <div class="mt-4 mb-4" *ngIf="showGameGenres">
+                  <p-multiSelect inputId="genres" class="w-100" [options]="genres" formControlName="genres"
+                    placeholder="Selecione os gêneros do jogo" optionLabel="name" display="chip" [showClear]="true" />
+                </div>
+                <div class="mt-4 mb-4" *ngIf="showGameGenres">
+                  <p-multiSelect inputId="playerModes" class="w-100" [options]="playerModes"
+                    formControlName="playerModes" placeholder="Selecione os modos de jogadores" optionLabel="name"
+                    display="chip" [showClear]="true" />
+                </div>
+
+                <div class="card mb-4" *ngIf="showGameGenres">
+                  <div class="card-header">Requisitos mínimos do sistema</div>
+                  <div class="card-body">
+                    <label for="minimumOs" class="form-label mt-3">Sistema operacional:</label>
+                    <input type="text" id="minimumOs" formControlName="minimumOs" class="form-control" />
+                    <label for="minimumCpu" class="form-label mt-3">Processador:</label>
+                    <input type="text" id="minimumCpu" formControlName="minimumCpu" class="form-control" />
+                    <label for="minimumStorage" class="form-label mt-3">Armazenamento:</label>
+                    <input type="text" id="minimumStorage" formControlName="minimumStorage" class="form-control" />
+                    <label for="minimumMemory" class="form-label mt-3">Memória:</label>
+                    <input type="text" id="minimumMemory" formControlName="minimumMemory" class="form-control" />
+                    <label for="minimumGpu" class="form-label mt-3">Placa de vídeo:</label>
+                    <input type="text" id="minimumGpu" formControlName="minimumGpu" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="card mb-4" *ngIf="showGameGenres">
+                  <div class="card-header">Requisitos recomendados do sistema</div>
+                  <div class="card-body">
+                    <label for="recommendedOs" class="form-label mt-3">Sistema operacional:</label>
+                    <input type="text" id="recommendedOs" formControlName="recommendedOs" class="form-control" />
+                    <label for="recommendedCpu" class="form-label mt-3">Processador:</label>
+                    <input type="text" id="recommendedCpu" formControlName="recommendedCpu" class="form-control" />
+                    <label for="recommendedStorage" class="form-label mt-3">Armazenamento:</label>
+                    <input type="text" id="recommendedStorage" formControlName="recommendedStorage"
+                      class="form-control" />
+                    <label for="recommendedMemory" class="form-label mt-3">Memória:</label>
+                    <input type="text" id="recommendedMemory" formControlName="recommendedMemory"
+                      class="form-control" />
+                    <label for="recommendedGpu" class="form-label mt-3">Placa de vídeo:</label>
+                    <input type="text" id="recommendedGpu" formControlName="recommendedGpu" class="form-control" />
+                  </div>
+                </div>
+
+              </div>
+            </form>
+          </div>
+          <div class="d-flex pt-4 justify-content-end">
+            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
+              (onClick)="onNextStep(index)" />
+          </div>
+        </ng-template>
+      </p-stepperPanel>
+      <p-stepperPanel header="Mídia">
+        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
+          let-index="index">
+          <div class="">
+            <h5 class="mb-4">Personalize o seu produto:</h5>
+            <p-toast />
+            <form [formGroup]="step3FormGroup">
+              <div
+                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
+                <div class="card mb-4">
                   <div class="card-header">Capa</div>
                   <div class="card-body d-flex justify-content-center">
                     <div class="card w-25">
@@ -131,11 +206,11 @@
                   </div>
                   <div *ngIf="showCapaInput" class="mb-3 p-2">
                     <label for="capaUrl" class="form-label">Nova capa:</label>
-                    <input type="file" id="capaUrl" (change)="onCapaChange($event)" formControlName="capaUrl"
-                      class="form-control" />
+                    <input type="file" accept="image/*" id="capaUrl" (change)="onCapaChange($event)"
+                      formControlName="capaUrl" class="form-control" />
                   </div>
                 </div>
-                <!-- <div class="mb-3">
+                <!-- <div class="mb-4">
                   <label for="videosUrls" class="form-label">Videos:</label>
                   <input type="file" id="videosUrls" (change)="onVideosChange($event)" formControlName="videosUrls"
                     multiple class="form-control" />
@@ -153,14 +228,14 @@
                       let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
                       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                         <div class="d-flex gap-2">
-                          <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
-                            [outlined]="true" pTooltip="Escolher imagens" tooltipPosition="top" />
-                          <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" [rounded]="true"
-                            [outlined]="true" severity="success" [disabled]="!files || files.length === 0"
-                            pTooltip="Fazer upload" tooltipPosition="top" />
-                          <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true"
-                            severity="danger" [disabled]="!files || files.length === 0" pTooltip="Remover imagens"
-                            tooltipPosition="top" />
+                          <p-button (onClick)="choose($event, chooseCallback)" class="rounded-icon-custom"
+                            icon="pi pi-images" [outlined]="true" pTooltip="Escolher imagens" tooltipPosition="top" />
+                          <p-button (onClick)="uploadEvent(uploadCallback)" class="rounded-icon-custom"
+                            icon="pi pi-cloud-upload" [outlined]="true" severity="success"
+                            [disabled]="!files || files.length === 0" pTooltip="Fazer upload" tooltipPosition="top" />
+                          <p-button (onClick)="clearCallback()" class="rounded-icon-custom" icon="pi pi-times"
+                            [outlined]="true" severity="danger" [disabled]="!files || files.length === 0"
+                            pTooltip="Remover imagens" tooltipPosition="top" />
                         </div>
                       </div>
                     </ng-template>
@@ -183,7 +258,7 @@
                             <p-badge value="Pendente" severity="warning" />
                             <p-button icon="pi pi-times"
                               (onClick)="onRemoveTemplatingFile($event, file, removeFileCallback, i)" [outlined]="true"
-                              [rounded]="true" severity="danger" />
+                              class="rounded-icon-custom" severity="danger" />
                           </div>
                         </div>
                       </div>
@@ -201,7 +276,7 @@
                             <div>{{ formatSize(file.size) }}</div>
                             <p-badge value="Completo" class="mt-3" severity="success" />
                             <p-button icon="pi pi-times" (onClick)="removeUploadedFile(removeUploadedFileCallback, i)"
-                              [outlined]="true" [rounded]="true" severity="danger" />
+                              [outlined]="true" class="rounded-icon-custom" severity="danger" />
                           </div>
                         </div>
                       </div>
@@ -219,50 +294,35 @@
 
                 </div>
 
-                <div class="mt-3 mb-3" *ngIf="showGameGenres">
-                  <p-multiSelect inputId="genres" class="w-100" [options]="genres" formControlName="genres"
-                    placeholder="Selecione os gêneros do jogo" optionLabel="name" display="chip" [showClear]="true" />
+                <!-- <div class="mb-4">
+                  <p-checkbox class="me-3" inputId="destaques" (click)="onShowDestaques()" />
+                  <label for="destaques">Deseja adicionar um destaque?</label>
                 </div>
 
-                <div class="card mb-3" *ngIf="showGameGenres">
-                  <div class="card-header">Requisitos mínimos do sistema</div>
-                  <div class="card-body">
-                    <label for="minimumOs" class="form-label mt-3">Sistema operacional:</label>
-                    <input type="text" id="minimumOs" formControlName="minimumOs" class="form-control" />
-                    <label for="minimumCpu" class="form-label mt-3">Processador:</label>
-                    <input type="text" id="minimumCpu" formControlName="minimumCpu" class="form-control" />
-                    <label for="minimumStorage" class="form-label mt-3">Armazenamento:</label>
-                    <input type="text" id="minimumStorage" formControlName="minimumStorage" class="form-control" />
-                    <label for="minimumMemory" class="form-label mt-3">Memória:</label>
-                    <input type="text" id="minimumMemory" formControlName="minimumMemory" class="form-control" />
-                    <label for="minimumGpu" class="form-label mt-3">Placa de vídeo:</label>
-                    <input type="text" id="minimumGpu" formControlName="minimumGpu" class="form-control" />
+                <div class="mb-4" *ngIf="showDestaques">
+                  <div class="card">
+                    <div class="card-header">Destaque de {{ fValue.step2.name }}</div>
+                    <div class="card-body">
+                      <div class="mb-4">
+                        <label for="descriptionDestaque" class="form-label">Descrição:</label>
+                        <textarea id="descriptionDestaque" formControlName="descriptionDestaque" class="form-control"
+                          rows="6"></textarea>
+                      </div>
+                      <div class="mb-4">
+                        <label for="capaDestaqueUrl" class="form-label">Capa:</label>
+                        <input type="file" accept="image/*" id="capaDestaqueUrl" (change)="onCapaDestaqueChange($event)"
+                          formControlName="capaDestaqueUrl" class="form-control" />
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <div class="card mb-3" *ngIf="showGameGenres">
-                  <div class="card-header">Requisitos recomendados do sistema</div>
-                  <div class="card-body">
-                    <label for="recommendedOs" class="form-label mt-3">Sistema operacional:</label>
-                    <input type="text" id="recommendedOs" formControlName="recommendedOs" class="form-control" />
-                    <label for="recommendedCpu" class="form-label mt-3">Processador:</label>
-                    <input type="text" id="recommendedCpu" formControlName="recommendedCpu" class="form-control" />
-                    <label for="recommendedStorage" class="form-label mt-3">Armazenamento:</label>
-                    <input type="text" id="recommendedStorage" formControlName="recommendedStorage"
-                      class="form-control" />
-                    <label for="recommendedMemory" class="form-label mt-3">Memória:</label>
-                    <input type="text" id="recommendedMemory" formControlName="recommendedMemory"
-                      class="form-control" />
-                    <label for="recommendedGpu" class="form-label mt-3">Placa de vídeo:</label>
-                    <input type="text" id="recommendedGpu" formControlName="recommendedGpu" class="form-control" />
-                  </div>
-                </div>
+                </div> -->
 
               </div>
             </form>
           </div>
           <div class="d-flex pt-4 justify-content-end">
-            <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
+              (onClick)="onNextStep(index)" />
           </div>
         </ng-template>
       </p-stepperPanel>
@@ -272,7 +332,7 @@
           <div class="">
             <h5 class="mb-4">Cadastre as suas chaves:</h5>
             <p-toast />
-            <form [formGroup]="step3FormGroup">
+            <form [formGroup]="step4FormGroup">
               <div
                 class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
                 <div class="mb-3">
@@ -299,16 +359,21 @@
             </form>
           </div>
           <div class="d-flex pt-4 justify-content-end">
-            <p-button label="Próximo" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextStep(index)" />
+            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
+              (onClick)="onNextStep(index)">
+              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"
+                [ngStyle]="{'display': showSpinner ? 'inline-block' : 'none'}"></span>
+            </p-button>
           </div>
         </ng-template>
       </p-stepperPanel>
       <p-stepperPanel header="Conclusão">
         <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
           <div class="">
+            <p-toast [life]="8000" />
             <div class="row">
               <div class="container-card col-6 p-4">
-                <div class="card-animation">
+                <div [ngStyle]="{'color': colorCardAnimation, 'background-color': backgroundColorCardAnimation}" class="card-animation">
                   <div>
                     <img class="rounded imgFinalCard" src="{{ capaUrl.sm }}"
                       alt="Foto do {{ this.fValue.step2.name }}" />

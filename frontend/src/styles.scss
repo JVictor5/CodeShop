@@ -12,3 +12,11 @@ $boderPurpleColor: #4c1d95;
 .main-container-create-product p-stepper ul {
   padding: 0;
 }
+
+p-button.rounded-icon-custom button {
+  border-radius: 50% !important;
+}
+
+p-button.rounded-button-stepper-custom button {
+  border-radius: 10px !important;
+}

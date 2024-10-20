@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ElementRef, ViewChild, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -17,10 +17,15 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { BadgeModule } from 'primeng/badge';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
+import { CalendarModule } from 'primeng/calendar';
+import { DialogModule } from 'primeng/dialog';
+import { gameGenres } from '../../data/game-genres';
+import { playerModes } from '../../data/player-modes';
+import { FastAverageColor } from 'fast-average-color';
 
 @Component({
   selector: 'app-create-product',
@@ -38,69 +43,76 @@ import { TooltipModule } from 'primeng/tooltip';
     MultiSelectModule,
     FormsModule,
     TooltipModule,
+    CalendarModule,
+    DialogModule,
   ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
-  providers: [MessageService]
+  providers: [MessageService, PrimeNGConfig]
 })
 export class CreateProductComponent {
+  @ViewChild('cardAnimationRef', { static: false }) cardAnimationRef!: ElementRef;
+
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private userRepository = inject(UserRepository);
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
+  private primengConfig = inject(PrimeNGConfig);
+
+  // variáveis que buscam os dados para popular o multi-select
+  genres = gameGenres;
+  playerModes = playerModes;
 
   idProduct: string = '';
   idUser: string = '';
   userInfo: any;
 
+  // variáveis que recebem url após a inserção no supabase
   capaUrl: { sm: string, lg: string } = { sm: '', lg: '' };
+  capaDestaqueUrl: { sm: string, lg: string } = { sm: '', lg: '' };
 
+  // variáveis de manipulação do dropzone
   selectedCapa: File[] = [];
+  selectedCapaDestaque: File[] = [];
   selectedImages: File[] = [];
   pendingImages: File[] = [];
   selectedVideos: File[] = [];
+
+  // controle dos códigos inseridos
   keys: string[] = [];
   quantity: number = 0;
 
+  // variáveis de controle dos diferentes forms correspondentes a cada passo do stepper
   step1FormGroup!: FormGroup;
   step2FormGroup!: FormGroup;
   step3FormGroup!: FormGroup;
+  step4FormGroup!: FormGroup;
 
   showGameGenres = false;
   activeIndex: number = 0;
-
-  genres = [
-    { name: 'Ação', code: 'acao' },
-    { name: 'Aventura', code: 'aventura' },
-    { name: 'Casual', code: 'casual' },
-    { name: 'Co-op (Cooperativo)', code: 'coop' },
-    { name: 'Esporte', code: 'esporte' },
-    { name: 'Estratégia', code: 'estrategia' },
-    { name: 'Horror psicológico', code: 'horror_psicologico' },
-    { name: 'Indie', code: 'indie' },
-    { name: 'Narrativa (Point & Click)', code: 'narrativa' },
-    { name: 'Plataforma 2D', code: 'plataforma_2d' },
-    { name: 'Plataforma 3D', code: 'plataforma_3d' },
-    { name: 'PvE (Jogador contra Ambiente)', code: 'pve' },
-    { name: 'PvP (Jogador contra Jogador)', code: 'pvp' },
-    { name: 'Quebra-cabeças (Puzzle)', code: 'quebra_cabecas' },
-    { name: 'Roguelike', code: 'roguelike' },
-    { name: 'Roguelite', code: 'roguelite' },
-    { name: 'Sandbox', code: 'sandbox' },
-    { name: 'Simulação', code: 'simulacao' },
-    { name: 'Tiro em primeira pessoa (FPS)', code: 'fps' }
-  ];
+  showSpinner: boolean = false;
+  visibleModalWelcome: boolean = true;
 
   ngOnInit() {
     this.step1FormGroup = this.form.get('step1') as FormGroup;
     this.step2FormGroup = this.form.get('step2') as FormGroup;
     this.step3FormGroup = this.form.get('step3') as FormGroup;
+    this.step4FormGroup = this.form.get('step4') as FormGroup;
 
     this.authService.currentUser.subscribe(async (user) => {
       this.idUser = user.uid;
       this.userInfo = await this.userRepository.getById(`${this.idUser}`);
+    });
+
+    this.primengConfig.setTranslation({
+      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      dayNamesMin: ['Do', 'Se', 'Te', 'Qa', 'Qi', 'Se', 'Sa'],
+      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dateFormat: "dd/mm/yy"
     });
   }
 
@@ -124,24 +136,23 @@ export class CreateProductComponent {
         this.showToast('error', 'Atenção', 'Escolha uma categoria!');
       } else {
         this.activeIndex++;
+        setTimeout(() => {
+          this.showToast('info', 'Descrição', 'Agora vamos conhecer melhor o seu produto.');
+        }, 400);
       }
     } else if (index == 1) {
-      if (!this.fValue.step2.genres) {
+      if (!this.fValue.step2.name) {
         this.showToast('error', 'Atenção', 'Preencha o campo nome!');
       } else if (!this.fValue.step2.description) {
         this.showToast('error', 'Atenção', 'Preencha o campo descrição!');
       } else if (!this.fValue.step2.price) {
         this.showToast('error', 'Atenção', 'Preencha o campo preço!');
-      } else if (this.selectedCapa.length == 0) {
-        this.showToast('error', 'Atenção', 'Escolha uma capa!');
-      } else if (this.selectedImages.length == 0) {
-        if (this.pendingImages.length > 0) {
-          this.showToast('error', 'Atenção', 'Faça o upload das imagens!');
-        } else {
-          this.showToast('error', 'Atenção', 'Escolha as imagens!');
-        }
+      } else if (!this.fValue.step2.releaseDate) {
+        this.showToast('error', 'Atenção', 'Escolha uma data de lançamento!');
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
         this.showToast('error', 'Atenção', 'Escolha gêneros para o jogo!');
+      } else if (this.showGameGenres && this.fValue.step2.playerModes.length == 0) {
+        this.showToast('error', 'Atenção', 'Escolha modos de jogadores para o jogo!');
       } else if (this.showGameGenres && (!this.fValue.step2.minimumCpu
         || !this.fValue.step2.minimumGpu
         || !this.fValue.step2.minimumMemory
@@ -156,26 +167,47 @@ export class CreateProductComponent {
         this.showToast('error', 'Atenção', 'Preencha os requisitos de sistema!');
       } else {
         this.activeIndex++;
+        this.scrollToTop();
+        setTimeout(() => {
+          this.showToast('info', 'Mídia', 'Ótimo! Agora vamos deixar o produto a cara dele.');
+        }, 700);
       }
     } else if (index == 2) {
+      if (this.selectedCapa.length == 0) {
+        this.showToast('error', 'Atenção', 'Escolha uma capa!');
+      } else if (this.selectedImages.length == 0) {
+        if (this.pendingImages.length > 0) {
+          this.showToast('error', 'Atenção', 'Faça o upload das imagens!');
+        } else {
+          this.showToast('error', 'Atenção', 'Escolha as imagens!');
+        }
+      } else if (!this.fValue.step3.titleDestaque) {
+        this.showToast('error', 'Atenção', 'Preencha o título do destaque!');
+      } else if (!this.fValue.step3.descriptionDestaque) {
+        this.showToast('error', 'Atenção', 'Preencha a descrição do destaque!');
+      } else if (!this.fValue.step3.capaDestaqueUrl) {
+        this.showToast('error', 'Atenção', 'Preencha a capa do destaque!');
+      } else {
+        this.activeIndex++;
+        setTimeout(() => {
+          this.showToast('info', 'Códigos', 'Excelente! Informe a seguir as chaves de acesso para o produto.');
+        }, 400);
+      }
+    } else if (index == 3) {
       if (this.keys.length == 0) {
         this.showToast('error', 'Atenção', 'Cadastre chave para o produto!');
       } else {
+        this.showSpinner = true;
         if (await this.handleSubmit()) {
-          this.activeIndex++;
+          this.applyColorToDiv();
+          setTimeout(() => {
+            this.activeIndex++;
+            setTimeout(() => {
+              this.showToast('success', 'Conclusão', 'Chegamos ao fim! Obrigado por confiar na CodeShop.');
+            }, 400);
+          }, 1000);
         }
       }
-    }
-  }
-
-  onCapaChange(event: any) {
-    if (event.target.files.length > 0) {
-      this.selectedCapa = Array.from(event.target.files);
-    }
-  }
-  onVideosChange(event: any) {
-    if (event.target.files.length > 0) {
-      this.selectedVideos = Array.from(event.target.files);
     }
   }
 
@@ -183,6 +215,83 @@ export class CreateProductComponent {
   onProductCategoryChange(category: string): void {
     this.showGameGenres = (category === 'Jogos');
   }
+
+  // Função para aplicar a cor ao card final do produto
+  applyColorToDiv(): void {
+    const fac = new FastAverageColor();
+    fac.getColorAsync(this.capaUrl.sm)
+      .then(color => {
+        this.cardAnimationRef.nativeElement.style.backgroundColor = color.rgba;
+        this.cardAnimationRef.nativeElement.style.color = color.isDark ? '#fff' : '#000';
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0
+    });
+  }
+
+  onVisibleModalWelcome() {
+    this.visibleModalWelcome = false;
+    setTimeout(() => {
+      this.showToast('info', 'Início', 'Escolha uma categoria para seu produto.');
+    }, 400);
+  }
+
+  // -- Início - Funções para manipulação de imagens
+
+  validateImage(fileType: string): boolean {
+    if (fileType == "image/png"
+      || fileType == "image/jpg"
+      || fileType == "image/jpeg"
+      || fileType == "image/webp"
+      || fileType == "image/avif"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onCapaChange(event: any) {
+    if (event.target.files.length > 0) {
+      let fileType = event.target.files[0].type;
+      if (this.validateImage(fileType)) {
+        this.selectedCapa = Array.from(event.target.files);
+      } else {
+        this.form.get('step3.capaUrl')?.reset();
+        this.selectedCapa = [];
+        this.showToast('error', 'Atenção', 'Somente imagens são aceitas!');
+      }
+    }
+  }
+
+  onVideosChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedVideos = Array.from(event.target.files);
+    }
+  }
+  
+  onCapaDestaqueChange(event: any) {
+    if (event.target.files.length > 0) {
+      let fileType = event.target.files[0].type;
+      if (this.validateImage(fileType)) {
+        this.selectedCapaDestaque = Array.from(event.target.files);
+      } else {
+        this.form.get('step3.capaDestaqueUrl')?.reset();
+        this.selectedCapaDestaque = [];
+        this.showToast('error', 'Atenção', 'Somente imagens são aceitas!');
+      }
+    }
+  }
+
+  // -- Fim - Funções para manipulação de imagens
+
+  // -- Início - Funções para o dropzone e a manipulação de imagens  
 
   // Função para tratar o evento de upload bem-sucedido
   onTemplatedUpload(event: any) {
@@ -230,15 +339,33 @@ export class CreateProductComponent {
     this.showToast('success', 'Sucesso', 'Imagem removida.');
   }
 
+  // -- Fim - Funções para o dropzone e a manipulação de imagens
+
   // Função para adicionar as chaves do produto
   addKeys(): void {
-    const keysInput = this.form.get('step3.keysInput')?.value;
+    const keysInput = this.form.get('step4.keysInput')?.value;
     if (keysInput) {
       const newKeys = keysInput.split(/[\s,]+/).filter(key => key.trim() !== '');
       this.keys.push(...newKeys);
       this.quantity = this.keys.length;
-      this.form.get('step3.keysInput')?.reset();
+      this.form.get('step4.keysInput')?.reset();
     }
+  }
+
+  formatDate(inputString: any): string {
+    let formattedDate = '';
+    if (inputString instanceof Date) {
+      formattedDate = this.setFormattedDate(inputString);
+    }
+    return formattedDate;
+  }
+
+  setFormattedDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Meses são indexados em 0
+    const year = date.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
   }
 
   form = this.builder.group({
@@ -249,10 +376,9 @@ export class CreateProductComponent {
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: [0.0, Validators.required],
-      capaUrl: ['', Validators.required],
-      videosUrls: [[] as string[], Validators.required],
-      imgUrls: [[] as string[], Validators.required],
+      releaseDate: ['', Validators.required],
       genres: [[] as string[], Validators.required],
+      playerModes: [[] as string[], Validators.required],
       minimumOs: '',
       minimumCpu: '',
       minimumStorage: '',
@@ -265,6 +391,14 @@ export class CreateProductComponent {
       recommendedGpu: '',
     }),
     step3: this.builder.group({
+      capaUrl: ['', Validators.required],
+      videosUrls: [[] as string[], Validators.required],
+      imgUrls: [[] as string[], Validators.required],
+      titleDestaque: ['', Validators.required],
+      capaDestaqueUrl: ['', Validators.required],
+      descriptionDestaque: ['', Validators.required]
+    }),
+    step4: this.builder.group({
       keysInput: ['', Validators.required],
     })
   });
@@ -292,6 +426,7 @@ export class CreateProductComponent {
           capaUrl: { sm: '', lg: '' },
           imgUrls: { sm: [] as string[], lg: [] as string[] },
           videosUrls: [''],
+          playerModes: Array.isArray(this.fValue.step2.playerModes) ? this.fValue.step2.playerModes : [this.fValue.step2.playerModes],
           genres: Array.isArray(this.fValue.step2.genres) ? this.fValue.step2.genres : [this.fValue.step2.genres],
           minimumSystemRequirements: {
             os: this.fValue.step2.minimumOs,
@@ -306,7 +441,14 @@ export class CreateProductComponent {
             storage: this.fValue.step2.recommendedStorage,
             memory: this.fValue.step2.recommendedMemory,
             gpu: this.fValue.step2.recommendedGpu,
-          }
+          },
+          releaseDate: {
+            dateFormat: this.formatDate(this.fValue.step2.releaseDate),
+            bruteFormat: this.fValue.step2.releaseDate
+          },
+          titleDestaque: this.fValue.step3.titleDestaque,
+          descriptionDestaque: this.fValue.step3.descriptionDestaque,
+          capaDestaqueUrl: { sm: '', lg: '' }
         };
       } else {
         formValue = {
@@ -319,7 +461,14 @@ export class CreateProductComponent {
           idUser: this.userInfo.idShop,
           capaUrl: { sm: '', lg: '' },
           imgUrls: { sm: [] as string[], lg: [] as string[] },
-          videosUrls: ['']
+          videosUrls: [''],
+          releaseDate: {
+            dateFormat: this.formatDate(this.fValue.step2.releaseDate),
+            bruteFormat: this.fValue.step2.releaseDate
+          },
+          titleDestaque: this.fValue.step3.titleDestaque,
+          descriptionDestaque: this.fValue.step3.descriptionDestaque,
+          capaDestaqueUrl: { sm: '', lg: '' }
         };
       }
 
@@ -334,6 +483,15 @@ export class CreateProductComponent {
         sm: capaUrlArray.sm[0],
         lg: capaUrlArray.lg[0]
       }
+      const capaDestaqueUrlArray = await this.imgService.uploadProductMedia(
+        id,
+        'capa-destaque',
+        this.selectedCapaDestaque
+      );
+      this.capaDestaqueUrl = {
+        sm: capaDestaqueUrlArray.sm[0],
+        lg: capaDestaqueUrlArray.lg[0]
+      }
       const imgUrls = await this.imgService.uploadProductMedia(
         id,
         'images',
@@ -347,6 +505,7 @@ export class CreateProductComponent {
       await this.productService.update({
         id,
         capaUrl: this.capaUrl,
+        capaDestaqueUrl: this.capaDestaqueUrl,
         imgUrls,
         videosUrls,
       });

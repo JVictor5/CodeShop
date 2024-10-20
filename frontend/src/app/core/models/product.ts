@@ -26,4 +26,12 @@ export interface Product extends Model {
     gpu: string;
   };
   idUser: string;
+  releaseDate: {
+    dateFormat: string; 
+    bruteFormat: string;
+  };
+  titleDestaque: string;
+  descriptionDestaque: string;
+  capaDestaqueUrl: { sm: string, lg: string};
+  playerModes?: string[];
 }
