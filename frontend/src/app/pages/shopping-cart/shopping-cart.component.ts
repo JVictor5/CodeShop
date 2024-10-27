@@ -4,6 +4,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
@@ -13,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     FloatLabelModule,
     InputTextModule,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss',

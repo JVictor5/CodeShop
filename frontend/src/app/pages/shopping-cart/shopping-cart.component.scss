@@ -1,3 +1,4 @@
+@import "../../../styles.scss";
 .contain {
   display: flex;
   width: 95%;
@@ -16,18 +17,24 @@
         flex-grow: 1;
       }
       button {
-        color: white;
-        background: #ef4444;
-        border: 1px solid #ef4444;
+        color: $whiteColor;
+        background: $RedColor;
+        border: 1px solid $RedColor;
         border-radius: 8px;
         cursor: pointer;
 
         &:hover {
-          background-color: #cc3b3b;
+          background-color: $hoverRedColor;
         }
       }
     }
-
+    .purple-line {
+      width: 92.5%;
+      height: 4px;
+      background-color: $purpleColor;
+      margin: 20px 0;
+      border-radius: 10px;
+    }
     .fullCart {
       width: 90%;
       height: 45rem;
@@ -37,7 +44,7 @@
         width: 0.3125rem;
       }
       &::-webkit-scrollbar-thumb {
-        background-color: #8b5cf6;
+        background-color: $purpleColor;
         border-radius: 20px;
       }
     }
@@ -108,7 +115,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: #8b5cf6;
+            color: $purpleColor;
             font-size: 2.375rem;
             text-align: center;
             &:hover {
@@ -116,10 +123,10 @@
             }
             &:disabled {
               cursor: context-menu;
-              color: white;
+              color: $whiteColor;
             }
             &:hover:disabled {
-              color: white;
+              color: $whiteColor;
             }
           }
           p {
@@ -134,7 +141,7 @@
         font-size: 1.125rem;
 
         button {
-          color: #ef4444;
+          color: $RedColor;
           background: none;
           border: none;
           cursor: pointer;
@@ -145,7 +152,7 @@
             width: 0;
             height: 2px;
             border-radius: 2px;
-            background-color: #ef4444;
+            background-color: $RedColor;
             position: absolute;
             bottom: -0.25rem;
             right: 0;
@@ -168,12 +175,12 @@
     gap: 3rem;
     width: 30%;
     .summary {
-      background-color: white;
+      background-color: $whiteColor;
       height: 20rem;
       box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
         rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
         rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-      border: 1px solid #8b5cf6;
+      border: 1px solid $purpleColor;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -184,7 +191,7 @@
           display: flex;
           font-size: 2rem;
           i {
-            color: #8b5cf6;
+            color: $purpleColor;
           }
         }
 
@@ -195,9 +202,9 @@
           width: 100%;
 
           .pay {
-            background-color: #8b5cf6;
-            border: 1px solid #8b5cf6;
-            color: white;
+            background-color: $purpleColor;
+            border: 1px solid $purpleColor;
+            color: $whiteColor;
             font-size: 1.1875rem;
             padding: 0.625rem;
             border-radius: 10px;
@@ -208,14 +215,14 @@
           }
           .shop {
             background: none;
-            border: 1px solid #8b5cf6;
-            color: #8b5cf6;
+            border: 1px solid $purpleColor;
+            color: $purpleColor;
             font-size: 1rem;
             padding: 0.625rem;
             border-radius: 10px;
             &:hover {
               background-color: #6b21a8;
-              color: white;
+              color: $whiteColor;
               border-color: #4c1d95;
             }
           }
@@ -226,7 +233,7 @@
       background-color: #ffff;
       width: 100%;
       height: 6rem;
-      border: 1px solid #8b5cf6;
+      border: 1px solid $purpleColor;
       border-radius: 10px;
       display: flex;
       justify-content: center;
@@ -248,7 +255,7 @@
         button {
           width: 25%;
           background-color: #10b981;
-          color: white;
+          color: $whiteColor;
           border: 1px solid #10b981;
           border-radius: 10px;
 

@@ -73,10 +73,10 @@
   </div>
 
   <div *ngIf="opcaoSelecionada === 'Biblioteca'" id="biblioteca">
-    <a href="">Em Desenvolvimento</a>
+    <app-library-key></app-library-key>
   </div>
   <div *ngIf="opcaoSelecionada === 'Compras'">
-    <a href="">Em Desenvolvimento</a>
+    <app-purchase-history></app-purchase-history>
   </div>
   @if(nivel == 1){
   <div *ngIf="opcaoSelecionada === 'Seller'">

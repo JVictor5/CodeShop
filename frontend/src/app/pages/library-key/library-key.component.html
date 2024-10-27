@@ -1,0 +1,98 @@
+<div class="user-codes-container">
+  <h2>Biblioteca de Códigos</h2>
+  <hr />
+  <div class="products-container">
+    <div class="product-card" *ngFor="let code of products">
+      <img [src]="code.img" alt="{{ code.name }}" class="product-image" />
+      <p class="product-name">{{ code.name }}</p>
+
+      <div
+        class="code-box"
+        (click)="openRevealDialog(code)"
+        *ngIf="!code.revealed && code.status !== 'seeCode'"
+      >
+        <div class="hidden-code">Clique para revelar</div>
+      </div>
+      <div
+        *ngIf="code.revealed || code.status === 'seeCode'"
+        class="revealed-code"
+      >
+        <p>Chave de Ativação:</p>
+        <div class="code-container">
+          <div class="code-text">{{ code.code }}</div>
+          <i class="copy-icon bx bx-copy" (click)="copyCode(code.code)"></i>
+        </div>
+      </div>
+      <button
+        *ngIf="!code.revealed && code.status !== 'seeCode'"
+        [disabled]="code.refunded"
+        class="refund-button"
+        (click)="openRefundDialog(code)"
+      >
+        {{ code.refunded ? "Reembolsado" : "Reembolsar" }}
+      </button>
+    </div>
+  </div>
+
+  <p-dialog
+    header="Deseja realmente ver este código?"
+    [(visible)]="revealDialogVisible"
+    [style]="{ width: '400px' }"
+    [modal]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    class="custom-dialog"
+  >
+    <div class="dialog-content">
+      <p class="dialog-message">
+        Importante: ao visualizar o código de ativação, você estará concordando
+        com o uso do produto, e a opção de reembolso será automaticamente
+        desativada. Verifique atentamente suas escolhas antes de prosseguir com
+        a visualização.
+      </p>
+    </div>
+    <p-footer>
+      <button (click)="revealDialogVisible = false" class="p-button-cancel">
+        Cancelar
+      </button>
+      <button (click)="confirmRevealCode()" class="p-button-confirm">
+        Confirmar
+      </button>
+    </p-footer>
+  </p-dialog>
+
+  <p-dialog
+    header="Tem certeza de que deseja solicitar o reembolso deste produto?"
+    [(visible)]="refundDialogVisible"
+    [style]="{ width: '400px' }"
+    [modal]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    class="custom-dialog"
+  >
+    <div class="dialog-content">
+      <p class="dialog-message">
+        Política de Reembolso: o reembolso está disponível apenas para produtos
+        cujo código de ativação não foi visualizado. Após a visualização, o
+        reembolso não poderá ser solicitado. Por favor, confirme sua decisão
+        antes de prosseguir.
+      </p>
+    </div>
+    <p-footer>
+      <div class="button">
+        <button (click)="refundDialogVisible = false" class="p-button-cancel">
+          Cancelar
+        </button>
+        <button (click)="confirmRefundCode()" class="p-button-confirm">
+          Confirmar
+        </button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</div>

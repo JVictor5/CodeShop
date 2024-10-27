@@ -1,0 +1,210 @@
+<div class="wrapper" id="app">
+  <div class="card-form">
+    <div class="card-list">
+      <div class="card-item" [ngClass]="{ '-active': isCardFlipped }">
+        <div class="card-item__side -front">
+          <div
+            class="card-item__focus"
+            [ngClass]="{ '-active': isInputFocused }"
+            [ngStyle]="focusElementStyle"
+          ></div>
+          <div class="card-item__cover">
+            <img [src]="currentCardBackground" class="card-item__bg" />
+          </div>
+          <div class="card-item__wrapper">
+            <div class="card-item__top">
+              <img
+                src="https://raw.githubusercontent.com/Asrih7/ng-payment-card-form/main/projects/ng-payment-card-form/src/assets/images/chip.png"
+                class="card-item__chip"
+              />
+              <div class="card-item__type">
+                <img [src]="getCardTypeImageUrl()" class="card-item__typeImg" />
+              </div>
+            </div>
+            <div class="card-item__number">
+              <ng-container
+                *ngFor="let n of displayCardNumber.split(''); let i = index"
+              >
+                <div class="card-item__numberItem">{{ n }}</div>
+              </ng-container>
+            </div>
+            <div class="card-item__content">
+              <label for="cardName" class="card-item__info">
+                <div class="card-item__holder">Titular do cartão</div>
+                <ng-container *ngIf="cardName.length; else emptyName">
+                  <div class="card-item__name">
+                    <ng-container
+                      *ngFor="let n of getFormattedCardName(); let i = index"
+                    >
+                      <span class="card-item__nameItem">{{ n }}</span>
+                    </ng-container>
+                  </div>
+                </ng-container>
+                <ng-template #emptyName>
+                  <div class="card-item__name">Nome do Cartão</div>
+                </ng-template>
+              </label>
+              <div class="card-item__date">
+                <label for="cardMonth" class="card-item__dateTitle"
+                  >Expira</label
+                >
+                <label for="cardMonth" class="card-item__dateItem">
+                  <span *ngIf="cardMonth">{{ cardMonth }}</span>
+                  <span *ngIf="!cardMonth">MM</span>
+                </label>
+                /
+                <label for="cardYear" class="card-item__dateItem">
+                  <span *ngIf="cardYear">{{
+                    cardYear.toString().slice(2)
+                  }}</span>
+                  <span *ngIf="!cardYear">YY</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-item__side -back">
+          <div class="card-item__cover">
+            <img [src]="currentCardBackground" class="card-item__bg" />
+          </div>
+          <div class="card-item__band"></div>
+          <div class="card-item__cvv">
+            <div class="card-item__cvvTitle">CVV</div>
+            <div class="card-item__cvvBand">
+              <span *ngFor="let n of cardCvv.split(''); let i = index">*</span>
+            </div>
+            <div class="card-item__type">
+              <img [src]="getCardTypeImageUrl()" class="card-item__typeImg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-form__inner" [formGroup]="cardForm">
+      <div class="card-input">
+        <label for="cardNumber" class="card-input__label"
+          >Número do Cartão</label
+        >
+        <input
+          type="text"
+          id="cardNumber"
+          class="card-input__input"
+          formControlName="cardNumber"
+          (input)="formatCardNumber()"
+          (focus)="focusInput()"
+          (blur)="blurInput()"
+          maxlength="16"
+          autocomplete="off"
+        />
+        <div
+          *ngIf="
+            cardForm.controls['cardNumber'].invalid &&
+            cardForm.controls['cardNumber'].touched
+          "
+          class="error-message"
+        >
+          Número do cartão é obrigatório e deve ter 16 dígitos.
+        </div>
+      </div>
+      <div class="card-input">
+        <label for="cardName" class="card-input__label">Nome do Titular</label>
+        <input
+          type="text"
+          id="cardName"
+          class="card-input__input"
+          formControlName="cardName"
+          (focus)="focusInput()"
+          (blur)="blurInput()"
+          autocomplete="off"
+        />
+        <div
+          *ngIf="
+            cardForm.controls['cardName'].invalid &&
+            cardForm.controls['cardName'].touched
+          "
+          class="error-message"
+        >
+          Nome do titular é obrigatório.
+        </div>
+      </div>
+      <div class="card-form__row">
+        <div class="card-form__col">
+          <div class="card-form__group">
+            <label for="cardMonth" class="card-input__label"
+              >Data de Expiração</label
+            >
+            <select
+              class="card-input__input -select"
+              id="cardMonth"
+              formControlName="cardMonth"
+              (focus)="focusInput()"
+              (blur)="blurInput()"
+            >
+              <option value="" disabled selected>Mês</option>
+              <option
+                *ngFor="let month of months"
+                [value]="month < 10 ? '0' + month : month"
+                [disabled]="month < minCardMonth"
+              >
+                {{ month < 10 ? "0" + month : month }}
+              </option>
+            </select>
+            <select
+              class="card-input__input -select"
+              id="cardYear"
+              formControlName="cardYear"
+              (focus)="focusInput()"
+              (blur)="blurInput()"
+            >
+              <option value="" disabled selected>Ano</option>
+              <option *ngFor="let year of years" [value]="year.toString()">
+                {{ year }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                (cardForm.controls['cardMonth'].invalid &&
+                  cardForm.controls['cardMonth'].touched) ||
+                (cardForm.controls['cardYear'].invalid &&
+                  cardForm.controls['cardYear'].touched)
+              "
+              class="error-message"
+            >
+              Data de expiração é obrigatória.
+            </div>
+          </div>
+        </div>
+        <div class="card-form__col -cvv">
+          <div class="card-input">
+            <label for="cardCvv" class="card-input__label">CVV</label>
+            <input
+              type="text"
+              id="cardCvv"
+              class="card-input__input"
+              formControlName="cardCvv"
+              (focus)="flipCard(true)"
+              (blur)="flipCard(false)"
+              maxlength="4"
+              autocomplete="off"
+            />
+            <div
+              *ngIf="
+                cardForm.controls['cardCvv'].invalid &&
+                cardForm.controls['cardCvv'].touched
+              "
+              class="error-message"
+            >
+              CVV é obrigatório e deve ter 3 ou 4 dígitos.
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        class="card-form__button"
+        (click)="submitForm()"
+      >
+        Pagar
+      </button>
+    </div>
+  </div>
+</div>

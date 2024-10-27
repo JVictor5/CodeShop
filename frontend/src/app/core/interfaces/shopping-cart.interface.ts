@@ -3,7 +3,10 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  capaUrl: string;
+  capaUrl: {
+    lg: string;
+    sm: string;
+  };
   description: string[];
   maximumQuantity: number;
 }

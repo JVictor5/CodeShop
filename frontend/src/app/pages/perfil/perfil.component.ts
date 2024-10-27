@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { SellerComponent } from '../seller/seller.component';
 import { UserDadosComponent } from '../user-dados/user-dados.component';
+import { LibraryKeyComponent } from '../library-key/library-key.component';
+import { PurchaseHistoryComponent } from '../purchase-history/purchase-history.component';
 
 @Component({
   selector: 'app-perfil',
@@ -22,6 +24,8 @@ import { UserDadosComponent } from '../user-dados/user-dados.component';
     NgxMaskPipe,
     SellerComponent,
     UserDadosComponent,
+    LibraryKeyComponent,
+    PurchaseHistoryComponent,
   ],
 })
 export class PerfilComponent {

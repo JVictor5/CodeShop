@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from '../interfaces/shopping-cart.interface';
 import { BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class CartService {
   private totalPriceSubject = new BehaviorSubject<number>(0);
   totalPrice$ = this.totalPriceSubject.asObservable();
 
-  constructor() {
+  constructor(private toastr: ToastrService) {
     this.loadCart();
   }
 
@@ -33,6 +34,12 @@ export class CartService {
   }
 
   addItem(item: CartItem) {
+    if (item.maximumQuantity <= 0) {
+      this.toastr.error('Produto Indisponível', 'Erro', {
+        closeButton: true,
+      });
+      return;
+    }
     const existingItem = this.cart.find((cartItem) => cartItem.id === item.id);
     if (existingItem) {
       existingItem.quantity += item.quantity;
@@ -76,5 +83,20 @@ export class CartService {
       0
     );
     this.totalPriceSubject.next(totalPrice);
+  }
+
+  getPaymentDetails() {
+    const products = this.cart.map((item) => ({
+      idProd: item.id,
+      quantity: item.quantity,
+      price: item.price,
+      status: 'Comprado',
+    }));
+    const precoTotal = this.totalPriceSubject.getValue().toString();
+
+    return {
+      products,
+      precoTotal,
+    };
   }
 }

@@ -77,6 +77,14 @@ export const routes: Routes = [
             (s) => s.ShoppingCartComponent
           ),
       },
+      {
+        path: 'carrinho/pagamento/cartao',
+        title: 'Carrinho de Compras',
+        loadComponent: () =>
+          import('./pages/pagament/card/card.component').then(
+            (s) => s.CardComponent
+          ),
+      },
     ],
   },
 ];

@@ -6,11 +6,12 @@
         <i class="pi pi-trash"></i> Limpar Carrinho
       </button>
     </div>
+    <div class="purple-line"></div>
     <div class="fullCart">
       <div class="itemsCart p-2">
         @for(item of cartItems$ | async; track item ){
         <div class="item p-3">
-          <div class="itemImg"><img src="{{ item.capaUrl }}" /></div>
+          <div class="itemImg"><img src="{{ item.capaUrl.sm }}" /></div>
           <div class="itemName">
             <div class="name">
               <h4>{{ item.name }}</h4>
@@ -66,8 +67,10 @@
         <h4>Valor Total: R$ {{ totalPrice$ | async }}</h4>
         <br />
         <div class="buttons">
-          <button class="pay">Finalizar Compra</button>
-          <button class="shop">Continuar Comprando</button>
+          <button class="pay" routerLink="/carrinho/pagamento/cartao">
+            Finalizar Compra
+          </button>
+          <button class="shop" routerLink="/">Continuar Comprando</button>
         </div>
       </div>
     </div>
