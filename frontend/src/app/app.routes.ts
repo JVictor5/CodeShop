@@ -54,7 +54,23 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'produtos',
+        path: 'produtos/categoria/:category',
+        title: 'Produtos',
+        loadComponent: () =>
+          import('./pages/tela-produto/tela-produto.component').then(
+            (p) => p.TelaProdutoComponent
+          ),
+      },
+      {
+        path: 'produtos/nome/:name',
+        title: 'Produtos',
+        loadComponent: () =>
+          import('./pages/tela-produto/tela-produto.component').then(
+            (p) => p.TelaProdutoComponent
+          ),
+      },
+      {
+        path: 'produtos/jogos/:gender',
         title: 'Produtos',
         loadComponent: () =>
           import('./pages/tela-produto/tela-produto.component').then(

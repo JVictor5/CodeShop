@@ -51,4 +51,34 @@ export class ProductService {
             console.log(error);
         }
     }
+
+    async getByName(name: string) {
+        try {
+            const products = this.productRepository.getByName(name);
+            return products;
+        } catch (error) {
+            console.log('Erro ao buscar produtos por nome: ', error);
+            throw error;
+        }
+    }
+
+    async getByCategory(category: string) {
+        try {
+            const products = this.productRepository.getByCategory(category);
+            return products;
+        } catch (error) {
+            console.log('Erro ao buscar produtos por categoria: ', error);
+            throw error;
+        }
+    }
+
+    async getByGameGender(genderCode: string, genderName: string) {
+        try {
+            const products = this.productRepository.getByGameGender(genderCode, genderName);
+            return products;
+        } catch (error) {
+            console.log('Erro ao buscar jogos por gênero: ', error);
+            throw error;
+        }
+    }
 }

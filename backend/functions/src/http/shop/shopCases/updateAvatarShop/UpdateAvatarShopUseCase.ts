@@ -5,7 +5,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 @injectable()
-export class UpdateAvatarUseCase {
+export class UpdateAvatarShopUseCase {
   constructor() {
     this.supabase = createClient(process.env.SUPABASE_PROJECT_URL!, process.env.SUPABASE_PROJECT_API_KEY_SERVICE_ROLE!);
   }
@@ -13,11 +13,11 @@ export class UpdateAvatarUseCase {
   private supabase;
 
   public async execute(
-    userId: string,
+    shopId: string,
     typeMedia: string,
     file: { fieldname: string; mime: string; ext: string; buffer: Buffer; }
   ): Promise<string> {
-    const avatarDir = path.posix.join(userId, typeMedia);
+    const avatarDir = path.posix.join(shopId, typeMedia);
     const fileName = `${uuidv4()}.${file.ext}`;
     const filePath = path.posix.join(avatarDir, fileName);
     
@@ -41,12 +41,12 @@ export class UpdateAvatarUseCase {
   }
 
   public async uploadToSupabase(filepath: string, buffer: Buffer) {
-    const { data, error } = await this.supabase.storage.from('user_media').upload(filepath, buffer);
+    const { data, error } = await this.supabase.storage.from('seller_media').upload(filepath, buffer);
     if (error) {
       console.error('Erro no upload do arquivo: ', error);
       return null;
     }
-    const publicUrl = await this.getPublicUrl('user_media', data.path);
+    const publicUrl = await this.getPublicUrl('seller_media', data.path);
     if (publicUrl) {
       return publicUrl;
     } else {

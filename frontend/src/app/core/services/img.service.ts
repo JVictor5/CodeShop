@@ -9,27 +9,69 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class ImgService {
   constructor(private http: HttpClient, private authService: AuthService) { }
-  async uploadFile(selectedFile: any) {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile, selectedFile.name);
+  
+  async uploadUserMedia(
+    typeMedia: string,
+    file: File
+  ): Promise<string> {
+    if (!file) {
+      console.error('Nenhum arquivo selecionado.');
+      return '';
+    }
 
-      try {
-        const token = await this.authService.getBearerToken();
-        console.log(token);
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-        });
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    
+    try {
+      const token = await this.authService.getBearerToken();
+      console.log(token);
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
 
-        this.http
-          .post(`${environment.urlApi}/users/:id/upload`, formData, { headers })
-          .subscribe({
-            next: (response: any) => console.log(response),
-            error: (error: any) => console.error(error),
-          });
-      } catch (error) {
-        console.error('Erro ao obter o token:', error);
-      }
+      const url = `${environment.urlApi}/users/:id/${typeMedia}/upload`;
+
+      const response = await lastValueFrom(
+        this.http.post<{ savedPath: string }>(url, formData, { headers })
+      );
+
+      return response.savedPath;
+    } catch (error) {
+      console.error('Erro ao obter o token:', error);
+      return '';
+    }
+  }
+
+  async uploadSellerMedia(
+    shopId: string,
+    typeMedia: string,
+    file: File
+  ): Promise<string> {
+    if (!file) {
+      console.error('Nenhum arquivo selecionado.');
+      return '';
+    }
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    
+    try {
+      const token = await this.authService.getBearerToken();
+      console.log(token);
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+
+      const url = `${environment.urlApi}/shop/${shopId}/${typeMedia}/upload`;
+
+      const response = await lastValueFrom(
+        this.http.post<{ savedPath: string }>(url, formData, { headers })
+      );
+
+      return response.savedPath;
+    } catch (error) {
+      console.error('Erro ao obter o token:', error);
+      return '';
     }
   }
 

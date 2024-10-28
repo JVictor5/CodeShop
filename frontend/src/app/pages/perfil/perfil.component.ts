@@ -33,7 +33,7 @@ export class PerfilComponent {
   username: string = '';
   id: string = '';
   nivel: number = 1;
-  avatar: string = '';
+  avatar: string | null = '';
 
   logado: boolean = false;
   exibirConteudo = true;
@@ -60,10 +60,10 @@ export class PerfilComponent {
     this.authService.currentUser.subscribe(async (user) => {
       if (user) {
         this.id = user.uid;
-        this.avatar = `http://127.0.0.1:5001/teste-4c267/southamerica-east1/api/users/${this.id}/avatar`;
         const userFromApi = await this.userRepository.getById(`${this.id}`);
         this.username = userFromApi.name;
         this.nivel = userFromApi.nivel;
+        this.avatar = userFromApi.avatar;
         this.logado = true;
       } else if (!user) {
         this.username = 'Usuário';
@@ -80,8 +80,16 @@ export class PerfilComponent {
   async uploadFile() {
     if (this.selectedFile) {
       try {
-        await this.imgService.uploadFile(this.selectedFile);
-        console.log('Upload successful');
+        const avatarUrl = await this.imgService.uploadUserMedia('avatar', this.selectedFile);
+        if (avatarUrl) {
+          const id = this.id;
+          await this.userRepository.update({
+            id,
+            avatar: avatarUrl
+          });
+        }
+        await this.imgService.uploadSellerMedia('neMRTYfisxEcVS9SIbmf', 'avatar', this.selectedFile);
+        window.location.reload();
       } catch (error) {
         console.error('Erro ao fazer o upload:', error);
       }

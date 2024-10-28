@@ -15,7 +15,7 @@ const routes = Router();
 routes.post('/', handleCreateUser);
 routes.post('/admins', ensureAuthentication, handleCreateAdmin);
 routes.put('/:id', ensureAuthentication, handleUpdateUser);
-routes.post('/:id/upload', ensureAuthentication, fetchFile, handleFileUpload);
+routes.post('/:id/:typeMedia/upload', ensureAuthentication, fetchFile, handleFileUpload);
 routes.get('/:id/avatar', handleGetFile);
 routes.post('/pass', recoverPass);
 routes.post('/email', enviEmail);

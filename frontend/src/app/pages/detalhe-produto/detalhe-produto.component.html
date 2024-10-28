@@ -94,7 +94,7 @@
                 <button class="btn btn-success w-100">Comprar</button>
               </div>
               <div class="col-6 p-1">
-                <button class="btn btn-danger w-100">Desejo</button>
+                <button (click)="toggleFavorite()" class="btn btn-danger w-100">{{ textFavorite }} favorito</button>
               </div>
             </div>
           </div>
