@@ -122,6 +122,7 @@ export class UserDadosComponent {
     console.log(this.id);
     try {
       const response = await this.authService.update(this.fValue, this.id);
+      window.location.reload();
       console.log(response);
     } catch (error) {
       console.error(error);

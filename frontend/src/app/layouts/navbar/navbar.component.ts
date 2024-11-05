@@ -1,24 +1,34 @@
 import { CommonModule, NgIf, Location } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-
+import { BadgeModule } from 'primeng/badge';
 import { UserRepository } from '../../core/repositories/user.repository';
 import { gameGenres } from '../../data/game-genres';
+import { CartService } from '../../core/services/shoppingCart.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, NgIf],
+  imports: [CommonModule, RouterOutlet, RouterLink, NgIf, BadgeModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
+  isHovered: boolean = false;
+  isInputFocused: boolean = false;
   genres = gameGenres;
   [x: string]: any;
   isExpanded = false;
   isHovering = false;
-  
+  totalCart: number = 0;
+
   private userRepository = inject(UserRepository);
   private location: Location = inject(Location);
   private router = inject(Router);
@@ -37,12 +47,20 @@ export class NavbarComponent {
   id: string = '';
   avatar: string | null = '';
   email: string = '';
+  idShop: string = '';
 
   nivel = 0;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private cartService: CartService
+  ) {}
 
   async ngOnInit() {
+    this.cartService.totalQuantity$.subscribe((total) => {
+      this.totalCart = total;
+    });
+    console.log(this.totalCart);
     this.authService.currentUser.subscribe(async (user) => {
       if (!user) {
         this.isLoggedIn = false;
@@ -52,9 +70,11 @@ export class NavbarComponent {
         this.isLoggedIn = true;
         this.username = user.displayName;
         this.id = user.uid;
+        this.email = user.email;
         const userFromApi = await this.userRepository.getById(`${this.id}`);
         this.nivel = userFromApi.nivel;
-        if(!userFromApi.avatar) {
+        this.idShop = userFromApi.idShop || '';
+        if (!userFromApi.avatar) {
           this.avatar = 'assets/avatar/avatarPadrao.jpg';
         } else {
           this.avatar = userFromApi.avatar;
@@ -73,6 +93,29 @@ export class NavbarComponent {
   }
 
   async searchProduct(inputValue: string) {
-    this.location.go('/produtos/nome/' + inputValue);
+    if (inputValue.trim()) {
+      this.location.go('/produtos/nome/' + inputValue);
+    }
+  }
+
+  @ViewChild('inputSearch') inputSearch!: ElementRef<HTMLInputElement>;
+  searchVisible = false;
+  menuVisible = false;
+
+  showSearchInput() {
+    this.searchVisible = true;
+  }
+
+  toggleSearchInput() {
+    this.searchVisible = true;
+    setTimeout(() => this.inputSearch.nativeElement.focus(), 0);
+  }
+
+  hideSearchInput() {
+    this.searchVisible = false;
+  }
+
+  toggleMenu() {
+    this.menuVisible = !this.menuVisible;
   }
 }

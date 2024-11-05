@@ -1,0 +1,280 @@
+<div class="profile-banner">
+  <div class="profile-info">
+    <div class="avatar">
+      <img src="{{ avatar }}" alt="Avatar da Loja" />
+      @if(userId == userShop){
+      <a
+        class="edit-icon"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        <i class="fa fa-pencil edit-icon"></i>
+      </a>
+      }
+    </div>
+    <div class="textShop">
+      <h2>{{ shopName }}</h2>
+      <p>{{ shopDiscription }}</p>
+    </div>
+  </div>
+  @if(userId == userShop){
+  <button class="edit-profile-button" (click)="openModal()">
+    <i class="fa fa-pencil-alt"></i> Editar Perfil da Loja
+  </button>
+  }
+</div>
+
+<div class="space"><h3>Produtos Disponivel da Loja</h3></div>
+@if (existsProduct == true || userId == userShop) {
+<div class="main-container-products">
+  @if(userId == userShop){
+  <div class="cardAdd" routerLink="/novo-produto">
+    <div class="text">Cadastra Novo Produto</div>
+    <div class="plus-icon">+</div>
+  </div>
+  } @for (product of products; track $index) {
+  <div class="totalCard">
+    <div class="card">
+      <div
+        class="body-card"
+        role="button"
+        (mouseenter)="toggleHover(product, true)"
+        (mouseleave)="toggleHover(product, false)"
+      >
+        <div class="card-cont">
+          <div class="icon-container">
+            <i
+              class="fa-heart heart-icon heart-icon-{{ product.id }} {{
+                product.isFavorite ? 'fas' : 'far'
+              }}"
+              (click)="toggleFavorite(product)"
+            ></i>
+            @if(userId == userShop) {
+            <div class="btn-group">
+              <i
+                type="button"
+                class="fa-solid fa-ellipsis-vertical"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+              </i>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <button
+                    class="dropdown-item"
+                    type="button"
+                    routerLink="/atualizar-produto/{{ product.id }}"
+                  >
+                    Editar Produto
+                  </button>
+                </li>
+                <li>
+                  <button
+                    class="dropdown-item"
+                    type="button"
+                    (click)="openDeleteDialog(product.id)"
+                  >
+                    Excluir Produto
+                  </button>
+                </li>
+              </ul>
+            </div>
+            }
+          </div>
+          <div routerLink="/detalhe-produto/{{ product.id }}">
+            <div>
+              <img
+                class="rounded img"
+                src="{{ product.capaUrl.sm }}"
+                alt="Foto do {{ product.name }}"
+              />
+            </div>
+            <div class="mt-3">
+              <h5>{{ product.name }}</h5>
+              <h3 class="text-color">R$ {{ product.price }}</h3>
+            </div>
+          </div>
+
+          <div
+            class="message mt-3 d-flex justify-content-center align-items-center"
+            [ngClass]="{ show: product.isHovered }"
+          >
+            <button
+              class="btn btn-outline-light w-100 m-3"
+              (click)="addToCart(product)"
+            >
+              <i class="bx bx-cart-add"></i>
+              Comprar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="glass"></div>
+    </div>
+  </div>
+  }
+</div>
+}@else {
+<div class="empty-store-container">
+  <i class="fa-solid fa-box-open empty-icon"></i>
+  <h2 class="empty-message">Ainda não há produtos nesta loja.</h2>
+  <p class="empty-description">
+    Volte mais tarde ou explore outras categorias para encontrar o que procura!
+  </p>
+  <button class="explore-button" routerLink="/">Voltar para Home</button>
+</div>
+}
+<!-- Dialogos de Confirmação/Editar PrimeNG -->
+
+<div class="dialog-exclude">
+  <p-dialog
+    header="Tem certeza de que deseja Desativar/Ativar este produto?"
+    [(visible)]="deleteDialogVisible"
+    [style]="{ width: '400px' }"
+    [modal]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    class="custom-dialog"
+  >
+    <div class="dialog-content">
+      <p class="dialog-message">
+        Esta ação é irreversível. Deseja realmente excluir este produto?
+      </p>
+    </div>
+    <p-footer>
+      <button (click)="deleteDialogVisible = false" class="p-button-cancel">
+        Cancelar
+      </button>
+      <button (click)="confirmDeleteProduct()" class="p-button-confirm">
+        Confirmar
+      </button>
+    </p-footer>
+  </p-dialog>
+</div>
+
+<!-- Foto da loja -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel">
+          Alterar Perfil
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="file" class="form-label">Imagem de Perfil</label>
+          <input
+            type="file"
+            class="form-control"
+            id="inputGroupFile01"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <div class="mb-3"></div>
+        <button type="submit" (click)="uploadFile()" class="btn btn-primary">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edição de dados -->
+<p-dialog
+  header="Edição de dados"
+  [(visible)]="isEditing"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [dismissableMask]="true"
+  (onHide)="onCloseModal()"
+  contentStyleClass="custom-dialog-content"
+>
+  <div class="form">
+    <form [formGroup]="form" (ngSubmit)="update()">
+      <div class="editable-field">
+        <p-floatLabel>
+          <input pInputText formControlName="name" type="text" />
+          <label for="name">Nome</label>
+        </p-floatLabel>
+        <div
+          *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+          class="error"
+        >
+          Nome é obrigatório.
+        </div>
+      </div>
+
+      <div class="editable-field">
+        <p-floatLabel>
+          <input pInputText formControlName="email" type="email" />
+          <label for="email">Email</label>
+        </p-floatLabel>
+        <div
+          *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+          class="error"
+        >
+          Email inválido.
+        </div>
+      </div>
+
+      <div class="editable-field">
+        <p-floatLabel>
+          <input pInputText formControlName="discription" type="text" />
+          <label for="discription">Descrição</label>
+        </p-floatLabel>
+        <div
+          *ngIf="
+            form.get('discription')?.invalid && form.get('discription')?.touched
+          "
+          class="error"
+        >
+          Descrição é obrigatória.
+        </div>
+      </div>
+
+      <div class="editable-field">
+        <p-floatLabel>
+          <input pInputText formControlName="phone" type="text" />
+          <label for="phone">Telefone</label>
+        </p-floatLabel>
+        <div
+          *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched"
+          class="error"
+        >
+          Telefone está inválido.
+        </div>
+      </div>
+
+      <div class="edit-buttons">
+        <button type="submit" class="save" [disabled]="form.invalid">
+          Salvar
+        </button>
+        <button type="button" class="cancel" (click)="onCloseModal()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>

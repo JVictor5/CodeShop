@@ -1,47 +1,182 @@
-<nav class="navbar sticky-top bg-dark border-bottom border-body navbar-expand-lg" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">CodeShop</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav me-2">
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo e Nome da CodeShop à esquerda -->
+    <a class="navbar-brand" href="/">
+      <div class="logo-placeholder"></div>
+      <span class="navbar-title">CodeShop</span>
+    </a>
+
+    <!-- Ícones à direita: Pesquisa, Carrinho, Menu de Hambúrguer -->
+    <div class="navbar-icons">
+      <!-- Ícone de Pesquisa -->
+      <div class="search-container">
+        <form class="d-flex" role="search">
+          <input
+            #inputSearch
+            class="search-txt"
+            type="search"
+            placeholder="Buscar"
+            aria-label="Buscar"
+          />
+          <button
+            (click)="searchProduct(inputSearch.value)"
+            class="search-button"
+            type="submit"
+          >
+            <i class="pi pi-search" style="font-family: primeicons"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Ícone de Carrinho -->
+      <button routerLink="/carrinho" class="icon-button">
+        <i class="bx bxs-cart cart-icon"></i>
+        <span class="cart-badge">{{ totalCart }}</span>
+      </button>
+
+      <!-- Botão de Menu Hambúrguer que abre o Offcanvas -->
+      <button
+        class="icon-button"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasMenu"
+        aria-controls="offcanvasMenu"
+      >
+        <div class="hamburger-icon">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Offcanvas do Bootstrap para o Menu de Navegação -->
+  <div
+    class="offcanvas offcanvas-end"
+    tabindex="-1"
+    id="offcanvasMenu"
+    aria-labelledby="offcanvasMenuLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        <i class="pi pi-times" style="font-family: primeicons"></i>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Pesquisa -->
+      <div class="search-container">
+        <form class="search-form" role="search">
+          <input
+            #inputSearch2
+            class="search-input"
+            type="search"
+            placeholder="Buscar"
+            aria-label="Buscar"
+          />
+          <button
+            (click)="searchProduct(inputSearch2.value)"
+            class="search-button"
+            type="submit"
+          >
+            <i class="pi pi-search" style="font-family: primeicons"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Links de Navegação -->
+      <ul class="navbar-nav mt-3">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/produtos/categoria/Aplicativos">Aplicativos</a>
+          <a class="nav-link" href="/carrinho">Carrinho de Compras</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/produtos/categoria/Gift Cards">Gift Cards</a>
+          <a class="nav-link" href="/produtos/categoria/Aplicativos"
+            >Aplicativos</a
+          >
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/produtos/categoria/Gift Cards"
+            >Gift Cards</a
+          >
+        </li>
+        <!-- Dropdown para Jogos -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a
+            class="nav-link dropdown-toggle"
+            href=""
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             Jogos
           </a>
-          <ul class="dropdown-menu dropdown-custom overflow-auto">
-            @for (item of genres; track item) {
-              <li><a class="dropdown-item" href="/produtos/jogos/{{ item.code }}">{{ item.name }}</a></li>
-            }
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" [href]="'/produtos/categoria/Jogos'"
+                >Todos os Jogos</a
+              >
+            </li>
+            <li *ngFor="let item of genres">
+              <a
+                class="dropdown-item"
+                [href]="'/produtos/jogos/' + item.code"
+                >{{ item.name }}</a
+              >
+            </li>
           </ul>
         </li>
+        @if(nivel == 2){
+
+        <!-- Loja -->
+
+        <li class="nav-item">
+          <a class="nav-link" href="/loja/{{ idShop }}">Minha Loja</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/produtos/categoria/Aplicativos"
+            >Análise de Vendas</a
+          >
+        </li>
+        }
       </ul>
-      <form class="d-flex me-2" role="search">
-        <input #inputSearch class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
-        <button (click)="searchProduct(inputSearch.value)" class="btn btn-outline-primary" type="submit">
-          <i class="pi pi-search" style="font-family: primeicons"></i>
+
+      <!-- Perfil de Usuário -->
+
+      <div class="user-profile">
+        <a href="/perfil">
+          <img src="{{ avatar }}" alt="Foto de Perfil" class="profile-pic" />
+          <div class="user-info">
+            <span class="user-name">{{ username }}</span>
+            <span class="user-type">{{ email }}</span>
+          </div>
+        </a>
+        @if(isLoggedIn == true){
+        <button
+          (click)="logout()"
+          data-bs-dismiss="offcanvas"
+          class="logout-button"
+        >
+          <i class="bx bx-log-out"></i>
         </button>
-      </form>
-    </div>
-    <div class="nav-item dropdown" (click)="toggleMenuPerfil()">
-      <a class="d-flex justify-content-end pe-2">
-        <img [src]="avatar" class="rounded-circle logo" alt="Avatar">
-      </a>
-      <ul class="dropdown-menu" [ngClass]="{'show': showMenuPerfil}" style="top: 100%; left: auto; right: 0;">
-        <li *ngIf="!isLoggedIn"><a class="dropdown-item" href="/login">Entrar</a></li>
-        <li *ngIf="isLoggedIn"><a class="dropdown-item" href="/perfil">Perfil</a></li>
-        <li><a class="dropdown-item logout-custom" (click)="logout()">Sair</a></li>
-      </ul>
+        }@else{
+        <button
+          routerLink="/login"
+          data-bs-dismiss="offcanvas"
+          class="logout-button"
+        >
+          <i class="bx bx-log-in"></i>
+        </button>
+        }
+      </div>
     </div>
   </div>
 </nav>

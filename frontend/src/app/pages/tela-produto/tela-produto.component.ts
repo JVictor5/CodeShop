@@ -75,7 +75,7 @@ export class TelaProdutoComponent implements OnInit {
       if (data.length > 0) {
         this.products = data;
         this.existsProduct = true;
-        this.isFavorite(data);
+        this.checkFavorites(data);
       }
     });
   }
@@ -85,65 +85,65 @@ export class TelaProdutoComponent implements OnInit {
       if (data.length > 0) {
         this.products = data;
         this.existsProduct = true;
-        this.isFavorite(data);
+        this.checkFavorites(data);
       }
     });
   }
 
   async loadProductsByGameGender(genderCode: string, genderName: string) {
-    this.productService.getByGameGender(genderCode, genderName).then((data: any[]) => {
-      if (data.length > 0) {
-        this.products = data;
-        this.existsProduct = true;
-        this.isFavorite(data);
+    this.productService
+      .getByGameGender(genderCode, genderName)
+      .then((data: any[]) => {
+        if (data.length > 0) {
+          this.products = data;
+          this.existsProduct = true;
+          this.checkFavorites(data);
+        }
+      });
+  }
+
+  async checkFavorites(products: any[]) {
+    if (!this.userId) {
+      return;
+    }
+    const favorites = await firstValueFrom(
+      this.favoriteProductsService.getFavoritesByUser(this.userId)
+    );
+    products.forEach((product) => {
+      if (favorites.some((fav) => fav.productId === product.id)) {
+        product.isFavorite = true;
       }
     });
   }
 
-  toggleFavorite(product: any) {   
-    const heartIcon = document.querySelector(`.heart-icon-${product.id}`);
-    
-    if (heartIcon) {
-      if (this.userId) {
-        product.isFavorite = !product.isFavorite;
-        if (product.isFavorite) {
-          this.favoriteProductsService.addFavorito(this.userId, product.id);
-          heartIcon.classList.add('active');
-        } else {
-          this.favoriteProductsService.deleteFavorito(this.userId, product.id);
-          heartIcon.classList.remove('active');
-        }
+  toggleFavorite(product: any) {
+    if (this.userId) {
+      product.isFavorite = !product.isFavorite;
+      if (product.isFavorite) {
+        this.favoriteProductsService.addFavorito(this.userId, product.id);
+        this.showToast(
+          'success',
+          'Favorited',
+          'Produto adicionado aos favoritos!'
+        );
       } else {
-        this.showToast('error', 'Atenção', 'É preciso acessar sua conta para favoritar um produto.');
+        this.favoriteProductsService.deleteFavorito(this.userId, product.id);
+        this.showToast('info', 'Removed', 'Produto removido dos favoritos.');
       }
     } else {
-      console.warn('Elemento heartIcon não encontrado!');
+      this.showToast(
+        'error',
+        'Atenção',
+        'É preciso acessar sua conta para favoritar um produto.'
+      );
     }
   }
 
-  /**
-   * Função destinada a mostrar os pop-ups.
-   * @param severity gravidade da mensagem que implica no tema do pop-up
-   * @param summary Título
-   * @param detail Descrição
-   */
   showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
-  }
-
-  async isFavorite(products: any[]) {
-    if (!this.userId) {
-      return;
-    }
-    const favorites = await firstValueFrom(this.favoriteProductsService.getFavoritesByUser(this.userId));
-    products.forEach((product) => {
-      if (favorites.some(fav => fav.productId === product.id)) {
-        const heartIcon = document.querySelector(`.heart-icon-${product.id}`);
-        if (heartIcon) {
-          product.isFavorite = true;
-          heartIcon.classList.add('active');
-        }
-      }
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
     });
   }
 
@@ -164,7 +164,6 @@ export class TelaProdutoComponent implements OnInit {
     product.isHovered = isHovering;
   }
 
-  // Filtro
   @ViewChild('filtro', { static: true }) filtro!: ElementRef<HTMLDivElement>;
 
   private originalHeight = '100vh';

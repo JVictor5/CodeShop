@@ -1,0 +1,81 @@
+@import "../../../styles.scss";
+
+$backgroundColor: #1a1a1a;
+$textColor: #f0f0f0;
+$lightGrayColor: #cccccc;
+$secondaryTextColor: #888888;
+
+.footer {
+  background-color: $backgroundColor;
+  color: $textColor;
+  padding: 2rem 1.5rem;
+
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+
+    .footer-column {
+      flex: 1 1 200px;
+
+      h3,
+      h4 {
+        color: $whiteColor;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+      }
+
+      p,
+      ul {
+        color: $lightGrayColor;
+        font-size: 0.9rem;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 0.5rem;
+
+          a {
+            color: $lightGrayColor;
+            text-decoration: none;
+            transition: color 0.3s;
+
+            &:hover {
+              color: $purpleColor;
+            }
+          }
+        }
+      }
+
+      .social-links {
+        display: flex;
+        gap: 0.5rem;
+
+        a {
+          color: $lightGrayColor;
+          font-size: 1.4rem;
+          transition: color 0.3s;
+
+          &:hover {
+            color: $purpleColor;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: $secondaryTextColor;
+
+    p {
+      margin: 0.3rem 0;
+    }
+  }
+}

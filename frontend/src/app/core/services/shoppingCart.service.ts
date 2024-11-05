@@ -14,6 +14,9 @@ export class CartService {
   private totalPriceSubject = new BehaviorSubject<number>(0);
   totalPrice$ = this.totalPriceSubject.asObservable();
 
+  private totalQuantitySubject = new BehaviorSubject<number>(0);
+  totalQuantity$ = this.totalQuantitySubject.asObservable();
+
   constructor(private toastr: ToastrService) {
     this.loadCart();
   }
@@ -22,6 +25,7 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(this.cart));
     this.cartSubject.next(this.cart);
     this.updateTotalPrice();
+    this.updateTotalQuantity();
   }
 
   private loadCart() {
@@ -30,6 +34,7 @@ export class CartService {
       this.cart = JSON.parse(cart);
       this.cartSubject.next(this.cart);
       this.updateTotalPrice();
+      this.updateTotalQuantity();
     }
   }
 
@@ -40,12 +45,39 @@ export class CartService {
       });
       return;
     }
+
     const existingItem = this.cart.find((cartItem) => cartItem.id === item.id);
+
     if (existingItem) {
+      const totalQuantity = existingItem.quantity + item.quantity;
+
+      if (totalQuantity > item.maximumQuantity) {
+        this.toastr.error(
+          `Você já tem este produto no carrinho e atingiu a quantidade máxima em estoque.`,
+          'Erro',
+          {
+            closeButton: true,
+          }
+        );
+        return;
+      }
+
       existingItem.quantity += item.quantity;
     } else {
+      if (item.quantity > item.maximumQuantity) {
+        this.toastr.error(
+          `Produto Indisponível. Quantidade máxima em estoque foi atingida.`,
+          'Erro',
+          {
+            closeButton: true,
+          }
+        );
+        return;
+      }
+
       this.cart.push(item);
     }
+
     this.saveCart();
   }
 
@@ -83,6 +115,18 @@ export class CartService {
       0
     );
     this.totalPriceSubject.next(totalPrice);
+  }
+
+  private updateTotalQuantity() {
+    const totalQuantity = this.cart.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    this.totalQuantitySubject.next(totalQuantity);
+  }
+
+  getTotalQuantity(): number {
+    return this.totalQuantitySubject.getValue();
   }
 
   getPaymentDetails() {

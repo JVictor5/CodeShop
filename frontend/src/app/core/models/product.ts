@@ -5,12 +5,13 @@ export interface Product extends Model {
   description: string;
   price: number;
   quantity: number;
-  capaUrl: { sm: string, lg: string};
+  capaUrl: { sm: string; lg: string };
   videosUrls: string[];
-  imgUrls: { sm: string[], lg: string[]};
+  imgUrls: { sm: string[]; lg: string[] };
   category: string;
   genres?: string[];
   keys: string[];
+  isFavorite?: boolean;
   minimumSystemRequirements?: {
     os: string;
     cpu: string;
@@ -27,11 +28,11 @@ export interface Product extends Model {
   };
   idUser: string;
   releaseDate: {
-    dateFormat: string; 
+    dateFormat: string;
     bruteFormat: string;
   };
   titleDestaque: string;
   descriptionDestaque: string;
-  capaDestaqueUrl: { sm: string, lg: string};
+  capaDestaqueUrl: { sm: string; lg: string };
   playerModes?: string[];
 }

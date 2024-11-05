@@ -20,3 +20,26 @@ p-button.rounded-icon-custom button {
 p-button.rounded-button-stepper-custom button {
   border-radius: 10px !important;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: $blackColor;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $purpleColor;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $hoverPurpleColor;
+}
+
+html {
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scrollbar-color: $purpleColor $blackColor;
+}

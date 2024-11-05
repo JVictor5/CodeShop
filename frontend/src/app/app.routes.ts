@@ -30,6 +30,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'loja/:id',
+        title: 'Detalhe da Loja',
+        loadComponent: () =>
+          import('./pages/my-shop/my-shop.component').then(
+            (v) => v.MyShopComponent
+          ),
+      },
+      {
         path: 'trocar-senha',
         title: 'Troca de Senha',
         loadComponent: () =>
