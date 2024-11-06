@@ -23,6 +23,11 @@ import { Recover } from '../interfaces/recover';
   providedIn: 'root',
 })
 export class AuthService {
+  isAuthenticated(): boolean {
+    const user = this.getUser();
+    return !!user;
+  }
+
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser = this.currentUserSubject.asObservable();
 

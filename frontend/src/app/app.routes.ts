@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './layouts/layout.component';
+import { shopGuard } from './core/guards/shop.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { recoverpassGuard } from './core/guards/recoverpass.guard';
 
 export const routes: Routes = [
   {
@@ -20,6 +23,7 @@ export const routes: Routes = [
           import('./pages/cadastro-usuario/cadastro-usuario.component').then(
             (b) => b.CadastroUsuarioComponent
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'perfil',
@@ -28,6 +32,7 @@ export const routes: Routes = [
           import('./pages/perfil/perfil.component').then(
             (a) => a.PerfilComponent
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'loja/:id',
@@ -44,6 +49,7 @@ export const routes: Routes = [
           import('./pages/recover-passoword/recover-passoword.component').then(
             (c) => c.RecoverPassowordComponent
           ),
+        canActivate: [recoverpassGuard],
       },
       {
         path: 'novo-produto',
@@ -52,6 +58,7 @@ export const routes: Routes = [
           import('./pages/create-product/create-product.component').then(
             (a) => a.CreateProductComponent
           ),
+        canActivate: [shopGuard],
       },
       {
         path: 'atualizar-produto/:id',
@@ -60,6 +67,7 @@ export const routes: Routes = [
           import('./pages/update-product/update-product.component').then(
             (a) => a.UpdateProductComponent
           ),
+        canActivate: [shopGuard],
       },
       {
         path: 'produtos/categoria/:category',
@@ -116,6 +124,7 @@ export const routes: Routes = [
           import('./pages/graficos-seller/graficos-seller.component').then(
             (s) => s.GraficosSellerComponent
           ),
+        canActivate: [shopGuard],
       },
     ],
   },
