@@ -109,6 +109,14 @@ export const routes: Routes = [
             (s) => s.CardComponent
           ),
       },
+      {
+        path: 'graficos',
+        title: 'Gráficos',
+        loadComponent: () =>
+          import('./pages/graficos-seller/graficos-seller.component').then(
+            (s) => s.GraficosSellerComponent
+          ),
+      },
     ],
   },
 ];

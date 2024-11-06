@@ -1,0 +1,50 @@
+<div class="container-fluid">
+    <div class="mt-4 text-center">
+        <h2>Análise - CodeShop</h2>
+        <h6>Uma visão de seus produtos na plataforma.</h6>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 col-md-6 mb-2">
+            <div class="card card-custom">
+                <div class="card-header text-center">
+                    <h3>Produtos mais desejados</h3>
+                </div>
+                <div class="card-body">
+                    <p-chart type="bar" [data]="dataFavoriteProducts" [options]="optionsFavoriteProducts" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 mb-2">
+            <div class="card card-custom">
+                <div class="card-header text-center">
+                    <h3>Tipos de produtos mais desejados</h3>
+                </div>
+                <div class="card-body">
+                    <p-chart class="chart-center-custom" type="pie" [data]="dataTypeFavoriteProducts" [options]="optionsTypeFavoriteProducts" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12 col-md-6 mb-2">
+            <div class="card card-custom">
+                <div class="card-header text-center">
+                    <h3>Produtos mais vendidos</h3>
+                </div>
+                <div class="card-body">
+                    <p-chart type="bar" [data]="dataPaymentProducts" [options]="optionsPaymentProducts" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 mb-2">
+            <div class="card card-custom">
+                <div class="card-header text-center">
+                    <h3>Tipos de produtos mais vendidos</h3>
+                </div>
+                <div class="card-body">
+                    <p-chart class="chart-center-custom" type="pie" [data]="dataTypePaymentProducts" [options]="optionsTypePaymentProducts" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

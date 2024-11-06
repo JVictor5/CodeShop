@@ -43,3 +43,11 @@ html {
   scroll-behavior: smooth;
   scrollbar-color: $purpleColor $blackColor;
 }
+
+p-chart div {
+  height: 300px;
+}
+
+.chart-center-custom div canvas {
+  margin: 0 auto;
+}
