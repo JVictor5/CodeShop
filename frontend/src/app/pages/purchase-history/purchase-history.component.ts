@@ -3,11 +3,12 @@ import { PaymentService } from '../../core/services/payment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-purchase-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './purchase-history.component.html',
   styleUrl: './purchase-history.component.scss',
 })
@@ -39,7 +40,7 @@ export class PurchaseHistoryComponent {
 
       this.pagamentos.sort((a, b) => {
         const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime(); 
+        const dateB = new Date(b.createdAt).getTime();
         return dateB - dateA;
       });
 

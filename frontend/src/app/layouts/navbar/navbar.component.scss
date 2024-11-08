@@ -215,10 +215,21 @@
 .offcanvas {
   background-color: $blackColor;
   border-left: 3px solid $purpleColor;
-  width: 30%;
-  @media (max-width: 768px) {
+  width: 575px;
+  @media (max-width: 800px) {
     width: 100%;
   }
+
+  .navbar-nav {
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+
+    @media (max-height: 560px) {
+      max-height: 50vh;
+    }
+  }
+
   .offcanvas-header {
     .offcanvas-title {
       font-size: 1.2rem;

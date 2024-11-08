@@ -116,6 +116,7 @@ export const routes: Routes = [
           import('./pages/pagament/card/card.component').then(
             (s) => s.CardComponent
           ),
+        canActivate: [authGuard],
       },
       {
         path: 'graficos',

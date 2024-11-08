@@ -1,82 +1,96 @@
-@for (pagamento of pagamentos; track $index){
-<div class="pagamentos-container">
-  <div class="pagamento-card">
-    <p class="payment-id">
-      <strong>ID da Compra: {{ pagamento.id }}</strong>
-    </p>
-    <div class="payment-summary">
-      <p class="card-details">
-        Numeros Finais do Cartão: **** **** **** {{ pagamento.endCard }}
-      </p>
-      <p class="total-price">
-        Preço Total: {{ pagamento.precoTotal | currency }}
-      </p>
-      <p class="payment-status">
-        Status:
-        <span
-          [ngClass]="{
-            success: pagamento.status === 'Aprovado',
-            pending: pagamento.status === 'Pending',
-            failed: pagamento.status === 'Cancelado'
-          }"
-          >{{ pagamento.status }}</span
-        >
+<div class="pag">
+  @if( !pagamentos || pagamentos.length == 0 ){
+  <div class="no-history-container">
+    <div class="no-history-message">
+      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+      <h2>Sem Histórico de Compras</h2>
+      <p>
+        Você ainda não fez nenhuma compra. Volte à página inicial e explore
+        nossos produtos!
       </p>
     </div>
-
-    <div
-      class="toggle-button"
-      (click)="pagamento.showProducts = !pagamento.showProducts"
-    >
-      <span>{{
-        pagamento.showProducts ? "Ocultar Produtos" : "Mostrar Produtos"
-      }}</span>
-      <span
-        class="arrow"
-        [ngClass]="{
-          up: pagamento.showProducts,
-          down: !pagamento.showProducts
-        }"
-        >&#x25BC;</span
-      >
-    </div>
-    @if(pagamento.showProducts){
-    <div class="products-list">
-      <div class="product-header">
-        <i class="bx bx-cart"></i>
-        <h5>Produtos Comprados</h5>
-        <i class="bx bx-cart"></i>
+    <button class="btn-go-home" routerLink="/">Ir para a Loja</button>
+  </div>
+  } @for (pagamento of pagamentos; track $index){
+  <div class="pagamentos-container">
+    <div class="pagamento-card">
+      <p class="payment-id">
+        <strong>ID da Compra: {{ pagamento.id }}</strong>
+      </p>
+      <div class="payment-summary">
+        <p class="card-details">
+          Numeros Finais do Cartão: **** **** **** {{ pagamento.endCard }}
+        </p>
+        <p class="total-price">
+          Preço Total: {{ pagamento.precoTotal | currency }}
+        </p>
+        <p class="payment-status">
+          Status:
+          <span
+            [ngClass]="{
+              success: pagamento.status === 'Aprovado',
+              pending: pagamento.status === 'Pending',
+              failed: pagamento.status === 'Cancelado'
+            }"
+            >{{ pagamento.status }}</span
+          >
+        </p>
       </div>
-      @for (product of pagamento.idProd; track $index) {
-      <div class="product-item">
-        <img
-          *ngIf="product.img"
-          [src]="product.img"
-          alt="{{ product.name }}"
-          class="product-image"
-        />
-        <div class="product-details">
-          <p class="product-name">Nome do Produto: {{ product.name }}</p>
-          <p class="product-quantity">Quantidade: {{ product.quantity }}</p>
-          <p class="product-status">
-            Preço Unitário: {{ product.price | currency }}
-          </p>
-          <p class="product-status">
-            Status:
-            <span
-              [ngClass]="{
-                success: product.status === 'Comprado',
-                failed: product.status === 'Reembolsado'
-              }"
-            >
-              {{ product.status }}</span
-            >
-          </p>
+
+      <div
+        class="toggle-button"
+        (click)="pagamento.showProducts = !pagamento.showProducts"
+      >
+        <span>{{
+          pagamento.showProducts ? "Ocultar Produtos" : "Mostrar Produtos"
+        }}</span>
+        <span
+          class="arrow"
+          [ngClass]="{
+            up: pagamento.showProducts,
+            down: !pagamento.showProducts
+          }"
+          >&#x25BC;</span
+        >
+      </div>
+      @if(pagamento.showProducts){
+      <div class="products-list">
+        <div class="product-header">
+          <i class="bx bx-cart"></i>
+          <h5>Produtos Comprados</h5>
+          <i class="bx bx-cart"></i>
         </div>
+        @for (product of pagamento.idProd; track $index) {
+        <div class="product-item">
+          <img
+            *ngIf="product.img"
+            [src]="product.img"
+            alt="{{ product.name }}"
+            class="product-image"
+          />
+          <div class="product-details">
+            <p class="product-name">Nome do Produto: {{ product.name }}</p>
+            <p class="product-quantity">Quantidade: {{ product.quantity }}</p>
+            <p class="product-status">
+              Preço Unitário: {{ product.price | currency }}
+            </p>
+            <p class="product-status">
+              Status:
+              <span
+                [ngClass]="{
+                  success: product.status === 'Comprado',
+                  failed: product.status === 'Reembolsado'
+                }"
+              >
+                {{ product.status }}</span
+              >
+            </p>
+          </div>
+        </div>
+        }
       </div>
       }
     </div>
-    }
   </div>
+  }
 </div>
-}

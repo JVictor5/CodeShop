@@ -164,21 +164,4 @@ export class TelaProdutoComponent implements OnInit {
     product.isHovered = isHovering;
   }
 
-  @ViewChild('filtro', { static: true }) filtro!: ElementRef<HTMLDivElement>;
-
-  private originalHeight = '100vh';
-  private newHeight = '95vh';
-
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (scrollPosition + windowHeight >= documentHeight) {
-      this.filtro.nativeElement.style.height = this.newHeight;
-    } else {
-      this.filtro.nativeElement.style.height = this.originalHeight;
-    }
-  }
 }

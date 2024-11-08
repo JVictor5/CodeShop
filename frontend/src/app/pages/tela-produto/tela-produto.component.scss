@@ -1,7 +1,9 @@
 @import "../../../styles.scss";
 .main-container {
   display: flex;
-  height: 100%;
+  min-height: 90vh;
+  padding: 15px;
+
   .filtro {
     position: sticky;
     height: 100vh;
@@ -258,5 +260,12 @@
   .img-custom {
     width: 320px;
     height: 300px;
+  }
+  
+  .productNotFound {
+    text-align: center;
+    margin: auto;
+    max-height: 90vh;
+    height: 100%;
   }
 }

@@ -5,7 +5,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { DividerModule } from 'primeng/divider';
 import { FastAverageColor } from 'fast-average-color';
@@ -15,11 +15,17 @@ import { firstValueFrom } from 'rxjs';
 import { FavoriteProdutsService } from '../../core/services/favoriteProducts.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CartService } from '../../core/services/shoppingCart.service';
 
 @Component({
   selector: 'app-detalhe-produto',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule, DividerModule, ToastModule],
+  imports: [
+    CommonModule,
+    DividerModule,
+    ToastModule,
+    RouterModule,
+  ],
   templateUrl: './detalhe-produto.component.html',
   styleUrl: './detalhe-produto.component.scss',
   providers: [MessageService],
@@ -27,7 +33,8 @@ import { MessageService } from 'primeng/api';
 })
 export class DetalheProdutoComponent {
   @ViewChild('colorDivRef', { static: false }) colorDivRef!: ElementRef;
-  @ViewChild('cardHeaderDestaqueRef', { static: false }) cardHeaderDestaqueRef!: ElementRef;
+  @ViewChild('cardHeaderDestaqueRef', { static: false })
+  cardHeaderDestaqueRef!: ElementRef;
 
   userId: string = '';
   textFavorite: string = 'Adicionar';
@@ -62,8 +69,8 @@ export class DetalheProdutoComponent {
     },
     releaseDate: {
       bruteFormat: '',
-      dateFormat: ''
-    }
+      dateFormat: '',
+    },
   };
   thumbnails: string[] = [];
   time = 0;
@@ -74,14 +81,17 @@ export class DetalheProdutoComponent {
     private companyRepository: CompanyRepository,
     private authService: AuthService,
     private favoriteProductsService: FavoriteProdutsService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cartService: CartService
   ) {}
   async ngOnInit(): Promise<void> {
     this.route.paramMap.subscribe(async (params) => {
       this.productId = params.get('id') ?? '';
       await this.loadProduct();
       this.applyColorToDiv();
-      this.infoSeller = await this.companyRepository.getById(this.infoProduto.idUser);
+      this.infoSeller = await this.companyRepository.getById(
+        this.infoProduto.idUser
+      );
     });
 
     this.authService.currentUser.subscribe(async (user) => {
@@ -95,8 +105,8 @@ export class DetalheProdutoComponent {
     if (this.productId) {
       try {
         const product = await this.productService.getById(this.productId);
-        this.infoProduto = product; 
-        this.isFavorite();  
+        this.infoProduto = product;
+        this.isFavorite();
       } catch (error) {
         console.error('Erro ao carregar o produto:', error);
       }
@@ -105,17 +115,23 @@ export class DetalheProdutoComponent {
 
   applyColorToDiv() {
     const fac = new FastAverageColor();
-    fac.getColorAsync(this.infoProduto.capaUrl.sm)
-        .then(color => {
-            this.colorDivRef.nativeElement.style.backgroundColor = color.rgba;
-            this.colorDivRef.nativeElement.style.color = color.isDark ? '#fff' : '#000';
-            this.cardHeaderDestaqueRef.nativeElement.style.backgroundColor = color.rgba;
-            this.cardHeaderDestaqueRef.nativeElement.style.color = color.isDark ? '#fff' : '#000';
-            this.predominantColor = color.rgba;
-        })
-        .catch(e => {
-            console.log(e);
-        });
+    fac
+      .getColorAsync(this.infoProduto.capaUrl.sm)
+      .then((color) => {
+        this.colorDivRef.nativeElement.style.backgroundColor = color.rgba;
+        this.colorDivRef.nativeElement.style.color = color.isDark
+          ? '#fff'
+          : '#000';
+        this.cardHeaderDestaqueRef.nativeElement.style.backgroundColor =
+          color.rgba;
+        this.cardHeaderDestaqueRef.nativeElement.style.color = color.isDark
+          ? '#fff'
+          : '#000';
+        this.predominantColor = color.rgba;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   formatTextDescription(text: string) {
@@ -126,39 +142,59 @@ export class DetalheProdutoComponent {
   }
 
   toggleFavorite() {
-      if (this.userId) {
-        if (!this.isFavoriteProduct) {
-          this.favoriteProductsService.addFavorito(this.userId, this.productId);
-          this.textFavorite = 'Remover';
-          this.isFavoriteProduct = true;
-        } else {
-          this.favoriteProductsService.deleteFavorito(this.userId, this.productId);
-          this.textFavorite = 'Adicionar';
-          this.isFavoriteProduct = false;
-        }
+    if (this.userId) {
+      if (!this.isFavoriteProduct) {
+        this.favoriteProductsService.addFavorito(this.userId, this.productId);
+        this.textFavorite = 'Remover';
+        this.isFavoriteProduct = true;
       } else {
-        this.showToast('error', 'Atenção', 'É preciso acessar sua conta para favoritar um produto.');
+        this.favoriteProductsService.deleteFavorito(
+          this.userId,
+          this.productId
+        );
+        this.textFavorite = 'Adicionar';
+        this.isFavoriteProduct = false;
       }
+    } else {
+      this.showToast(
+        'error',
+        'Atenção',
+        'É preciso acessar sua conta para favoritar um produto.'
+      );
+    }
   }
 
   async isFavorite() {
     if (!this.userId) {
       return;
     }
-    const favorites = await firstValueFrom(this.favoriteProductsService.getFavoritesByUser(this.userId));
-    if (favorites.some(fav => fav.productId === this.productId)) {
+    const favorites = await firstValueFrom(
+      this.favoriteProductsService.getFavoritesByUser(this.userId)
+    );
+    if (favorites.some((fav) => fav.productId === this.productId)) {
       this.textFavorite = 'Remover';
       this.isFavoriteProduct = true;
-    };
+    }
   }
 
-  /**
-   * Função destinada a mostrar os pop-ups.
-   * @param severity gravidade da mensagem que implica no tema do pop-up
-   * @param summary Título
-   * @param detail Descrição
-   */
+  addToCart(product: any) {
+    this.cartService.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      capaUrl: product.capaUrl,
+      quantity: 1,
+      description: product.genres,
+      maximumQuantity: product.quantity,
+    });
+    console.log(product.description);
+  }
+
   showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
   }
 }

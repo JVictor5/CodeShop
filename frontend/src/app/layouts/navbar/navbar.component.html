@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-container">
     <!-- Logo e Nome da CodeShop à esquerda -->
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" routerLink="/" data-bs-dismiss="offcanvas">
       <div class="logo-placeholder"></div>
       <span class="navbar-title">CodeShop</span>
     </a>
@@ -29,7 +29,11 @@
       </div>
 
       <!-- Ícone de Carrinho -->
-      <button routerLink="/carrinho" class="icon-button">
+      <button
+        routerLink="/carrinho"
+        class="icon-button"
+        data-bs-dismiss="offcanvas"
+      >
         <i class="bx bxs-cart cart-icon"></i>
         <span class="cart-badge">{{ totalCart }}</span>
       </button>
@@ -93,18 +97,28 @@
       <!-- Links de Navegação -->
       <ul class="navbar-nav mt-3">
         <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link" routerLink="/" data-bs-dismiss="offcanvas"
+            >Home</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/carrinho">Carrinho de Compras</a>
+          <a class="nav-link" routerLink="/carrinho" data-bs-dismiss="offcanvas"
+            >Carrinho de Compras</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/produtos/categoria/Aplicativos"
+          <a
+            class="nav-link"
+            routerLink="/produtos/categoria/Aplicativos"
+            data-bs-dismiss="offcanvas"
             >Aplicativos</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/produtos/categoria/Gift Cards"
+          <a
+            class="nav-link"
+            routerLink="/produtos/categoria/Gift Cards"
+            data-bs-dismiss="offcanvas"
             >Gift Cards</a
           >
         </li>
@@ -112,7 +126,6 @@
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
-            href=""
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -121,14 +134,18 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" [href]="'/produtos/categoria/Jogos'"
+              <a
+                class="dropdown-item"
+                [routerLink]="'/produtos/categoria/Jogos'"
+                data-bs-dismiss="offcanvas"
                 >Todos os Jogos</a
               >
             </li>
             <li *ngFor="let item of genres">
               <a
                 class="dropdown-item"
-                [href]="'/produtos/jogos/' + item.code"
+                [routerLink]="'/produtos/jogos/' + item.code"
+                data-bs-dismiss="offcanvas"
                 >{{ item.name }}</a
               >
             </li>
@@ -139,10 +156,15 @@
         <!-- Loja -->
 
         <li class="nav-item">
-          <a class="nav-link" href="/loja/{{ idShop }}">Minha Loja</a>
+          <a
+            class="nav-link"
+            routerLink="/loja/{{ idShop }}"
+            data-bs-dismiss="offcanvas"
+            >Minha Loja</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/graficos"
+          <a class="nav-link" routerLink="/graficos" data-bs-dismiss="offcanvas"
             >Análise - CodeShop</a
           >
         </li>
@@ -152,7 +174,7 @@
       <!-- Perfil de Usuário -->
 
       <div class="user-profile">
-        <a href="/perfil">
+        <a routerLink="/perfil" data-bs-dismiss="offcanvas">
           <img src="{{ avatar }}" alt="Foto de Perfil" class="profile-pic" />
           <div class="user-info">
             <span class="user-name">{{ username }}</span>

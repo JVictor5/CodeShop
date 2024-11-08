@@ -2,6 +2,7 @@
 
 .user-codes-container {
   padding: 20px;
+  min-height: 100vh;
 
   h2 {
     text-align: center;
@@ -176,6 +177,56 @@
       &:hover {
         background-color: $hoverRedColor;
         border: 2px solid $hoverRedColor;
+      }
+    }
+  }
+
+  .no-code-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    text-align: center;
+    padding: 2rem;
+
+    .no-code-message {
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+
+      i {
+        font-size: 3rem;
+        color: #f39c12;
+        margin-bottom: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+    }
+
+    .btn-go-home {
+      background-color: $purpleColor;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $hoverPurpleColor;
       }
     }
   }

@@ -22,7 +22,7 @@ import { CartService } from '../../core/services/shoppingCart.service';
 export class HomeComponent {
   recentProducts: Product[] = [];
   userId: string = '';
-  favoriteProductIds: Set<string> = new Set(); // Armazena os IDs dos produtos favoritos
+  favoriteProductIds: Set<string> = new Set();
 
   responsiveOptions = [
     {

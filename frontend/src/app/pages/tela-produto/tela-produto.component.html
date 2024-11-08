@@ -1,5 +1,4 @@
 <div class="main-container">
-  <div class="filtro" #filtro></div>
   <p-toast />
   <div *ngIf="existsProduct" class="main-container-products">
     @for (product of products; track $index) {
@@ -26,7 +25,10 @@
               />
             </div>
             <div class="mt-3">
-              <h5>{{ product.name }}</h5>
+              <h5>
+                {{ product.name.slice(0, 18)
+                }}<span *ngIf="product.name.length > 18">...</span>
+              </h5>
               <h3 class="text-color">R$ {{ product.price }}</h3>
             </div>
           </div>
@@ -49,10 +51,15 @@
     </div>
     }
   </div>
-  <div class="p-4" *ngIf="!existsProduct">
-    <h3>Não encontramos produto que atenda a esse filtro. Continue procurando!</h3>
+  <div class="productNotFound" *ngIf="!existsProduct">
+    <h3>
+      Não encontramos produto que atenda a esse filtro. Continue procurando!
+    </h3>
     <div class="d-flex justify-content-center">
-      <img class="img-custom" src="../../../assets/imgs/not-found-product.png" />
+      <img
+        class="img-custom"
+        src="../../../assets/imgs/not-found-product.png"
+      />
     </div>
   </div>
 </div>

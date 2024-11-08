@@ -6,11 +6,12 @@ import { KeyService } from '../../core/services/key.service';
 import { ToastrService } from 'ngx-toastr';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-library-key',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule],
+  imports: [CommonModule, DialogModule, ButtonModule, RouterModule],
   templateUrl: './library-key.component.html',
   styleUrls: ['./library-key.component.scss'],
 })
