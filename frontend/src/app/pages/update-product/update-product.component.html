@@ -210,11 +210,6 @@
                       formControlName="capaUrl" class="form-control" />
                   </div>
                 </div>
-                <!-- <div class="mb-4">
-                  <label for="videosUrls" class="form-label">Videos:</label>
-                  <input type="file" id="videosUrls" (change)="onVideosChange($event)" formControlName="videosUrls"
-                    multiple class="form-control" />
-                </div> -->
 
                 <div class="card flex justify-content-center">
                   <p-toast></p-toast>
@@ -294,28 +289,43 @@
 
                 </div>
 
-                <!-- <div class="mb-4">
-                  <p-checkbox class="me-3" inputId="destaques" (click)="onShowDestaques()" />
-                  <label for="destaques">Deseja adicionar um destaque?</label>
-                </div>
-
-                <div class="mb-4" *ngIf="showDestaques">
+                <div class="mt-4 mb-4">
                   <div class="card">
-                    <div class="card-header">Destaque de {{ fValue.step2.name }}</div>
+                    <div class="card-header"
+                      pTooltip="Destaque é uma forma de promover uma informação importante do produto, como uma funcionalidade específica, um prêmio recebido."
+                      tooltipPosition="top">
+                      Destaque de {{ fValue.step2.name }}</div>
                     <div class="card-body">
+                      <div class="mb-4">
+                        <label for="titleDestaque" class="form-label">Título:</label>
+                        <input type="text" id="titleDestaque" formControlName="titleDestaque" class="form-control"
+                          pTooltip="O título que será mostrado no destaque." />
+                      </div>
                       <div class="mb-4">
                         <label for="descriptionDestaque" class="form-label">Descrição:</label>
                         <textarea id="descriptionDestaque" formControlName="descriptionDestaque" class="form-control"
-                          rows="6"></textarea>
+                          rows="8" pTooltip="O texto que será mostrado no destaque."></textarea>
                       </div>
-                      <div class="mb-4">
-                        <label for="capaDestaqueUrl" class="form-label">Capa:</label>
-                        <input type="file" accept="image/*" id="capaDestaqueUrl" (change)="onCapaDestaqueChange($event)"
-                          formControlName="capaDestaqueUrl" class="form-control" />
+                      <div class="card mb-4">
+                        <div class="card-header">Capa destaque</div>
+                        <div class="card-body d-flex justify-content-center">
+                          <div class="card w-25">
+                            <div class="card-header d-flex justify-content-center">Capa destaque atual</div>
+                            <div class="card-body d-flex flex-column">
+                              <img alt="Capa destaque atual do produto" [src]="currentCapaDestaque" class="img-fluid mb-2" />
+                              <button class="btn btn-primary" (click)="showCapaDestaqueClick()">Escolher nova capa destaque</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="showCapaDestaqueInput" class="mb-3 p-2">
+                          <label for="capaDestaqueUrl" class="form-label">Nova capa destaque:</label>
+                          <input type="file" accept="image/*" id="capaDestaqueUrl" (change)="onCapaDestaqueChange($event)"
+                            formControlName="capaDestaqueUrl" class="form-control" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
               </div>
             </form>
@@ -388,8 +398,8 @@
                 <h3>Seu produto está pronto!</h3>
                 <p class="mb-4">Agora ele está disponível para ser comprado.</p>
                 <div class="d-flex justify-content-between">
-                  <a href="detalhe-produto/{{ this.productId }}" class="btn btn-success">Ver o produto na loja</a>
-                  <a href="" class="btn btn-primary">Voltar para os seus produtos</a>
+                  <a routerLink="/detalhe-produto/{{ productId }}" class="btn btn-success">Ver o produto na loja</a>
+                  <a routerLink="/loja/{{ shopId }}" class="btn btn-primary">Voltar para os seus produtos</a>
                 </div>
               </div>
             </div>

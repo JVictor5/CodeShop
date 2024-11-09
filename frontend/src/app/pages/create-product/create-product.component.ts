@@ -26,6 +26,7 @@ import { DialogModule } from 'primeng/dialog';
 import { gameGenres } from '../../data/game-genres';
 import { playerModes } from '../../data/player-modes';
 import { FastAverageColor } from 'fast-average-color';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-create-product',
@@ -45,6 +46,7 @@ import { FastAverageColor } from 'fast-average-color';
     TooltipModule,
     CalendarModule,
     DialogModule,
+    RouterModule
   ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
@@ -411,13 +413,45 @@ export class CreateProductComponent {
     return this.form.getRawValue();
   }
 
+  formatNameSearch(name: string): string {
+    // Mapeamento dos números para sua versão escrita
+    const numberMap: { [key: string]: string } = {
+      "0": "zero",
+      "1": "um",
+      "2": "dois",
+      "3": "três",
+      "4": "quatro",
+      "5": "cinco",
+      "6": "seis",
+      "7": "sete",
+      "8": "oito",
+      "9": "nove",
+    };
+
+    // Substituir números por sua versão escrita
+    let formattedName = name.replace(/[0-9]/g, (num) => numberMap[num]);
+
+    // Substituir caracteres acentuados pela versão sem acento e transformar em minúsculo
+    formattedName = formattedName
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    // Remover espaços em branco e caracteres especiais
+    formattedName = formattedName.replace(/[\s\W_]+/g, "");
+
+    return formattedName;
+  }
+
   async handleSubmit() {
     try {
+      const nameSearch = this.formatNameSearch(this.fValue.step2.name);
       let formValue;
       if (this.showGameGenres) {
         formValue = {
           category: this.fValue.step1.category,
           name: this.fValue.step2.name,
+          nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
           keys: this.keys,
@@ -454,6 +488,7 @@ export class CreateProductComponent {
         formValue = {
           category: this.fValue.step1.category,
           name: this.fValue.step2.name,
+          nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
           keys: this.keys,
@@ -501,7 +536,6 @@ export class CreateProductComponent {
         id,
         this.selectedVideos
       );
-      // const videosUrls = [] as string[];
       await this.productService.update({
         id,
         capaUrl: this.capaUrl,

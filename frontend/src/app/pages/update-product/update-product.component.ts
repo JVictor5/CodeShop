@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -42,6 +42,7 @@ import { FastAverageColor } from 'fast-average-color';
     FormsModule,
     CalendarModule,
     DialogModule,
+    RouterModule
   ],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.scss',
@@ -55,6 +56,7 @@ export class UpdateProductComponent implements OnInit {
   private messageService = inject(MessageService);
   private primengConfig = inject(PrimeNGConfig);
   productId: string = '';
+  shopId: string = '';
 
   // variáveis que buscam os dados para popular o multi-select
   genres = gameGenres;
@@ -62,10 +64,14 @@ export class UpdateProductComponent implements OnInit {
 
   // variável que recebe url após a inserção no supabase
   capaUrl: { sm: string; lg: string; } = { sm: '', lg: '' };
+  capaDestaqueUrl: { sm: string, lg: string } = { sm: '', lg: '' };
 
   selectedCapa: File[] = [];
+  selectedCapaDestaque: File[] = [];
   currentCapa: string = '';
+  currentCapaDestaque: string = '';
   showCapaInput: boolean = false;
+  showCapaDestaqueInput: boolean = false;
 
   // variáveis de manipulação do dropzone
   unchangedImages: { sm: string[]; lg: string[]; } = { sm: [], lg: [] };
@@ -74,7 +80,6 @@ export class UpdateProductComponent implements OnInit {
   uploadedImages: any[] = [];
   beforeUpdateImages: string[] = [];
   pendingImages: any[] = [];
-  showImagesInput: boolean = false;
 
   selectedVideos: File[] = [];
   currentVideos: string[] = [];
@@ -138,14 +143,21 @@ export class UpdateProductComponent implements OnInit {
             recommendedStorage: p.recommendedSystemRequirements?.storage,
             recommendedMemory: p.recommendedSystemRequirements?.memory,
             recommendedGpu: p.recommendedSystemRequirements?.gpu,
+          },
+          step3: {
+            titleDestaque: p.titleDestaque,
+            descriptionDestaque: p.descriptionDestaque
           }
         });
       }
       this.currentCapa = p.capaUrl.sm;
+      this.currentCapaDestaque = p.capaDestaqueUrl.sm;
       this.capaUrl = { sm: p.capaUrl.sm, lg: p.capaUrl.lg };
+      this.capaDestaqueUrl = { sm: p.capaDestaqueUrl.sm, lg: p.capaDestaqueUrl.lg };
       this.keys = p.keys;
       this.quantity = this.keys.length;
       this.beforeUpdateImages = p.imgUrls.sm;
+      this.shopId = p.idUser;
     });
 
     this.primengConfig.setTranslation({
@@ -196,6 +208,7 @@ export class UpdateProductComponent implements OnInit {
       capaUrl: ['', Validators.required],
       videosUrls: [[] as string[], Validators.required],
       imgUrls: [[] as string[], Validators.required],
+      titleDestaque: ['', Validators.required],
       capaDestaqueUrl: ['', Validators.required],
       descriptionDestaque: ['', Validators.required]
     }),
@@ -305,11 +318,18 @@ export class UpdateProductComponent implements OnInit {
       }
     }
   }
-  /*onVideosChange(event: any) {
+  onCapaDestaqueChange(event: any) {
     if (event.target.files.length > 0) {
-      this.selectedVideos = Array.from(event.target.files);
+      let fileType = event.target.files[0].type;
+      if (this.validateImage(fileType)) {
+        this.selectedCapaDestaque = Array.from(event.target.files);
+      } else {
+        this.form.get('step3.capaDestaqueUrl')?.reset();
+        this.selectedCapaDestaque = [];
+        this.showToast('error', 'Atenção', 'Somente imagens são aceitas!');
+      }
     }
-  }*/
+  }
 
   // Função para detectar mudança de categoria e mostrar o select de gêneros de jogos
   onProductCategoryChange(category: string): void {
@@ -343,8 +363,8 @@ export class UpdateProductComponent implements OnInit {
     this.showCapaInput = true;
   }
 
-  showImagesInputClick(): void {
-    this.showImagesInput = true;
+  showCapaDestaqueClick(): void {
+    this.showCapaDestaqueInput = true;
   }
 
   removeImageFromCurrentImages(index: number) {
@@ -479,14 +499,46 @@ export class UpdateProductComponent implements OnInit {
     }
   }
 
+  formatNameSearch(name: string): string {
+    // Mapeamento dos números para sua versão escrita
+    const numberMap: { [key: string]: string } = {
+      "0": "zero",
+      "1": "um",
+      "2": "dois",
+      "3": "três",
+      "4": "quatro",
+      "5": "cinco",
+      "6": "seis",
+      "7": "sete",
+      "8": "oito",
+      "9": "nove",
+    };
+
+    // Substituir números por sua versão escrita
+    let formattedName = name.replace(/[0-9]/g, (num) => numberMap[num]);
+
+    // Substituir caracteres acentuados pela versão sem acento e transformar em minúsculo
+    formattedName = formattedName
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    // Remover espaços em branco e caracteres especiais
+    formattedName = formattedName.replace(/[\s\W_]+/g, "");
+
+    return formattedName;
+  }
+
   async handleSubmit() {
     try {
+      const nameSearch = this.formatNameSearch(this.fValue.step2.name);
       let formValue;
       if (this.showGameGenres) {
         formValue = {
           id: this.productId,
           category: this.fValue.step1.category,
           name: this.fValue.step2.name,
+          nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
           keys: this.keys,
@@ -511,12 +563,15 @@ export class UpdateProductComponent implements OnInit {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
             bruteFormat: this.fValue.step2.releaseDate
           },
+          titleDestaque: this.fValue.step3.titleDestaque,
+          descriptionDestaque: this.fValue.step3.descriptionDestaque
         };
       } else {
         formValue = {
           id: this.productId,
           category: this.fValue.step1.category,
           name: this.fValue.step2.name,
+          nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
           genres: this.fValue.step2.genres,
@@ -526,6 +581,8 @@ export class UpdateProductComponent implements OnInit {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
             bruteFormat: this.fValue.step2.releaseDate
           },
+          titleDestaque: this.fValue.step3.titleDestaque,
+          descriptionDestaque: this.fValue.step3.descriptionDestaque
         };
       }
       await this.productService.update(formValue);
@@ -546,6 +603,25 @@ export class UpdateProductComponent implements OnInit {
           await this.productService.update({
             id,
             capaUrl: this.capaUrl
+          });
+        }
+      }
+
+      if (this.selectedCapaDestaque.length > 0) {
+        const message = await this.imgService.deleteProductMedia(id, 'capa-destaque', this.currentCapaDestaque);
+        if (message == 'Success') {
+          const capaDestaqueUrlArray = await this.imgService.uploadProductMedia(
+            id,
+            'capa-destaque',
+            this.selectedCapaDestaque
+          );
+          this.capaDestaqueUrl = {
+            sm: capaDestaqueUrlArray.sm[0],
+            lg: capaDestaqueUrlArray.lg[0]
+          }
+          await this.productService.update({
+            id,
+            capaDestaqueUrl: this.capaDestaqueUrl
           });
         }
       }

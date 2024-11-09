@@ -94,8 +94,38 @@ export class NavbarComponent {
 
   async searchProduct(inputValue: string) {
     if (inputValue.trim()) {
-      this.location.go('/produtos/nome/' + inputValue);
+      this.location.go('/produtos/nome/' + this.formatNameSearch(inputValue));
     }
+  }
+
+  formatNameSearch(name: string): string {
+    // Mapeamento dos números para sua versão escrita
+    const numberMap: { [key: string]: string } = {
+      "0": "zero",
+      "1": "um",
+      "2": "dois",
+      "3": "três",
+      "4": "quatro",
+      "5": "cinco",
+      "6": "seis",
+      "7": "sete",
+      "8": "oito",
+      "9": "nove",
+    };
+
+    // Substituir números por sua versão escrita
+    let formattedName = name.replace(/[0-9]/g, (num) => numberMap[num]);
+
+    // Substituir caracteres acentuados pela versão sem acento e transformar em minúsculo
+    formattedName = formattedName
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    // Remover espaços em branco e caracteres especiais
+    formattedName = formattedName.replace(/[\s\W_]+/g, "");
+
+    return formattedName;
   }
 
   @ViewChild('inputSearch') inputSearch!: ElementRef<HTMLInputElement>;

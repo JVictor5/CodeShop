@@ -30,7 +30,7 @@ export class ProductRepository extends FirebaseAbstract<Product> {
 
     const q = query(
       collectionRef,
-      orderBy('name' as string),
+      orderBy('nameSearch' as string),
       startAt(nameProduct),
       endAt(nameProduct + '\uf8ff')
     );
