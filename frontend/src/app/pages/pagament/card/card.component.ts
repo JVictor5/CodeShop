@@ -201,11 +201,7 @@ export class CardComponent {
           this.idBuy = await this.pagamentoRepository.create(paymentData);
           this.code();
           this.pagamentoRepository.toastSuccess();
-          this.router.navigate(['/']);
-        } else {
-          this.toastr.error('', 'Carrinho vazio', {
-            closeButton: false,
-          });
+          this.cartService.clearCart();
           this.router.navigate(['/']);
         }
       });

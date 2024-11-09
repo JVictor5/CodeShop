@@ -18,6 +18,7 @@ import { CadastroForm } from '../interfaces/cadastro-form.interfece';
 import { UpdateForms } from '../interfaces/update-form.interface';
 import { Form } from '@angular/forms';
 import { Recover } from '../interfaces/recover';
+import { CartService } from './shoppingCart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,11 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
-  constructor(private auth: Auth, private http: HttpClient) {
+  constructor(
+    private auth: Auth,
+    private http: HttpClient,
+    private shoppingCartService: CartService
+  ) {
     const user = JSON.parse(LocalStorage.getItem('user'));
     if (user) {
       this.currentUserSubject.next(user);
@@ -81,6 +86,7 @@ export class AuthService {
     try {
       await signOut(this.auth);
       this.currentUserSubject.next(null);
+      this.shoppingCartService.clearCart();
     } catch (err) {
       console.error(err);
     }
