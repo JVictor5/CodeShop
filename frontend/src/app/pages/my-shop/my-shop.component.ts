@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ShopService } from '../../core/services/shop.service';
 import { ProductService } from '../../core/services/product.service';
 import { FavoriteProdutsService } from '../../core/services/favoriteProducts.service';
@@ -25,6 +25,8 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-my-shop',
@@ -37,6 +39,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     InputTextModule,
     FloatLabelModule,
     ReactiveFormsModule,
+    ToastModule,
+    TooltipModule
   ],
   templateUrl: './my-shop.component.html',
   styleUrls: ['./my-shop.component.scss'],
@@ -58,8 +62,9 @@ export class MyShopComponent implements OnInit {
   storeId: string = '';
 
   isEditing = false;
-  deleteDialogVisible = false;
+  statusProductDialogVisible = false;
   selectedProductId: string | null = null;
+  prodIsActive!: boolean;
 
   private productService = inject(ProductService);
   private favoriteProductsService = inject(FavoriteProdutsService);
@@ -72,7 +77,8 @@ export class MyShopComponent implements OnInit {
     private titleService: Title,
     private shopService: ShopService,
     private authService: AuthService,
-    private imgService: ImgService
+    private imgService: ImgService,
+    private router: Router
   ) {}
 
   form = this.builder.group({
@@ -98,7 +104,14 @@ export class MyShopComponent implements OnInit {
       }
     });
     this.route.paramMap.subscribe((params) => {
-      const storeId = params.get('id');
+      const url = this.router.url;
+      let isShop: boolean;
+      if (url.includes('/perfil')) {
+        isShop = true;
+      } else {
+        isShop = false;
+      }
+      const storeId = params.get('idShop');
       if (storeId) {
         this.shopService
           .getById(storeId)
@@ -111,7 +124,11 @@ export class MyShopComponent implements OnInit {
             this.userShop = company.idUser;
             this.shopDiscription = company.discription;
             this.titleService.setTitle(this.shopName);
-            this.loadProductsByStore(storeId);
+            if (isShop) {
+              this.loadProductsByStore(storeId);
+            } else {
+              this.loadProductsByStoreProdActive(storeId);
+            }
 
             this.form.patchValue({
               idUser: company.idUser,
@@ -142,6 +159,15 @@ export class MyShopComponent implements OnInit {
   }
   async loadProductsByStore(storeId: string) {
     this.productService.getByIdShop(storeId).then((data: any[]) => {
+      if (data.length > 0) {
+        this.products = data;
+        this.existsProduct = true;
+        this.checkFavorites(data);
+      }
+    });
+  }
+  async loadProductsByStoreProdActive(storeId: string) {
+    this.productService.getByIdShopProdActive(storeId).then((data: any[]) => {
       if (data.length > 0) {
         this.products = data;
         this.existsProduct = true;
@@ -216,20 +242,30 @@ export class MyShopComponent implements OnInit {
     });
   }
 
-  openDeleteDialog(productId: string) {
+  async openDeleteDialog(productId: string) {
     this.selectedProductId = productId;
-    this.deleteDialogVisible = true;
+    const prodInfo = await this.productService.getById(productId);
+    this.prodIsActive = prodInfo.status;
+    this.statusProductDialogVisible = true;
   }
 
-  confirmDeleteProduct() {
+  confirmToggleStatusProduct() {
     if (this.selectedProductId) {
-      this.deleteProduct(this.selectedProductId);
+      this.toggleStatusProduct(this.selectedProductId);
     }
-    this.deleteDialogVisible = false;
+    this.statusProductDialogVisible = false;
   }
 
-  deleteProduct(id: string) {
-    this.productService.delete(id);
+  toggleStatusProduct(id: string) {
+    const newStatus = !this.prodIsActive;
+    this.productService.update({
+      id,
+      status: newStatus
+    });
+    this.showToast('success', 'Sucesso', 'Status do produto atualizado.');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   }
 
   onFileSelected(event: any) {

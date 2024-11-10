@@ -36,4 +36,5 @@ export interface Product extends Model {
   descriptionDestaque: string;
   capaDestaqueUrl: { sm: string; lg: string };
   playerModes?: string[];
+  status: boolean;
 }

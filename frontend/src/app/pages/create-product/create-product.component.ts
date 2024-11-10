@@ -482,7 +482,8 @@ export class CreateProductComponent {
           },
           titleDestaque: this.fValue.step3.titleDestaque,
           descriptionDestaque: this.fValue.step3.descriptionDestaque,
-          capaDestaqueUrl: { sm: '', lg: '' }
+          capaDestaqueUrl: { sm: '', lg: '' },
+          status: true
         };
       } else {
         formValue = {
@@ -503,7 +504,8 @@ export class CreateProductComponent {
           },
           titleDestaque: this.fValue.step3.titleDestaque,
           descriptionDestaque: this.fValue.step3.descriptionDestaque,
-          capaDestaqueUrl: { sm: '', lg: '' }
+          capaDestaqueUrl: { sm: '', lg: '' },
+          status: true
         };
       }
 

@@ -25,6 +25,7 @@
   }
 </div>
 
+<p-toast />
 <div class="space"><h3>Produtos Disponivel da Loja</h3></div>
 @if (existsProduct == true || userId == userShop) {
 <div class="main-container-products">
@@ -43,6 +44,14 @@
         (mouseleave)="toggleHover(product, false)"
       >
         <div class="card-cont">
+          <div class="blocked-container">
+            
+            <i 
+              class="{{ !product.status ? 'pi pi-exclamation-triangle' : '' }}"
+              pTooltip="Produto desativado" tooltipPosition="top"
+            >
+            </i>
+          </div>
           <div class="icon-container">
             <i
               class="fa-heart heart-icon heart-icon-{{ product.id }} {{
@@ -75,7 +84,7 @@
                     type="button"
                     (click)="openDeleteDialog(product.id)"
                   >
-                    Excluir Produto
+                    Alterar status
                   </button>
                 </li>
               </ul>
@@ -129,8 +138,10 @@
 
 <div class="dialog-exclude">
   <p-dialog
-    header="Tem certeza de que deseja Desativar/Ativar este produto?"
-    [(visible)]="deleteDialogVisible"
+    [header]="prodIsActive 
+      ? 'Tem certeza de que deseja desativar este produto?' 
+      : 'Tem certeza de que deseja ativar este produto?'"
+    [(visible)]="statusProductDialogVisible"
     [style]="{ width: '400px' }"
     [modal]="true"
     [closable]="false"
@@ -142,14 +153,14 @@
   >
     <div class="dialog-content">
       <p class="dialog-message">
-        Esta ação é irreversível. Deseja realmente excluir este produto?
+        Isso irá impactar na exibição do seu produto.
       </p>
     </div>
     <p-footer>
-      <button (click)="deleteDialogVisible = false" class="p-button-cancel">
+      <button (click)="statusProductDialogVisible = false" class="btn btn-secondary me-2">
         Cancelar
       </button>
-      <button (click)="confirmDeleteProduct()" class="p-button-confirm">
+      <button (click)="confirmToggleStatusProduct()" class="btn btn-primary">
         Confirmar
       </button>
     </p-footer>

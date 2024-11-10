@@ -71,6 +71,7 @@ export class DetalheProdutoComponent {
       bruteFormat: '',
       dateFormat: '',
     },
+    status: ''
   };
   thumbnails: string[] = [];
   time = 0;

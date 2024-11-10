@@ -99,7 +99,17 @@ export class ProductService {
       const products = this.productRepository.getByIdShop(idShop);
       return products;
     } catch (error) {
-      console.log('Erro ao buscar jogos por gênero: ', error);
+      console.log('Erro ao buscar jogos por idShop: ', error);
+      throw error;
+    }
+  }
+
+  async getByIdShopProdActive(idShop: string) {
+    try {
+      const products = this.productRepository.getByIdShopProdActive(idShop);
+      return products;
+    } catch (error) {
+      console.log('Erro ao buscar jogos por idShop: ', error);
       throw error;
     }
   }

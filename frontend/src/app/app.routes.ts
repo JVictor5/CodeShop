@@ -35,12 +35,21 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'loja/:id',
+        path: 'loja/:idShop',
         title: 'Detalhe da Loja',
         loadComponent: () =>
           import('./pages/my-shop/my-shop.component').then(
             (v) => v.MyShopComponent
           ),
+      },
+      {
+        path: 'loja/perfil/:idShop',
+        title: 'Detalhe da Loja',
+        loadComponent: () =>
+          import('./pages/my-shop/my-shop.component').then(
+            (v) => v.MyShopComponent
+          ),
+        canActivate: [shopGuard],
       },
       {
         path: 'trocar-senha',

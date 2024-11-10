@@ -489,3 +489,19 @@
     }
   }
 }
+
+.blocked-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  gap: 10px;
+  top: 10px;
+  left: 10px;
+  transition: opacity 0.3s ease;
+  background-color: $blackColor;
+  padding: 5px;
+  border-bottom-right-radius: 5px;
+  i {
+    font-size: 24px !important;
+  }
+}

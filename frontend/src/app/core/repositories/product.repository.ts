@@ -30,6 +30,7 @@ export class ProductRepository extends FirebaseAbstract<Product> {
 
     const q = query(
       collectionRef,
+      where('status', '==', true),
       orderBy('nameSearch' as string),
       startAt(nameProduct),
       endAt(nameProduct + '\uf8ff')
@@ -49,7 +50,11 @@ export class ProductRepository extends FirebaseAbstract<Product> {
   public async getByCategory(categoryProduct: string): Promise<Product[]> {
     const collectionRef = collection(this.db, CollectionNames.PRODUCT);
 
-    const q = query(collectionRef, where('category', '==', categoryProduct));
+    const q = query(
+      collectionRef, 
+      where('category', '==', categoryProduct),
+      where('status', '==', true)
+    );
 
     const querySnapshot = await getDocs(q);
     const results: Product[] = [];
@@ -73,7 +78,8 @@ export class ProductRepository extends FirebaseAbstract<Product> {
       where('genres', 'array-contains', {
         code: gameGenderCode,
         name: gameGenderName,
-      })
+      }),
+      where('status', '==', true)
     );
 
     const querySnapshot = await getDocs(q);
@@ -92,6 +98,7 @@ export class ProductRepository extends FirebaseAbstract<Product> {
 
     const q = query(
       collectionRef,
+      where('status', '==', true),
       orderBy('createdAt', 'desc'),
       limit(limitCount)
     );
@@ -106,10 +113,31 @@ export class ProductRepository extends FirebaseAbstract<Product> {
 
     return results;
   }
+
   public async getByIdShop(idShop: string): Promise<Product[]> {
     const collectionRef = collection(this.db, CollectionNames.PRODUCT);
 
     const q = query(collectionRef, where('idUser', '==', idShop));
+
+    const querySnapshot = await getDocs(q);
+    const results: Product[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as Product;
+      const id = doc.id;
+      results.push({ ...data, id });
+    });
+
+    return results;
+  }
+
+  public async getByIdShopProdActive(idShop: string): Promise<Product[]> {
+    const collectionRef = collection(this.db, CollectionNames.PRODUCT);
+
+    const q = query(
+      collectionRef, 
+      where('idUser', '==', idShop),
+      where('status', '==', true),
+    );
 
     const querySnapshot = await getDocs(q);
     const results: Product[] = [];
