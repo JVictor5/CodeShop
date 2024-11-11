@@ -17,7 +17,7 @@
   }
   .products-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 20px;
     justify-items: center;
   }
@@ -143,7 +143,7 @@
     .dialog-footer {
       display: flex;
       justify-content: center;
-      gap: 1.5rem; // Espaço entre os botões
+      gap: 1.5rem;
       padding: 1rem;
     }
 

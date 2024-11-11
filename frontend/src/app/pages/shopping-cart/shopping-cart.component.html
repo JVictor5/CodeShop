@@ -64,7 +64,10 @@
           <h3>Resumo</h3>
         </div>
         <hr />
-        <h4>Valor Total: R$ {{ totalPrice$ | async }}</h4>
+        <h4>
+          Valor Total:
+          {{ totalPrice$ | async | currency : "BRL" : "R$ " : "1.2-2" }}
+        </h4>
         <br />
         <div class="buttons">
           <button class="pay" routerLink="/carrinho/pagamento/cartao">

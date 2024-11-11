@@ -5,7 +5,7 @@ import { PaymentService } from '../../../core/services/payment.service';
 import { CartService } from '../../../core/services/shoppingCart.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { KeyService } from '../../../core/services/key.service';
-import { debounceTime } from 'rxjs';
+import { debounceTime, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -187,7 +187,7 @@ export class CardComponent {
     });
 
     if (this.cardForm.valid) {
-      this.cartService.cart$.subscribe(async (cartItems) => {
+      this.cartService.cart$.pipe(take(1)).subscribe(async (cartItems) => {
         if (cartItems.length > 0) {
           const paymentDetails = this.cartService.getPaymentDetails();
           const user = this.authService.getUser();
@@ -202,7 +202,7 @@ export class CardComponent {
           this.code();
           this.pagamentoRepository.toastSuccess();
           this.cartService.clearCart();
-          this.router.navigate(['/']);
+          this.router.navigate(['/'], { queryParamsHandling: 'merge' });
         }
       });
     } else {

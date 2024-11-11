@@ -70,11 +70,19 @@ export class CartService {
           'Erro',
           {
             closeButton: true,
+            timeOut: 1000,
           }
         );
         return;
       }
-
+      this.toastr.success(
+        `Produto adicionado ao carrinho com sucesso!`,
+        'Sucesso',
+        {
+          closeButton: true,
+          timeOut: 500,
+        }
+      );
       this.cart.push(item);
     }
 
