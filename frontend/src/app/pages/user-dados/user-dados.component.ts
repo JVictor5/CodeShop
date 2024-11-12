@@ -6,8 +6,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
@@ -73,7 +76,6 @@ export class UserDadosComponent {
       this.form.patchValue({
         name: userFromApi.name,
         email: userFromApi.email,
-        password: userFromApi.password,
         document: userFromApi.document,
         phone: userFromApi.phone,
         nivel: userFromApi.nivel,
@@ -82,14 +84,50 @@ export class UserDadosComponent {
   }
 
   form = this.builder.group({
-    name: ['', []],
-    email: ['', [Validators.email]],
-    password: ['', []],
-    document: ['', []],
+    name: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [this.passwordValidator()]],
+    document: ['', [Validators.required, this.validateDocument.bind(this)]],
     documentType: [''],
-    phone: ['', [Validators.pattern(/\d{10,11}$/)]],
+    phone: ['', [Validators.required, Validators.pattern(/\d{10,11}$/)]],
     nivel: [1, []],
   });
+
+  handlePhoneInput(event: Event) {
+    const phoneField = event.target as HTMLInputElement;
+    if (!phoneField.value.startsWith('+55')) {
+      phoneField.value = '+55' + phoneField.value.slice(5);
+    }
+  }
+
+  passwordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = control.value;
+
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      const isValidLength = password.length >= 8;
+
+      const valid = hasUpperCase && hasNumber && isValidLength;
+
+      return !valid ? { passwordStrength: true } : null;
+    };
+  }
+
+  validateDocument(control: any) {
+    const value = control.value;
+
+    if (!value) {
+      return null;
+    }
+    if (value.length < 11) {
+      return { invalidCpf: true };
+    } else if (value.length > 11 && value.length < 14) {
+      return { invalidCnpj: true };
+    }
+
+    return null;
+  }
 
   setDocumentType() {
     const documentValue = this.form.get('document')?.value;
@@ -113,12 +151,6 @@ export class UserDadosComponent {
 
   async update() {
     this.setDocumentType();
-    const phoneValue = this.form.get('phone')?.value;
-    if (phoneValue && !phoneValue.startsWith('+55')) {
-      this.form
-        .get('phone')
-        ?.setValue(`+55${phoneValue}`, { emitEvent: false });
-    }
     console.log(this.id);
     try {
       const response = await this.authService.update(this.fValue, this.id);

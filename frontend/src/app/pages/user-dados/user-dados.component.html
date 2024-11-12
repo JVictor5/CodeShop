@@ -34,7 +34,7 @@
                 pInputText
                 mask="CPF_CNPJ"
                 [disabled]="true"
-                [value]="document"
+                [value]="document | mask : 'CPF_CNPJ'"
               />
               <label for="document">{{ documentType }}</label>
             </p-floatLabel>
@@ -43,9 +43,12 @@
               <input
                 id="phone"
                 type="text"
+                mask=""
                 pInputText
                 [disabled]="true"
-                [value]="phone"
+                [value]="
+                  phone | mask : '+00 (00) 0000-0000||+00 (00) 00000-0000'
+                "
               />
               <label for="phone">Telefone</label>
             </p-floatLabel>
@@ -84,12 +87,12 @@
             <label for="username">Nome</label>
           </p-floatLabel>
           <div
-            *ngIf="
-              form.get('username')?.invalid && form.get('username')?.touched
-            "
+            *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
             class="error"
           >
-            Nome é obrigatório.
+            <span *ngIf="form.get('name')?.errors?.['required']">
+              Username é obrigatório.
+            </span>
           </div>
         </div>
 
@@ -112,16 +115,29 @@
             <label for="password">Senha</label>
           </p-floatLabel>
           <div
-            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            *ngIf="
+              form.get('password')?.invalid && form.get('password')?.touched
+            "
             class="error"
           >
-            Email inválido.
+            <span
+              *ngIf="!form.get('password')?.errors?.['required'] && form.get('password')?.errors?.['passwordStrength']"
+              class="error"
+            >
+              A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um
+              número.
+            </span>
           </div>
         </div>
 
         <div class="editable-field">
           <p-floatLabel>
-            <input pInputText formControlName="document" type="text" />
+            <input
+              pInputText
+              formControlName="document"
+              type="text"
+              mask="CPF_CNPJ"
+            />
             <label for="document">Documento</label>
           </p-floatLabel>
           <div
@@ -130,13 +146,27 @@
             "
             class="error"
           >
-            Documento é obrigatório.
+            <span *ngIf="form.get('document')?.errors?.['required']">
+              CPF/CNPJ é obrigatório.
+            </span>
+            <span *ngIf="form.get('document')?.errors?.['invalidCpf']">
+              CPF é inválido.
+            </span>
+            <span *ngIf="form.get('document')?.errors?.['invalidCnpj']">
+              CNPJ é inválido.
+            </span>
           </div>
         </div>
 
         <div class="editable-field">
           <p-floatLabel>
-            <input pInputText formControlName="phone" type="text" />
+            <input
+              pInputText
+              formControlName="phone"
+              type="text"
+              mask="+00 (00) 0000-0000||+00 (00) 00000-0000"
+              (input)="handlePhoneInput($event)"
+            />
             <label for="phone">Telefone</label>
           </p-floatLabel>
           <div

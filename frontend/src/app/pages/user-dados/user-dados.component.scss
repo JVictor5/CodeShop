@@ -217,6 +217,13 @@
     background-position: center;
   }
 }
+.error {
+  width: 100%;
+  color: $RedColor;
+  font-size: 0.875rem;
+  padding: 0;
+}
+
 @media screen and (max-width: 1010px) {
   .user {
     height: 90vh;
