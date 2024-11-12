@@ -22,10 +22,8 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     ReactiveFormsModule,
     NgxMaskDirective,
-    NgxMaskPipe,
     NgbModule,
     FloatLabelModule,
     InputTextModule,
@@ -41,6 +39,7 @@ export class CadastroUsuarioComponent {
   emailError: boolean = false;
   emailSuggestions: string[] = ['gmail.com', 'outlook.com', 'yahoo.com'];
   filteredEmails: string[] = [];
+  errorMessage: string | null = null;
 
   switchToSignUp() {
     this.isSignUpMode = true;
@@ -100,7 +99,7 @@ export class CadastroUsuarioComponent {
     }
     if (value.length < 11) {
       return { invalidCpf: true };
-    } else if (value.length < 14) {
+    } else if (value.length > 11 && value.length < 14) {
       return { invalidCnpj: true };
     }
 
@@ -109,7 +108,6 @@ export class CadastroUsuarioComponent {
   passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.value;
-
 
       const hasUpperCase = /[A-Z]/.test(password);
       const hasNumber = /\d/.test(password);
@@ -143,12 +141,29 @@ export class CadastroUsuarioComponent {
 
   async handleSubmit() {
     this.setDocumentType();
+    this.errorMessage = null;
+
     try {
-      const response = await this.authService.cad(this.fValue);
-      console.log(response);
+      const result = await this.authService.cad(this.fValue);
+      if (result === 'success') {
+        this.form.reset();
+        this.switchToSignIn();
+      } else if (result === 'error') {
+        this.errorMessage = 'Algum campo já possui cadastro ou contém erro.';
+        this.markAllFieldsAsTouched();
+      }
     } catch (error) {
-      console.error(error);
+      this.errorMessage =
+        'Erro ao processar o cadastro. Verifique seus dados e tente novamente.';
+      this.markAllFieldsAsTouched();
     }
+  }
+
+  private markAllFieldsAsTouched() {
+    Object.keys(this.form.controls).forEach((field) => {
+      const control = this.form.get(field);
+      control?.markAsTouched({ onlySelf: true });
+    });
   }
 
   onSubmit() {

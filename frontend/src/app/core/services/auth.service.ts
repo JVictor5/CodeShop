@@ -61,14 +61,16 @@ export class AuthService {
     }
   };
 
-  async cad(form: CadastroForm) {
+  async cad(form: CadastroForm): Promise<string> {
     try {
       const response = await lastValueFrom(
         this.http.post(`${environment.urlApi}/users`, form)
       );
       console.log(response);
+      return 'success';
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
+      return 'error';
     }
   }
 
