@@ -71,7 +71,8 @@ export class TelaProdutoComponent implements OnInit {
   }
 
   async loadProductsByCategory(category: string) {
-    this.productService.getByCategory(category).then((data: any[]) => {
+    let categoryName: string = await this.setCategoryName(category);
+    this.productService.getByCategory(categoryName).then((data: any[]) => {
       if (data.length > 0) {
         this.products = data;
         this.existsProduct = true;
@@ -162,6 +163,35 @@ export class TelaProdutoComponent implements OnInit {
 
   toggleHover(product: any, isHovering: boolean) {
     product.isHovered = isHovering;
+  }
+
+  async setCategoryName(category: string) {
+    let categoryName: string;
+    switch (category) {
+      case 'jogos':
+        categoryName = 'Jogos';
+        break;
+      case 'gift-cards':
+        categoryName = 'Gift Card';
+        break;
+      case 'assinaturas':
+        categoryName = 'Assinatura de Serviços';
+        break;
+      case 'creditos-virtuais':
+        categoryName = 'Créditos Virtuais';
+        break;
+      case 'software':
+        categoryName = 'Software e Aplicativos';
+        break;
+      case 'conteudo-adicional':
+        categoryName = 'Conteúdos Adicionais e Expansões';
+        break;
+      default:
+        categoryName = '';
+        break;
+    }
+
+    return categoryName;
   }
 
 }
