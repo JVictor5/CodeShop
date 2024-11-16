@@ -124,6 +124,7 @@ export class UpdateProductComponent implements OnInit {
           name: p.name,
           description: p.description,
           price: p.price,
+          storeForActivation: p.storeForActivation,
           releaseDate: p.releaseDate.bruteFormat,
         },
       });
@@ -190,6 +191,7 @@ export class UpdateProductComponent implements OnInit {
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: [0.0, Validators.required],
+      storeForActivation: ['', Validators.required],
       releaseDate: ['', Validators.required],
       genres: [[] as string[], Validators.required],
       playerModes: [[] as string[], Validators.required],
@@ -245,6 +247,8 @@ export class UpdateProductComponent implements OnInit {
         this.showToast('error', 'Atenção', 'Preencha o campo descrição!');
       } else if (!this.fValue.step2.price) {
         this.showToast('error', 'Atenção', 'Preencha o campo preço!');
+      } else if (!this.fValue.step2.storeForActivation) {
+        this.showToast('error', 'Atenção', 'Preencha o campo loja para ativação!');
       } else if (!this.fValue.step2.releaseDate) {
         this.showToast('error', 'Atenção', 'Escolha uma data de lançamento!');
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
@@ -541,6 +545,7 @@ export class UpdateProductComponent implements OnInit {
           nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
+          storeForActivation: this.fValue.step2.storeForActivation,
           keys: this.keys,
           quantity: this.quantity,
           playerModes: Array.isArray(this.fValue.step2.playerModes) ? this.fValue.step2.playerModes : [this.fValue.step2.playerModes],
@@ -574,6 +579,7 @@ export class UpdateProductComponent implements OnInit {
           nameSearch: nameSearch,
           description: this.fValue.step2.description,
           price: this.fValue.step2.price,
+          storeForActivation: this.fValue.step2.storeForActivation,
           genres: this.fValue.step2.genres,
           keys: this.keys,
           quantity: this.quantity,

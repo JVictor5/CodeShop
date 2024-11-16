@@ -46,6 +46,7 @@ export class DetalheProdutoComponent {
     name: '',
     description: '',
     price: '',
+    storeForActivation: '',
     quantity: '',
     capaUrl: { sm: '', lg: '' },
     videosUrls: [],
