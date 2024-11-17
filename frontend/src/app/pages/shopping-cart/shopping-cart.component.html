@@ -1,7 +1,7 @@
 <div class="contain">
   <div class="cart">
     <div class="menuCart">
-      <h2>Items do Carrinho</h2>
+      <h2>Itens do Carrinho</h2>
       <button (click)="clearCart()">
         <i class="pi pi-trash"></i> Limpar Carrinho
       </button>
@@ -15,7 +15,11 @@
           <div class="itemName">
             <div class="name">
               <h4>{{ item.name }}</h4>
-              <p>Generos: {{ getDescriptionText(item.description, 100) }}</p>
+              @if(item.type !== 'Jogos') {
+                <p>Categoria: {{ item.type }}</p>
+              } @else {
+                <p>Generos: {{ getDescriptionText(item.description, 100) }}</p>
+              }
             </div>
             <h5>{{ item.price | currency : "BRL" }}</h5>
           </div>

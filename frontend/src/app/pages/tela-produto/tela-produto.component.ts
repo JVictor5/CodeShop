@@ -157,6 +157,7 @@ export class TelaProdutoComponent implements OnInit {
       quantity: 1,
       description: product.genres,
       maximumQuantity: product.quantity,
+      type: product.category,
     });
     console.log(product.description);
   }
@@ -193,5 +194,4 @@ export class TelaProdutoComponent implements OnInit {
 
     return categoryName;
   }
-
 }

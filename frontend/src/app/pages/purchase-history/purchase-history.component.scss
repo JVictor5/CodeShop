@@ -2,13 +2,25 @@
 
 .pag {
   min-height: 100vh;
+  padding: 20px;
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  hr {
+    border-radius: 15px;
+    border-top: 5px solid $boderPurpleColor;
+    width: 80%;
+    margin: 20px auto;
+  }
 
   .no-history-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
+    height: 60vh;
     text-align: center;
     padding: 2rem;
 

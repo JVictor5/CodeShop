@@ -1,0 +1,58 @@
+<div class="wishList-container">
+  <h2 class="h2">Lista de Desejos</h2>
+  <hr />
+  @if( !products || products.length == 0 ){
+  <div class="wish-list-container">
+    <div class="wish-list-message">
+      <i class="fa fa-heart" aria-hidden="true"></i>
+      <h2>Você ainda não tem produtos na sua Lista de Desejos!</h2>
+      <p>
+        Não há itens adicionados à sua lista no momento. Explore nossa loja e
+        adicione seus produtos favoritos!
+      </p>
+    </div>
+    <button class="btn-go-shop" routerLink="/">Ir para a Loja</button>
+  </div>
+  }
+  <div class="wish-list-item-container">
+    @for (produto of products; track $index) {
+    <div class="wish-list-item">
+      <img
+        class="product-image"
+        src="{{ produto.capaUrl.sm }}"
+        alt="{{ produto.name }}"
+        routerLink="/detalhe-produto//{{ produto.id }}"
+      />
+      <div class="product-info">
+        <h1
+          class="product-name"
+          routerLink="/detalhe-produto//{{ produto.id }}"
+        >
+          {{ produto.name }}
+        </h1>
+        <h2 class="product-category">Categoria: {{ produto.category }}</h2>
+
+        @if( produto.category == 'Jogos' ) {
+        <div class="product-genre">
+          @for( genre of produto.genres; track $index ) {
+          <p routerLink="/produtos/jogos/{{ genre.code }}">{{ genre.name }}</p>
+          }
+        </div>
+
+        <p class="release-date">
+          Data de Lancamento: {{ produto.releaseDate.dateFormat }}
+        </p>
+        }
+      </div>
+      <div class="product-actions">
+        @if(produto.status == true){
+        <button class="available" (click)="addToCart(produto)">Adicionar ao carrinho</button>
+        }@else{
+        <button class="unavailable">Indisponível</button>
+        }
+        <button class="remove" (click)="removeFavorite(produto)">Remover da Lista</button>
+      </div>
+    </div>
+    }
+  </div>
+</div>

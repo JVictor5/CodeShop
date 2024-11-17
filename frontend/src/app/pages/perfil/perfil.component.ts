@@ -10,6 +10,7 @@ import { SellerComponent } from '../seller/seller.component';
 import { UserDadosComponent } from '../user-dados/user-dados.component';
 import { LibraryKeyComponent } from '../library-key/library-key.component';
 import { PurchaseHistoryComponent } from '../purchase-history/purchase-history.component';
+import { WishListComponent } from '../wish-list/wish-list.component';
 
 @Component({
   selector: 'app-perfil',
@@ -26,6 +27,7 @@ import { PurchaseHistoryComponent } from '../purchase-history/purchase-history.c
     UserDadosComponent,
     LibraryKeyComponent,
     PurchaseHistoryComponent,
+    WishListComponent,
   ],
 })
 export class PerfilComponent {
@@ -80,15 +82,22 @@ export class PerfilComponent {
   async uploadFile() {
     if (this.selectedFile) {
       try {
-        const avatarUrl = await this.imgService.uploadUserMedia('avatar', this.selectedFile);
+        const avatarUrl = await this.imgService.uploadUserMedia(
+          'avatar',
+          this.selectedFile
+        );
         if (avatarUrl) {
           const id = this.id;
           await this.userRepository.update({
             id,
-            avatar: avatarUrl
+            avatar: avatarUrl,
           });
         }
-        await this.imgService.uploadSellerMedia('neMRTYfisxEcVS9SIbmf', 'avatar', this.selectedFile);
+        await this.imgService.uploadSellerMedia(
+          'neMRTYfisxEcVS9SIbmf',
+          'avatar',
+          this.selectedFile
+        );
         window.location.reload();
       } catch (error) {
         console.error('Erro ao fazer o upload:', error);

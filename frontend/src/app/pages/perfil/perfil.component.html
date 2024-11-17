@@ -60,6 +60,10 @@
     <button class="module" (click)="exibirOpcao('Compras')">
       Suas Compras
     </button>
+    <div class="listra"></div>
+    <button class="module" (click)="exibirOpcao('wishList')">
+      Lista de Desejos
+    </button>
     @if(nivel == 1){
     <div class="listra"></div>
     <button class="module" (click)="exibirOpcao('Seller')">
@@ -67,22 +71,17 @@
     </button>
     }
   </div>
-  @if(logado == true){
-  <div *ngIf="exibirConteudo" class="mx-auto">
+  @if (exibirConteudo) {
+  <div class="mx-auto">
     <app-user-dados></app-user-dados>
   </div>
-
-  <div *ngIf="opcaoSelecionada === 'Biblioteca'" id="biblioteca">
-    <app-library-key></app-library-key>
-  </div>
-  <div *ngIf="opcaoSelecionada === 'Compras'">
-    <app-purchase-history></app-purchase-history>
-  </div>
-  @if(nivel == 1){
-  <div *ngIf="opcaoSelecionada === 'Seller'">
-    <app-seller></app-seller>
-  </div>
-  } }@else {
-  <h1>Logue-se para acessar esta página</h1>
-  }
+  } @if(opcaoSelecionada === 'Biblioteca'){
+  <app-library-key></app-library-key>
+  }@else if(opcaoSelecionada === 'Compras'){
+  <app-purchase-history></app-purchase-history>
+  } @else if (opcaoSelecionada === 'wishList') {
+  <app-wish-list></app-wish-list>
+  } @if(nivel == 1){ @if(opcaoSelecionada === 'Seller'){
+  <app-seller></app-seller>
+  } }
 </div>

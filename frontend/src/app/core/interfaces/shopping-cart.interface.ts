@@ -9,4 +9,5 @@ export interface CartItem {
   };
   description: string[];
   maximumQuantity: number;
+  type: string;
 }

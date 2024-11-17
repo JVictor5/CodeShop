@@ -40,7 +40,7 @@ import { TooltipModule } from 'primeng/tooltip';
     FloatLabelModule,
     ReactiveFormsModule,
     ToastModule,
-    TooltipModule
+    TooltipModule,
   ],
   templateUrl: './my-shop.component.html',
   styleUrls: ['./my-shop.component.scss'],
@@ -230,6 +230,7 @@ export class MyShopComponent implements OnInit {
       quantity: 1,
       description: product.genres,
       maximumQuantity: product.quantity,
+      type: product.category,
     });
   }
 
@@ -260,7 +261,7 @@ export class MyShopComponent implements OnInit {
     const newStatus = !this.prodIsActive;
     this.productService.update({
       id,
-      status: newStatus
+      status: newStatus,
     });
     this.showToast('success', 'Sucesso', 'Status do produto atualizado.');
     setTimeout(() => {

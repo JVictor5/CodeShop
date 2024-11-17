@@ -135,6 +135,7 @@ export class HomeComponent {
       quantity: 1,
       description: product.genres,
       maximumQuantity: product.quantity,
+      type: product.category,
     });
   }
 

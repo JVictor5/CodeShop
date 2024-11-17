@@ -35,6 +35,7 @@ export class CartService {
       this.cartSubject.next(this.cart);
       this.updateTotalPrice();
       this.updateTotalQuantity();
+      console.log(this.cart);
     }
   }
 

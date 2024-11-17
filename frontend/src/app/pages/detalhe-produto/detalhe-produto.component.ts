@@ -20,12 +20,7 @@ import { CartService } from '../../core/services/shoppingCart.service';
 @Component({
   selector: 'app-detalhe-produto',
   standalone: true,
-  imports: [
-    CommonModule,
-    DividerModule,
-    ToastModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, DividerModule, ToastModule, RouterModule],
   templateUrl: './detalhe-produto.component.html',
   styleUrl: './detalhe-produto.component.scss',
   providers: [MessageService],
@@ -72,7 +67,7 @@ export class DetalheProdutoComponent {
       bruteFormat: '',
       dateFormat: '',
     },
-    status: ''
+    status: '',
   };
   thumbnails: string[] = [];
   time = 0;
@@ -188,6 +183,7 @@ export class DetalheProdutoComponent {
       quantity: 1,
       description: product.genres,
       maximumQuantity: product.quantity,
+      type: product.category,
     });
     console.log(product.description);
   }
