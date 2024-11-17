@@ -127,6 +127,10 @@ export class UpdateProductComponent implements OnInit {
           storeForActivation: p.storeForActivation,
           releaseDate: p.releaseDate.bruteFormat,
         },
+        step3: {
+          titleDestaque: p.titleDestaque,
+          descriptionDestaque: p.descriptionDestaque
+        }
       });
       this.showGameGenres = (p.category === 'Jogos');
       if (this.showGameGenres) {
@@ -144,10 +148,6 @@ export class UpdateProductComponent implements OnInit {
             recommendedStorage: p.recommendedSystemRequirements?.storage,
             recommendedMemory: p.recommendedSystemRequirements?.memory,
             recommendedGpu: p.recommendedSystemRequirements?.gpu,
-          },
-          step3: {
-            titleDestaque: p.titleDestaque,
-            descriptionDestaque: p.descriptionDestaque
           }
         });
       }
