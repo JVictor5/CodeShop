@@ -177,7 +177,10 @@
     width: 30%;
     .summary {
       background-color: $whiteColor;
-      height: 20rem;
+      max-height: 30rem;
+      height: auto;
+      min-height: 20rem;
+      padding: 1rem;
       box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
         rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
         rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -188,6 +191,15 @@
       border-radius: 10px;
       .content {
         width: 85%;
+        .addedcoupon {
+          display: flex;
+          justify-content: space-between;
+          .clearCoupon {
+            text-decoration: none;
+            color: $RedColor;
+            cursor: pointer;
+          }
+        }
         .title {
           display: flex;
           font-size: 2rem;

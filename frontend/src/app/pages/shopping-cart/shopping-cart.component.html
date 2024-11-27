@@ -16,9 +16,9 @@
             <div class="name">
               <h4>{{ item.name }}</h4>
               @if(item.type !== 'Jogos') {
-                <p>Categoria: {{ item.type }}</p>
+              <p>Categoria: {{ item.type }}</p>
               } @else {
-                <p>Generos: {{ getDescriptionText(item.description, 100) }}</p>
+              <p>Generos: {{ getDescriptionText(item.description, 100) }}</p>
               }
             </div>
             <h5>{{ item.price | currency : "BRL" }}</h5>
@@ -55,10 +55,17 @@
     <div class="coupon">
       <div class="content">
         <p-floatLabel>
-          <input pInputText id="coupon" />
+          <input pInputText id="coupon" #coupon />
           <label for="coupon">Cupom de Desconto</label>
         </p-floatLabel>
-        <button type="button" pButton class="p-button-danger">Aplicar</button>
+        <button
+          type="button"
+          pButton
+          class="p-button-danger"
+          (click)="discount(coupon.value, coupon)"
+        >
+          Aplicar
+        </button>
       </div>
     </div>
     <div class="summary">
@@ -72,6 +79,17 @@
           Valor Total:
           {{ totalPrice$ | async | currency : "BRL" : "R$ " : "1.2-2" }}
         </h4>
+        @if(couponActive !== ''){
+        <p>
+          Valor Total sem Cupom:
+          {{ originalPrice$ | async | currency : "BRL" : "R$ " : "1.2-2" }}
+        </p>
+        <p>Cupom usado:</p>
+        <div class="addedcoupon">
+          <p>{{ couponActive }}</p>
+          <a class="clearCoupon" (click)="clearCoupon()">X</a>
+        </div>
+        }
         <br />
         <div class="buttons">
           <button class="pay" routerLink="/carrinho/pagamento/cartao">

@@ -202,6 +202,7 @@ export class CardComponent {
           this.code();
           this.pagamentoRepository.toastSuccess();
           this.cartService.clearCart();
+          localStorage.removeItem('cupomAplicado');
           this.router.navigate(['/'], { queryParamsHandling: 'merge' });
         }
       });

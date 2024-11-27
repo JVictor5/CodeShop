@@ -11,6 +11,9 @@ export class CartService {
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
   cart$ = this.cartSubject.asObservable();
 
+  private originalPriceSubject = new BehaviorSubject<number>(0);
+  originalPrice$ = this.originalPriceSubject.asObservable();
+
   private totalPriceSubject = new BehaviorSubject<number>(0);
   totalPrice$ = this.totalPriceSubject.asObservable();
 
@@ -123,6 +126,9 @@ export class CartService {
       (total, item) => total + item.price * item.quantity,
       0
     );
+    if (this.originalPriceSubject.getValue() === 0) {
+      this.originalPriceSubject.next(totalPrice);
+    }
     this.totalPriceSubject.next(totalPrice);
   }
 
@@ -151,5 +157,50 @@ export class CartService {
       products,
       precoTotal,
     };
+  }
+
+  desconto(word: string) {
+    const cupomAplicado = localStorage.getItem('cupomAplicado');
+    if (this.cart.length === 0) {
+      localStorage.removeItem('cupomAplicado');
+    }
+    if (cupomAplicado) {
+      if (cupomAplicado !== word) {
+        this.toastr.error(
+          'Você já aplicou um cupom. Só é permitido um cupom por vez.',
+          'Erro',
+          {
+            closeButton: true,
+            timeOut: 1000,
+          }
+        );
+        return;
+      }
+    }
+
+    let desconto = 0;
+    if (word === 'CODE10') {
+      desconto = this.originalPriceSubject.getValue() * 0.1;
+    } else if (word === 'CODE15') {
+      desconto = this.originalPriceSubject.getValue() * 0.15;
+    } else if (word === 'CODE20') {
+      desconto = this.originalPriceSubject.getValue() * 0.2;
+    } else {
+      this.toastr.error('Não existe esse cupom.', 'Erro', {
+        closeButton: true,
+        timeOut: 1000,
+      });
+      return;
+    }
+
+    this.totalPriceSubject.next(
+      this.originalPriceSubject.getValue() - desconto
+    );
+    localStorage.setItem('cupomAplicado', word);
+  }
+
+  clearCoupon() {
+    localStorage.removeItem('cupomAplicado');
+    this.totalPriceSubject.next(this.originalPriceSubject.getValue());
   }
 }
