@@ -117,7 +117,7 @@ export class MyShopComponent implements OnInit {
           .getById(storeId)
           .then((company) => {
             this.storeId = storeId;
-            this.avatar = company.avatar;
+            this.avatar = company.avatar || 'assets/avatar/iconeShop.jpg';
             this.shopName = company.name;
             this.shopPhone = company.phone;
             this.shopEmail = company.email;

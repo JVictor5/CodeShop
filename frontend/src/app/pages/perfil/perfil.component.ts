@@ -65,13 +65,14 @@ export class PerfilComponent {
         const userFromApi = await this.userRepository.getById(`${this.id}`);
         this.username = userFromApi.name;
         this.nivel = userFromApi.nivel;
-        this.avatar = userFromApi.avatar;
+        this.avatar = userFromApi.avatar || 'assets/avatar/avatarPadrao.jpg';
         this.logado = true;
       } else if (!user) {
         this.username = 'Usuário';
         this.avatar = 'assets/avatar/avatarPadrao.jpg';
         this.logado = false;
       }
+      console.log(this.avatar);
     });
   }
 

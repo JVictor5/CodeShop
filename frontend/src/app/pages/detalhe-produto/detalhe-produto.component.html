@@ -176,7 +176,7 @@
             <h6>Distribuidor:</h6>
             <a routerLink="/loja/{{ infoSeller?.id }}" class="cardShop">
               <img
-                src="{{ infoSeller?.avatar }}"
+                src="{{ infoSeller?.avatar || 'assets/avatar/iconeShop.jpg' }}"
                 alt="Avatar de {{ infoSeller?.name }}"
               />
               <div class="card-content">

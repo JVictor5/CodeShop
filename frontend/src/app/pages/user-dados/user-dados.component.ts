@@ -155,6 +155,9 @@ export class UserDadosComponent {
     try {
       const response = await this.authService.update(this.fValue, this.id);
       window.location.reload();
+      if (this.fValue.password !== '' || this.fValue.email !== this.email) {
+        window.location.href = '/';
+      }
       console.log(response);
     } catch (error) {
       console.error(error);

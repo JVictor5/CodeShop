@@ -10,6 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ShopService } from '../../core/services/shop.service';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-seller',
@@ -29,7 +30,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 export class SellerComponent {
   constructor(
     private shopService: ShopService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
   id = '';
 
@@ -60,7 +62,8 @@ export class SellerComponent {
   }
   async handleSubmit() {
     if (this.form.valid) {
-      await this.shopService.cad(this.fValue);
+      const idShop = await this.shopService.cad(this.fValue);
+      window.location.href = `/loja/perfil/${idShop?.id}`;
     } else {
       this.form.markAllAsTouched();
     }

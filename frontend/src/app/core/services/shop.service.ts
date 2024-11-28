@@ -6,6 +6,7 @@ import { ShopForm } from '../interfaces/seller-form.interface';
 import { Company } from '../models/company';
 import { CompanyRepository } from '../repositories/company.repository';
 import { AuthService } from './auth.service';
+import { ShopResponse } from '../interfaces/shopresponse.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,16 +17,18 @@ export class ShopService {
     private authService: AuthService,
     private companyRepository: CompanyRepository
   ) {}
-  async cad(form: ShopForm) {
+  async cad(form: ShopForm): Promise<ShopResponse | null> {
     try {
       const response = await lastValueFrom(
         this.http.post(`${environment.urlApi}/shop/sellers`, form)
       );
-      console.log(response);
+      return response as ShopResponse; // Cast para o tipo ShopResponse
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
+      return null;
     }
   }
+
   async update(id: string, form: ShopForm) {
     try {
       const response = await lastValueFrom(

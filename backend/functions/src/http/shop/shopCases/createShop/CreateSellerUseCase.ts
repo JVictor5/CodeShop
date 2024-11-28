@@ -14,7 +14,7 @@ export class CreateShopUseCase {
     private _user: UserRepository
   ) {}
 
-  async execute({ idUser, name, email, discription, phone }: CreateSellerParams): Promise<void> {
+  async execute({ idUser, name, email, discription, phone }: CreateSellerParams): Promise<string> {
     try {
       const sellerData: AddDocument<Seller> = {
         idUser,
@@ -34,6 +34,7 @@ export class CreateShopUseCase {
         nivel: 2,
         idShop
       });
+      return idShop;
     } catch {
       console.error('');
 
