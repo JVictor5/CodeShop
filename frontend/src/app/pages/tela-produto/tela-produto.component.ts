@@ -17,11 +17,12 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
 import { gameGenres } from '../../data/game-genres';
+import { CardProductComponent } from '../../component/card-product/card-poduct.component';
 
 @Component({
   selector: 'app-tela-produto',
   standalone: true,
-  imports: [CommonModule, RouterLink, ToastModule],
+  imports: [CommonModule, RouterLink, ToastModule, CardProductComponent],
   templateUrl: './tela-produto.component.html',
   styleUrl: './tela-produto.component.scss',
   providers: [MessageService],

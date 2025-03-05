@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .contain {
   width: 100%;
@@ -18,7 +18,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      filter: drop-shadow(5px 5px 5px $purpleColor);
+      filter: drop-shadow(5px 5px 5px style.$purpleColor);
     }
 
     .form {
@@ -44,17 +44,17 @@
       button {
         margin: 0 auto;
         width: 90%;
-        background-color: $whiteColor;
-        border: 1px solid $purpleColor;
-        color: $purpleColor;
+        background-color: style.$whiteColor;
+        border: 1px solid style.$purpleColor;
+        color: style.$purpleColor;
         border-radius: 10px;
         transition: 0.6s;
         font-size: 1.125rem;
         padding: 0.625rem;
         &:hover {
-          background-color: $hoverPurpleColor;
-          border: 1px solid $hoverPurpleColor;
-          color: $whiteColor;
+          background-color: style.$hoverPurpleColor;
+          border: 1px solid style.$hoverPurpleColor;
+          color: style.$whiteColor;
         }
       }
     }
@@ -62,14 +62,14 @@
 }
 
 .ng-invalid.ng-touched {
-  border-color: $RedColor;
+  border-color: style.$RedColor;
 }
 .ng-invalid.ng-touched ~ label {
-  color: $RedColor !important;
+  color: style.$RedColor !important;
 }
 
 .error {
-  color: $RedColor;
+  color: style.$RedColor;
   font-size: 0.875rem;
   padding: 0;
 }

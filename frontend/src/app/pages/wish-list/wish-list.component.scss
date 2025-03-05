@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 .wishList-container {
   padding: 20px;
   width: 100%;
@@ -11,7 +11,7 @@
   }
   hr {
     border-radius: 15px;
-    border-top: 5px solid $boderPurpleColor;
+    border-top: 5px solid style.$boderPurpleColor;
     width: 80%;
     margin: 20px auto;
   }
@@ -34,7 +34,7 @@
       width: 80%;
       transition: border 0.3s ease, box-shadow 0.3s ease;
       &:hover {
-        border: 2px solid $purpleColor;
+        border: 2px solid style.$purpleColor;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       .product-image {
@@ -74,15 +74,15 @@
           cursor: pointer;
           justify-content: start;
           p {
-            border: 1px solid $purpleColor;
-            color: $purpleColor;
+            border: 1px solid style.$purpleColor;
+            color: style.$purpleColor;
             border-radius: 5px;
             font-size: 1rem;
             padding: 4px;
             white-space: nowrap;
             &:hover {
-              background-color: $hoverPurpleColor;
-              color: $whiteColor;
+              background-color: style.$hoverPurpleColor;
+              color: style.$whiteColor;
             }
           }
         }
@@ -112,7 +112,7 @@
 
       i {
         font-size: 3rem;
-        color: $RedColor;
+        color: style.$RedColor;
         margin-bottom: 1rem;
       }
 
@@ -131,7 +131,7 @@
     }
 
     .btn-go-shop {
-      background-color: $purpleColor;
+      background-color: style.$purpleColor;
       color: white;
       border: none;
       padding: 0.8rem 2rem;
@@ -141,7 +141,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: $hoverPurpleColor;
+        background-color: style.$hoverPurpleColor;
       }
     }
   }
@@ -159,18 +159,18 @@
       padding: 0.8rem 2rem;
       font-size: 1rem;
       border-radius: 8px;
-      color: $whiteColor;
+      color: style.$whiteColor;
       text-align: center;
       &.remove {
-        background-color: $RedColor;
+        background-color: style.$RedColor;
         &:hover {
-          background-color: $hoverRedColor;
+          background-color: style.$hoverRedColor;
         }
       }
       &.available {
-        background-color: $greenColor;
+        background-color: style.$greenColor;
         &:hover {
-          background-color: $hoverGreenColor;
+          background-color: style.$hoverGreenColor;
         }
       }
       &.unavailable {

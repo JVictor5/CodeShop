@@ -51,7 +51,7 @@ export class ProductRepository extends FirebaseAbstract<Product> {
     const collectionRef = collection(this.db, CollectionNames.PRODUCT);
 
     const q = query(
-      collectionRef, 
+      collectionRef,
       where('category', '==', categoryProduct),
       where('status', '==', true)
     );
@@ -134,7 +134,7 @@ export class ProductRepository extends FirebaseAbstract<Product> {
     const collectionRef = collection(this.db, CollectionNames.PRODUCT);
 
     const q = query(
-      collectionRef, 
+      collectionRef,
       where('idUser', '==', idShop),
       where('status', '==', true),
     );

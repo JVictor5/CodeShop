@@ -1,5 +1,5 @@
+@use "../../../styles.scss" as styles;
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-@import "../../../styles.scss";
 * {
   font-family: "Poppins", sans-serif;
 }
@@ -8,14 +8,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: $blackColor;
+  background-color: styles.$blackColor;
   padding: 0.5rem 1rem;
-  color: $whiteColor;
+  color: styles.$whiteColor;
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 999;
-  border-bottom: 3px solid $purpleColor;
+  border-bottom: 3px solid styles.$purpleColor;
 
   .navbar-container {
     display: flex;
@@ -28,7 +28,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: $whiteColor;
+    color: styles.$whiteColor;
 
     .logo-placeholder {
       width: 40px;
@@ -51,7 +51,7 @@
     .icon-button {
       background: none;
       border: none;
-      color: $whiteColor;
+      color: styles.$whiteColor;
       cursor: pointer;
       width: 40px;
       height: 40px;
@@ -74,8 +74,8 @@
         position: absolute;
         top: 0.55rem;
         right: 4.1rem;
-        background-color: $purpleColor;
-        color: $whiteColor;
+        background-color: styles.$purpleColor;
+        color: styles.$whiteColor;
         border-radius: 50%;
         padding: 0.25em 0.5em;
         font-size: 0.75rem;
@@ -89,7 +89,7 @@
 
     .search-container {
       position: relative;
-      background-color: $whiteColor;
+      background-color: styles.$whiteColor;
       border-radius: 40px;
       height: 40px;
       padding: 5px;
@@ -97,7 +97,7 @@
       align-items: center;
 
       .search-button {
-        color: $purpleColor;
+        color: styles.$purpleColor;
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -138,7 +138,7 @@
       cursor: pointer;
 
       .bar {
-        background-color: $whiteColor;
+        background-color: styles.$whiteColor;
         margin: 3px 0;
         border-radius: 5px;
         transition: width 0.4s ease;
@@ -213,8 +213,8 @@
 }
 
 .offcanvas {
-  background-color: $blackColor;
-  border-left: 3px solid $purpleColor;
+  background-color: styles.$blackColor;
+  border-left: 3px solid styles.$purpleColor;
   width: 575px;
   @media (max-width: 800px) {
     width: 100%;
@@ -234,18 +234,18 @@
     .offcanvas-title {
       font-size: 1.2rem;
       font-weight: bold;
-      color: $whiteColor;
+      color: styles.$whiteColor;
     }
 
     .btn-close {
-      color: $whiteColor !important;
+      color: styles.$whiteColor !important;
       opacity: 1;
     }
   }
 
   .offcanvas-body {
     padding: 1rem;
-    color: $whiteColor;
+    color: styles.$whiteColor;
 
     .search-container {
       width: 90%;
@@ -261,8 +261,8 @@
         padding: 0.75rem;
         border: none;
         border-radius: 15px 0 0 15px;
-        border: solid 2px $purpleColor;
-        background-color: $whiteColor;
+        border: solid 2px styles.$purpleColor;
+        background-color: styles.$whiteColor;
         color: black;
 
         &:focus {
@@ -276,11 +276,11 @@
         padding: 0.75rem 1rem;
         border: none;
         border-radius: 0 15px 15px 0;
-        background-color: $purpleColor;
-        color: $whiteColor;
-        border-right: solid 2px $purpleColor;
-        border-bottom: solid 2px $purpleColor;
-        border-top: solid 2px $purpleColor;
+        background-color: styles.$purpleColor;
+        color: styles.$whiteColor;
+        border-right: solid 2px styles.$purpleColor;
+        border-bottom: solid 2px styles.$purpleColor;
+        border-top: solid 2px styles.$purpleColor;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -291,15 +291,15 @@
         }
 
         &:hover {
-          background-color: $whiteColor;
-          color: $purpleColor;
+          background-color: styles.$whiteColor;
+          color: styles.$purpleColor;
         }
       }
     }
 
     li {
       text-align: center;
-      color: $whiteColor;
+      color: styles.$whiteColor;
       text-decoration: none;
       font-size: 20px;
       border: none;
@@ -316,7 +316,7 @@
         left: 0;
         right: 0;
         height: 2px;
-        background: $purpleColor;
+        background: styles.$purpleColor;
         transition: 0.5s;
         width: 0%;
         margin: 0 auto;
@@ -329,7 +329,7 @@
         left: 0;
         right: 0;
         height: 2px;
-        background: $purpleColor;
+        background: styles.$purpleColor;
         transition: 0.5s;
         width: 0%;
         margin: 0 auto;
@@ -345,7 +345,7 @@
     }
 
     .nav-link {
-      color: $whiteColor;
+      color: styles.$whiteColor;
     }
 
     .dropdown-menu {
@@ -355,8 +355,8 @@
       .dropdown-item:active,
       .dropdown-item:focus,
       .dropdown-item:hover {
-        background-color: $whiteColor;
-        color: $blackColor;
+        background-color: styles.$whiteColor;
+        color: styles.$blackColor;
       }
     }
 
@@ -364,13 +364,13 @@
       margin-top: 1.5rem;
 
       h6 {
-        color: $whiteColor;
+        color: styles.$whiteColor;
       }
 
       .btn {
-        background-color: $purpleColor;
+        background-color: styles.$purpleColor;
         border: none;
-        color: $whiteColor;
+        color: styles.$whiteColor;
       }
     }
   }
@@ -383,8 +383,8 @@
   align-items: center;
   padding: 1rem;
   background-color: #111;
-  border: 1px solid $purpleColor;
-  color: $whiteColor;
+  border: 1px solid styles.$purpleColor;
+  color: styles.$whiteColor;
   border-radius: 8px;
   gap: 10px;
 
@@ -420,8 +420,8 @@
 
   .logout-button {
     margin-left: auto;
-    background-color: $purpleColor;
-    color: $whiteColor;
+    background-color: styles.$purpleColor;
+    color: styles.$whiteColor;
     border: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -430,8 +430,8 @@
     font-size: 1.5rem;
 
     &:hover {
-      background-color: $whiteColor;
-      color: $purpleColor;
+      background-color: styles.$whiteColor;
+      color: styles.$purpleColor;
     }
   }
 }

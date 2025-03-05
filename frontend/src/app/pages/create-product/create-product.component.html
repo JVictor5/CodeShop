@@ -1,384 +1,799 @@
 <div class="d-flex justify-content-center p-4">
   <div class="main-container-create-product">
-    <p-dialog header="Cadastro de produto" [modal]="true" [(visible)]="visibleModalWelcome" [style]="{ width: '25rem' }">
-      <span class="p-text-secondary block mb-5">Bem vindo! Aqui você irá criar o seu produto na CodeShop.</span>
+    <p-dialog
+      header="Cadastro de produto"
+      [modal]="true"
+      [(visible)]="visibleModalWelcome"
+      [style]="{ width: '25rem' }"
+    >
+      <span class="p-text-secondary block mb-5"
+        >Bem vindo! Aqui você irá criar o seu produto na CodeShop.</span
+      >
       <div class="d-flex justify-content-end mt-4 me-2">
-        <button class="btn btn-primary" (click)="onVisibleModalWelcome()">Vamos lá!</button>
+        <button class="btn btn-primary" (click)="onVisibleModalWelcome()">
+          Vamos lá!
+        </button>
       </div>
     </p-dialog>
 
-    <p-stepper [linear]="true" [(activeStep)]="activeIndex">
-      <p-stepperPanel header="Categoria">
-        <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-          <div class="">
-            <h5 class="mb-4">Escolha uma categoria:</h5>
-            <p-toast />
-            <form [formGroup]="step1FormGroup">
-              <div
-                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div class="row">
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="" formControlName="category" type="radio" name="category" id="gameCode" value="Jogos"
-                      (change)="onProductCategoryChange('Jogos')">
-                    <div class="card">
-                      <label for="gameCode" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/jogo-logo-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Jogos</div>
-                      </label>
+    <p-stepper [linear]="true" [(value)]="activeIndex">
+      <p-step-list>
+        <p-step [value]="0">Categoria</p-step>
+        <p-step [value]="1">Descrição</p-step>
+        <p-step [value]="2">Mídia</p-step>
+        <p-step [value]="3">Código</p-step>
+        <p-step [value]="4">Conclusão</p-step>
+      </p-step-list>
+      <p-step-panels>
+        <p-step-panel header="Categoria" [value]="0">
+          <ng-template pTemplate="content" let-nextCallback="nextCallback">
+            <div class="">
+              <h5 class="mb-4">Escolha uma categoria:</h5>
+              <p-toast />
+              <form [formGroup]="step1FormGroup">
+                <div
+                  class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium"
+                >
+                  <div class="row">
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class=""
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="gameCode"
+                        value="Jogos"
+                        (change)="onProductCategoryChange('Jogos')"
+                      />
+                      <div class="card">
+                        <label for="gameCode" class="w-100 labelBtn p-2">
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/jogo-logo-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Jogos
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="giftCard"
+                        value="Gift Card"
+                        (change)="onProductCategoryChange('Gift Card')"
+                      />
+                      <div class="card">
+                        <label for="giftCard" class="w-100 labelBtn p-2">
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/cartao-presente-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Gift Card
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="serviceSubscription"
+                        value="Assinatura de Serviços"
+                        (change)="
+                          onProductCategoryChange('Assinatura de Serviços')
+                        "
+                      />
+                      <div class="card">
+                        <label
+                          for="serviceSubscription"
+                          class="w-100 labelBtn p-2"
+                        >
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/assinatura-logo-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Assinatura de Serviços
+                          </div>
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="form-check-input" formControlName="category" type="radio" name="category"
-                      id="giftCard" value="Gift Card" (change)="onProductCategoryChange('Gift Card')">
-                    <div class="card">
-                      <label for="giftCard" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/cartao-presente-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Gift Card</div>
-                      </label>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="virtualCredits"
+                        value="Créditos Virtuais"
+                        (change)="onProductCategoryChange('Créditos Virtuais')"
+                      />
+                      <div class="card">
+                        <label for="virtualCredits" class="w-100 labelBtn p-2">
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/credito-logo-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Créditos Virtuais
+                          </div>
+                        </label>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="form-check-input" formControlName="category" type="radio" name="category"
-                      id="serviceSubscription" value="Assinatura de Serviços"
-                      (change)="onProductCategoryChange('Assinatura de Serviços')">
-                    <div class="card">
-                      <label for="serviceSubscription" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/assinatura-logo-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Assinatura de Serviços</div>
-                      </label>
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="software"
+                        value="Software e Aplicativos"
+                        (change)="
+                          onProductCategoryChange('Software e Aplicativos')
+                        "
+                      />
+                      <div class="card">
+                        <label for="software" class="w-100 labelBtn p-2">
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/apps-logo-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Software e Aplicativos
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="category"
+                        type="radio"
+                        name="category"
+                        id="additionalContent"
+                        value="Conteúdos Adicionais e Expansões"
+                        (change)="
+                          onProductCategoryChange(
+                            'Conteúdos Adicionais e Expansões'
+                          )
+                        "
+                      />
+                      <div class="card">
+                        <label
+                          for="additionalContent"
+                          class="w-100 labelBtn p-2"
+                        >
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            <img
+                              class="img-fluid"
+                              src="../../../assets/imgs/adicional-logo-form.png"
+                            />
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center"
+                          >
+                            Conteúdos Adicionais
+                          </div>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="form-check-input" formControlName="category" type="radio" name="category"
-                      id="virtualCredits" value="Créditos Virtuais"
-                      (change)="onProductCategoryChange('Créditos Virtuais')">
-                    <div class="card">
-                      <label for="virtualCredits" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/credito-logo-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Créditos Virtuais</div>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="form-check-input" formControlName="category" type="radio" name="category"
-                      id="software" value="Software e Aplicativos"
-                      (change)="onProductCategoryChange('Software e Aplicativos')">
-                    <div class="card">
-                      <label for="software" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/apps-logo-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Software e Aplicativos</div>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-3">
-                    <input class="form-check-input" formControlName="category" type="radio" name="category"
-                      id="additionalContent" value="Conteúdos Adicionais e Expansões"
-                      (change)="onProductCategoryChange('Conteúdos Adicionais e Expansões')">
-                    <div class="card">
-                      <label for="additionalContent" class="w-100 labelBtn p-2">
-                        <div class="d-flex justify-content-center align-items-center">
-                          <img class="img-fluid" src="../../../assets/imgs/adicional-logo-form.png" />
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">Conteúdos Adicionais</div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+              </form>
+              <div class="d-flex pt-4 justify-content-end">
+                <p-button
+                  label="Próximo"
+                  class="rounded-button-stepper-custom"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (onClick)="onNextStep(activeIndex)"
+                />
               </div>
-            </form>
-            <div class="d-flex pt-4 justify-content-end">
-              <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
-                (onClick)="onNextStep(index)" />
             </div>
-          </div>
-        </ng-template>
-      </p-stepperPanel>
-      <p-stepperPanel header="Descrição">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-          let-index="index">
-          <div class="">
-            <h5 class="mb-4">Preencha as informações:</h5>
-            <p-toast />
-            <form [formGroup]="step2FormGroup">
-              <div
-                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div class="mb-4">
-                  <label for="name" class="form-label">Nome:</label>
-                  <input type="text" id="name" formControlName="name" class="form-control" />
-                </div>
-                <div class="mb-4">
-                  <label for="description" class="form-label">Descrição:</label>
-                  <textarea id="description" formControlName="description" class="form-control" rows="8"></textarea>
-                </div>
-                <div class="mb-4">
-                  <label for="price" class="form-label">Preço:</label>
-                  <input type="number" id="price" formControlName="price" class="form-control" />
-                </div>
-                <div class="mb-4">
-                  <label for="storeForActivation" class="form-label">Loja de ativação do produto:</label>
-                  <input type="text" id="storeForActivation" formControlName="storeForActivation" class="form-control" />
-                </div>
-                <div class="mb-4">
-                  <label for="releaseDate" class="form-label d-block">Data de lançamento:</label>
-                  <p-calendar id="releaseDate" formControlName="releaseDate"
-                    pTooltip="Data em que seu produto foi lançado." />
-                </div>
-                <div class="mt-4 mb-4" *ngIf="showGameGenres">
-                  <p-multiSelect inputId="genres" class="w-100" [options]="genres" formControlName="genres"
-                    placeholder="Selecione os gêneros do jogo" optionLabel="name" display="chip" [showClear]="true" />
-                </div>
-                <div class="mt-4 mb-4" *ngIf="showGameGenres">
-                  <p-multiSelect inputId="playerModes" class="w-100" [options]="playerModes" formControlName="playerModes"
-                    placeholder="Selecione os modos de jogadores" optionLabel="name" display="chip" [showClear]="true" />
-                </div>
-
-                <div class="card mb-4" *ngIf="showGameGenres">
-                  <div class="card-header">Requisitos mínimos do sistema</div>
-                  <div class="card-body">
-                    <label for="minimumOs" class="form-label">Sistema operacional:</label>
-                    <input type="text" id="minimumOs" formControlName="minimumOs" class="form-control" />
-                    <label for="minimumCpu" class="form-label mt-3">Processador:</label>
-                    <input type="text" id="minimumCpu" formControlName="minimumCpu" class="form-control" />
-                    <label for="minimumStorage" class="form-label mt-3">Armazenamento:</label>
-                    <input type="text" id="minimumStorage" formControlName="minimumStorage" class="form-control" />
-                    <label for="minimumMemory" class="form-label mt-3">Memória:</label>
-                    <input type="text" id="minimumMemory" formControlName="minimumMemory" class="form-control" />
-                    <label for="minimumGpu" class="form-label mt-3">Placa de vídeo:</label>
-                    <input type="text" id="minimumGpu" formControlName="minimumGpu" class="form-control" />
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel header="Descrição" [value]="1">
+          <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+          >
+            <div class="">
+              <h5 class="mb-4">Preencha as informações:</h5>
+              <p-toast />
+              <form [formGroup]="step2FormGroup">
+                <div
+                  class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium"
+                >
+                  <div class="mb-4">
+                    <label for="name" class="form-label">Nome:</label>
+                    <input
+                      type="text"
+                      id="name"
+                      formControlName="name"
+                      class="form-control"
+                    />
                   </div>
-                </div>
-
-                <div class="card mb-4" *ngIf="showGameGenres">
-                  <div class="card-header">Requisitos recomendados do sistema</div>
-                  <div class="card-body">
-                    <label for="recommendedOs" class="form-label">Sistema operacional:</label>
-                    <input type="text" id="recommendedOs" formControlName="recommendedOs" class="form-control" />
-                    <label for="recommendedCpu" class="form-label mt-3">Processador:</label>
-                    <input type="text" id="recommendedCpu" formControlName="recommendedCpu" class="form-control" />
-                    <label for="recommendedStorage" class="form-label mt-3">Armazenamento:</label>
-                    <input type="text" id="recommendedStorage" formControlName="recommendedStorage"
-                      class="form-control" />
-                    <label for="recommendedMemory" class="form-label mt-3">Memória:</label>
-                    <input type="text" id="recommendedMemory" formControlName="recommendedMemory"
-                      class="form-control" />
-                    <label for="recommendedGpu" class="form-label mt-3">Placa de vídeo:</label>
-                    <input type="text" id="recommendedGpu" formControlName="recommendedGpu" class="form-control" />
+                  <div class="mb-4">
+                    <label for="description" class="form-label"
+                      >Descrição:</label
+                    >
+                    <textarea
+                      id="description"
+                      formControlName="description"
+                      class="form-control"
+                      rows="8"
+                    ></textarea>
                   </div>
-                </div>
+                  <div class="mb-4">
+                    <label for="price" class="form-label">Preço:</label>
+                    <input
+                      type="number"
+                      id="price"
+                      formControlName="price"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label for="storeForActivation" class="form-label"
+                      >Loja de ativação do produto:</label
+                    >
+                    <input
+                      type="text"
+                      id="storeForActivation"
+                      formControlName="storeForActivation"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label for="releaseDate" class="form-label d-block"
+                      >Data de lançamento:</label
+                    >
+                    <p-calendar
+                      id="releaseDate"
+                      formControlName="releaseDate"
+                      pTooltip="Data em que seu produto foi lançado."
+                    />
+                  </div>
+                  <div class="mt-4 mb-4" *ngIf="showGameGenres">
+                    <p-multiSelect
+                      inputId="genres"
+                      class="w-100"
+                      [options]="genres"
+                      formControlName="genres"
+                      placeholder="Selecione os gêneros do jogo"
+                      optionLabel="name"
+                      display="chip"
+                      [showClear]="true"
+                    />
+                  </div>
+                  <div class="mt-4 mb-4" *ngIf="showGameGenres">
+                    <p-multiSelect
+                      inputId="playerModes"
+                      class="w-100"
+                      [options]="playerModes"
+                      formControlName="playerModes"
+                      placeholder="Selecione os modos de jogadores"
+                      optionLabel="name"
+                      display="chip"
+                      [showClear]="true"
+                    />
+                  </div>
 
-              </div>
-            </form>
-          </div>
-          <div class="d-flex pt-4 justify-content-end">
-            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
-              (onClick)="onNextStep(index)" />
-          </div>
-        </ng-template>
-      </p-stepperPanel>
-      <p-stepperPanel header="Mídia">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-          let-index="index">
-          <div class="">
-            <h5 class="mb-4">Personalize o seu produto:</h5>
-            <p-toast />
-            <form [formGroup]="step3FormGroup">
-              <div
-                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div class="mb-4">
-                  <label for="capaUrl" class="form-label">Capa:</label>
-                  <input type="file" accept="image/*" id="capaUrl" (change)="onCapaChange($event)"
-                    formControlName="capaUrl" class="form-control" />
-                </div>
-                <div class="mb-4">
-                  <label for="videosUrls" class="form-label">Videos:</label>
-                  <input type="file" accept="video/*" id="videosUrls" (change)="onVideosChange($event)" formControlName="videosUrls"
-                    multiple class="form-control" />
-                </div>
-
-                <div class="mb-4">
-                  <label class="mb-1">Imagens:</label>
-                  <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true"
-                    accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload($event)"
-                    (onSelect)="onSelectedFiles($event)">
-
-                    <!-- Template do Header -->
-                    <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback"
-                      let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
-                      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                        <div class="d-flex gap-2">
-                          <p-button (onClick)="choose($event, chooseCallback)" class="rounded-icon-custom"
-                            icon="pi pi-images" [outlined]="true" pTooltip="Escolher imagens" tooltipPosition="top" />
-                          <p-button (onClick)="uploadEvent(uploadCallback)" class="rounded-icon-custom"
-                            icon="pi pi-cloud-upload" [outlined]="true" severity="success"
-                            [disabled]="!files || files.length === 0" pTooltip="Fazer upload" tooltipPosition="top" />
-                          <p-button (onClick)="clearCallback()" icon="pi pi-times" class="rounded-icon-custom"
-                            [outlined]="true" severity="danger" [disabled]="!files || files.length === 0"
-                            pTooltip="Remover imagens" tooltipPosition="top" />
-                        </div>
-                      </div>
-                    </ng-template>
-
-                    <!-- Template do Conteúdo -->
-                    <ng-template pTemplate="content" let-files let-uploadedFiles="uploadedFiles"
-                      let-removeFileCallback="removeFileCallback"
-                      let-removeUploadedFileCallback="removeUploadedFileCallback">
-
-                      <!-- Arquivos Pendentes de Upload -->
-                      <div *ngIf="files?.length > 0">
-                        <h5>Pendente</h5>
-                        <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
-                          <div *ngFor="let file of files; let i = index"
-                            class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3">
-                            <div>
-                              <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="img-fluid" />
-                            </div>
-                            <span class="font-semibold">{{ file.name }}</span>
-                            <div>{{ formatSize(file.size) }}</div>
-                            <p-badge value="Pendente" severity="warning" />
-                            <p-button icon="pi pi-times"
-                              (onClick)="onRemoveTemplatingFile($event, file, removeFileCallback, i)" [outlined]="true"
-                              class="rounded-icon-custom" severity="danger" />
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Arquivos já Carregados -->
-                      <div *ngIf="uploadedFiles?.length > 0">
-                        <h5>Completo</h5>
-                        <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
-                          <div *ngFor="let file of uploadedFiles; let i = index"
-                            class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3">
-                            <div>
-                              <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="img-fluid" />
-                            </div>
-                            <span class="font-semibold">{{ file.name }}</span>
-                            <div>{{ formatSize(file.size) }}</div>
-                            <p-badge value="Completo" class="mt-3" severity="success" />
-                            <p-button icon="pi pi-times" (onClick)="removeUploadedFile(removeUploadedFileCallback, i)"
-                              [outlined]="true" class="rounded-icon-custom" severity="danger" />
-                          </div>
-                        </div>
-                      </div>
-                    </ng-template>
-
-                    <!-- Template Vazio -->
-                    <ng-template pTemplate="empty">
-                      <div class="d-flex align-items-center justify-content-center flex-column">
-                        <i
-                          class="pi pi-cloud-upload border border-2 rounded-circle p-5 fs-1 text-secondary border-secondary"></i>
-                        <p class="mt-4 mb-0">Arraste e solte as imagens aqui para fazer upload.</p>
-                      </div>
-                    </ng-template>
-                  </p-fileUpload>
-                </div>
-
-                <div class="mb-4">
-                  <div class="card">
-                    <div class="card-header"
-                      pTooltip="Destaque é uma forma de promover uma informação importante do produto, como uma funcionalidade específica, um prêmio recebido."
-                      tooltipPosition="top">
-                      Destaque de {{ fValue.step2.name }}</div>
+                  <div class="card mb-4" *ngIf="showGameGenres">
+                    <div class="card-header">Requisitos mínimos do sistema</div>
                     <div class="card-body">
-                      <div class="mb-4">
-                        <label for="titleDestaque" class="form-label">Título:</label>
-                        <input type="text" id="titleDestaque" formControlName="titleDestaque" class="form-control"
-                          pTooltip="O título que será mostrado no destaque." />
+                      <label for="minimumOs" class="form-label"
+                        >Sistema operacional:</label
+                      >
+                      <input
+                        type="text"
+                        id="minimumOs"
+                        formControlName="minimumOs"
+                        class="form-control"
+                      />
+                      <label for="minimumCpu" class="form-label mt-3"
+                        >Processador:</label
+                      >
+                      <input
+                        type="text"
+                        id="minimumCpu"
+                        formControlName="minimumCpu"
+                        class="form-control"
+                      />
+                      <label for="minimumStorage" class="form-label mt-3"
+                        >Armazenamento:</label
+                      >
+                      <input
+                        type="text"
+                        id="minimumStorage"
+                        formControlName="minimumStorage"
+                        class="form-control"
+                      />
+                      <label for="minimumMemory" class="form-label mt-3"
+                        >Memória:</label
+                      >
+                      <input
+                        type="text"
+                        id="minimumMemory"
+                        formControlName="minimumMemory"
+                        class="form-control"
+                      />
+                      <label for="minimumGpu" class="form-label mt-3"
+                        >Placa de vídeo:</label
+                      >
+                      <input
+                        type="text"
+                        id="minimumGpu"
+                        formControlName="minimumGpu"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="card mb-4" *ngIf="showGameGenres">
+                    <div class="card-header">
+                      Requisitos recomendados do sistema
+                    </div>
+                    <div class="card-body">
+                      <label for="recommendedOs" class="form-label"
+                        >Sistema operacional:</label
+                      >
+                      <input
+                        type="text"
+                        id="recommendedOs"
+                        formControlName="recommendedOs"
+                        class="form-control"
+                      />
+                      <label for="recommendedCpu" class="form-label mt-3"
+                        >Processador:</label
+                      >
+                      <input
+                        type="text"
+                        id="recommendedCpu"
+                        formControlName="recommendedCpu"
+                        class="form-control"
+                      />
+                      <label for="recommendedStorage" class="form-label mt-3"
+                        >Armazenamento:</label
+                      >
+                      <input
+                        type="text"
+                        id="recommendedStorage"
+                        formControlName="recommendedStorage"
+                        class="form-control"
+                      />
+                      <label for="recommendedMemory" class="form-label mt-3"
+                        >Memória:</label
+                      >
+                      <input
+                        type="text"
+                        id="recommendedMemory"
+                        formControlName="recommendedMemory"
+                        class="form-control"
+                      />
+                      <label for="recommendedGpu" class="form-label mt-3"
+                        >Placa de vídeo:</label
+                      >
+                      <input
+                        type="text"
+                        id="recommendedGpu"
+                        formControlName="recommendedGpu"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="d-flex pt-4 justify-content-end">
+              <p-button
+                label="Próximo"
+                class="rounded-button-stepper-custom"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="onNextStep(activeIndex)"
+              />
+            </div>
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel header="Mídia" [value]="2">
+          <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+          >
+            <div class="">
+              <h5 class="mb-4">Personalize o seu produto:</h5>
+              <p-toast />
+              <form [formGroup]="step3FormGroup">
+                <div
+                  class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium"
+                >
+                  <div class="mb-4">
+                    <label for="capaUrl" class="form-label">Capa:</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="capaUrl"
+                      (change)="onCapaChange($event)"
+                      formControlName="capaUrl"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label for="videosUrls" class="form-label">Videos:</label>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      id="videosUrls"
+                      (change)="onVideosChange($event)"
+                      formControlName="videosUrls"
+                      multiple
+                      class="form-control"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="mb-1">Imagens:</label>
+                    <p-fileUpload
+                      name="myfile[]"
+                      url="https://www.primefaces.org/cdn/api/upload.php"
+                      [multiple]="true"
+                      accept="image/*"
+                      maxFileSize="1000000"
+                      (onUpload)="onTemplatedUpload($event)"
+                      (onSelect)="onSelectedFiles($event)"
+                    >
+                      <!-- Template do Header -->
+                      <ng-template
+                        pTemplate="header"
+                        let-files
+                        let-chooseCallback="chooseCallback"
+                        let-clearCallback="clearCallback"
+                        let-uploadCallback="uploadCallback"
+                      >
+                        <div
+                          class="d-flex flex-wrap justify-content-between align-items-center gap-2"
+                        >
+                          <div class="d-flex gap-2">
+                            <p-button
+                              (onClick)="choose($event, chooseCallback)"
+                              class="rounded-icon-custom"
+                              icon="pi pi-images"
+                              [outlined]="true"
+                              pTooltip="Escolher imagens"
+                              tooltipPosition="top"
+                            />
+                            <p-button
+                              (onClick)="uploadEvent(uploadCallback)"
+                              class="rounded-icon-custom"
+                              icon="pi pi-cloud-upload"
+                              [outlined]="true"
+                              severity="success"
+                              [disabled]="!files || files.length === 0"
+                              pTooltip="Fazer upload"
+                              tooltipPosition="top"
+                            />
+                            <p-button
+                              (onClick)="clearCallback()"
+                              icon="pi pi-times"
+                              class="rounded-icon-custom"
+                              [outlined]="true"
+                              severity="danger"
+                              [disabled]="!files || files.length === 0"
+                              pTooltip="Remover imagens"
+                              tooltipPosition="top"
+                            />
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <!-- Template do Conteúdo -->
+                      <ng-template
+                        pTemplate="content"
+                        let-files
+                        let-uploadedFiles="uploadedFiles"
+                        let-removeFileCallback="removeFileCallback"
+                        let-removeUploadedFileCallback="removeUploadedFileCallback"
+                      >
+                        <!-- Arquivos Pendentes de Upload -->
+                        <div *ngIf="files?.length > 0">
+                          <h5>Pendente</h5>
+                          <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
+                            <div
+                              *ngFor="let file of files; let i = index"
+                              class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3"
+                            >
+                              <div>
+                                <img
+                                  role="presentation"
+                                  [alt]="file.name"
+                                  [src]="file.objectURL"
+                                  class="img-fluid"
+                                />
+                              </div>
+                              <span class="font-semibold">{{ file.name }}</span>
+                              <div>{{ formatSize(file.size) }}</div>
+                              <p-badge value="Pendente" severity="warn" />
+                              <p-button
+                                icon="pi pi-times"
+                                (onClick)="
+                                  onRemoveTemplatingFile(
+                                    $event,
+                                    file,
+                                    removeFileCallback,
+                                    i
+                                  )
+                                "
+                                [outlined]="true"
+                                class="rounded-icon-custom"
+                                severity="danger"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Arquivos já Carregados -->
+                        <div *ngIf="uploadedFiles?.length > 0">
+                          <h5>Completo</h5>
+                          <div class="d-flex flex-wrap p-0 p-sm-5 gap-5">
+                            <div
+                              *ngFor="let file of uploadedFiles; let i = index"
+                              class="card col-md-3 col-sm-12 m-0 p-3 border border-secondary rounded d-flex flex-column align-items-center gap-3"
+                            >
+                              <div>
+                                <img
+                                  role="presentation"
+                                  [alt]="file.name"
+                                  [src]="file.objectURL"
+                                  class="img-fluid"
+                                />
+                              </div>
+                              <span class="font-semibold">{{ file.name }}</span>
+                              <div>{{ formatSize(file.size) }}</div>
+                              <p-badge
+                                value="Completo"
+                                class="mt-3"
+                                severity="success"
+                              />
+                              <p-button
+                                icon="pi pi-times"
+                                (onClick)="
+                                  removeUploadedFile(
+                                    removeUploadedFileCallback,
+                                    i
+                                  )
+                                "
+                                [outlined]="true"
+                                class="rounded-icon-custom"
+                                severity="danger"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <!-- Template Vazio -->
+                      <ng-template pTemplate="empty">
+                        <div
+                          class="d-flex align-items-center justify-content-center flex-column"
+                        >
+                          <i
+                            class="pi pi-cloud-upload border border-2 rounded-circle p-5 fs-1 text-secondary border-secondary"
+                          ></i>
+                          <p class="mt-4 mb-0">
+                            Arraste e solte as imagens aqui para fazer upload.
+                          </p>
+                        </div>
+                      </ng-template>
+                    </p-fileUpload>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="card">
+                      <div
+                        class="card-header"
+                        pTooltip="Destaque é uma forma de promover uma informação importante do produto, como uma funcionalidade específica, um prêmio recebido."
+                        tooltipPosition="top"
+                      >
+                        Destaque de {{ fValue.step2.name }}
                       </div>
-                      <div class="mb-4">
-                        <label for="descriptionDestaque" class="form-label">Descrição:</label>
-                        <textarea id="descriptionDestaque" formControlName="descriptionDestaque" class="form-control"
-                          rows="8" pTooltip="O texto que será mostrado no destaque."></textarea>
-                      </div>
-                      <div class="mb-4">
-                        <label for="capaDestaqueUrl" class="form-label">Capa:</label>
-                        <input type="file" accept="image/*" id="capaDestaqueUrl" (change)="onCapaDestaqueChange($event)"
-                          formControlName="capaDestaqueUrl" class="form-control" />
+                      <div class="card-body">
+                        <div class="mb-4">
+                          <label for="titleDestaque" class="form-label"
+                            >Título:</label
+                          >
+                          <input
+                            type="text"
+                            id="titleDestaque"
+                            formControlName="titleDestaque"
+                            class="form-control"
+                            pTooltip="O título que será mostrado no destaque."
+                          />
+                        </div>
+                        <div class="mb-4">
+                          <label for="descriptionDestaque" class="form-label"
+                            >Descrição:</label
+                          >
+                          <textarea
+                            id="descriptionDestaque"
+                            formControlName="descriptionDestaque"
+                            class="form-control"
+                            rows="8"
+                            pTooltip="O texto que será mostrado no destaque."
+                          ></textarea>
+                        </div>
+                        <div class="mb-4">
+                          <label for="capaDestaqueUrl" class="form-label"
+                            >Capa:</label
+                          >
+                          <input
+                            type="file"
+                            accept="image/*"
+                            id="capaDestaqueUrl"
+                            (change)="onCapaDestaqueChange($event)"
+                            formControlName="capaDestaqueUrl"
+                            class="form-control"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-              </div>
-            </form>
-          </div>
-          <div class="d-flex pt-4 justify-content-end">
-            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
-              (onClick)="onNextStep(index)" />
-          </div>
-        </ng-template>
-      </p-stepperPanel>
-      <p-stepperPanel header="Código">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-          let-index="index">
-          <div class="">
-            <h5 class="mb-4">Cadastre as suas chaves:</h5>
-            <p-toast />
-            <form [formGroup]="step4FormGroup">
-              <div
-                class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                <div class="mb-3">
-                  <textarea class="form-control" formControlName="keysInput" rows="3"></textarea>
-                  <button class="btn btn-primary mt-3 mb-3" type="button" (click)="addKeys()">Adicionar</button>
-                </div>
-
-                <div *ngIf="keys.length > 0">
-                  <h5 class="mb-4">Chaves cadastradas</h5>
-                  <p-listbox [options]="keys" />
-                </div>
-
-              </div>
-            </form>
-          </div>
-          <div class="d-flex pt-4 justify-content-end">
-            <p-button label="Próximo" class="rounded-button-stepper-custom" icon="pi pi-arrow-right" iconPos="right"
-              (onClick)="onNextStep(index)">
-              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"
-                [ngStyle]="{'display': showSpinner ? 'inline-block' : 'none'}"></span>
-            </p-button>
-          </div>
-        </ng-template>
-      </p-stepperPanel>
-      <p-stepperPanel header="Conclusão">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
-          <div class="">
-            <p-toast [life]="8000" />
-            <div class="row">
-              <div class="container-card col-6 p-4">
-                <div #cardAnimationRef class="card-animation">
-                  <div>
-                    <img class="rounded imgFinalCard" src="{{ capaUrl.sm }}"
-                      alt="Foto do {{ this.fValue.step2.name }}" />
+              </form>
+            </div>
+            <div class="d-flex pt-4 justify-content-end">
+              <p-button
+                label="Próximo"
+                class="rounded-button-stepper-custom"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="onNextStep(activeIndex)"
+              />
+            </div>
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel header="Código" [value]="3">
+          <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+          >
+            <div class="">
+              <h5 class="mb-4">Cadastre as suas chaves:</h5>
+              <p-toast />
+              <form [formGroup]="step4FormGroup">
+                <div
+                  class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium"
+                >
+                  <div class="mb-3">
+                    <textarea
+                      class="form-control"
+                      formControlName="keysInput"
+                      rows="3"
+                    ></textarea>
+                    <button
+                      class="btn btn-primary mt-3 mb-3"
+                      type="button"
+                      (click)="addKeys()"
+                    >
+                      Adicionar
+                    </button>
                   </div>
-                  <div class="mt-3">
-                    <h5>{{ this.fValue.step2.name }}</h5>
-                    <h3 class="text-color">R$ {{ this.fValue.step2.price }}</h3>
+
+                  <div *ngIf="keys.length > 0">
+                    <h5 class="mb-4">Chaves cadastradas</h5>
+                    <p-listbox [options]="keys" />
                   </div>
                 </div>
-              </div>
-              <div class="col-6 d-flex flex-column justify-content-center">
-                <h3>Seu produto está pronto!</h3>
-                <p class="mb-4">Agora ele está disponível para ser comprado.</p>
-                <div class="d-flex justify-content-between">
-                  <a routerLink="/detalhe-produto/{{ idProduct }}" class="btn btn-success">Ver o produto na loja</a>
-                  <a routerLink="/loja/perfil/{{ userInfo.idShop }}" class="btn btn-primary">Voltar para os seus produtos</a>
+              </form>
+            </div>
+            <div class="d-flex pt-4 justify-content-end">
+              <p-button
+                label="Próximo"
+                class="rounded-button-stepper-custom"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="onNextStep(activeIndex)"
+              >
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                  [ngStyle]="{ display: showSpinner ? 'inline-block' : 'none' }"
+                ></span>
+              </p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+        <p-step-panel header="Conclusão" [value]="4">
+          <ng-template pTemplate="content" let-prevCallback="prevCallback">
+            <div class="">
+              <p-toast [life]="8000" />
+              <div class="row">
+                <div class="container-card col-6 p-4">
+                  <div #cardAnimationRef class="card-animation">
+                    <div>
+                      <img
+                        class="rounded imgFinalCard"
+                        src="{{ capaUrl.sm }}"
+                        alt="Foto do {{ this.fValue.step2.name }}"
+                      />
+                    </div>
+                    <div class="mt-3">
+                      <h5>{{ this.fValue.step2.name }}</h5>
+                      <h3 class="text-color">
+                        R$ {{ this.fValue.step2.price }}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 d-flex flex-column justify-content-center">
+                  <h3>Seu produto está pronto!</h3>
+                  <p class="mb-4">
+                    Agora ele está disponível para ser comprado.
+                  </p>
+                  <div class="d-flex justify-content-between">
+                    <a
+                      routerLink="/detalhe-produto/{{ idProduct }}"
+                      class="btn btn-success"
+                      >Ver o produto na loja</a
+                    >
+                    <a
+                      routerLink="/loja/perfil/{{ userInfo.idShop }}"
+                      class="btn btn-primary"
+                      >Voltar para os seus produtos</a
+                    >
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ng-template>
-      </p-stepperPanel>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
     </p-stepper>
   </div>
 </div>

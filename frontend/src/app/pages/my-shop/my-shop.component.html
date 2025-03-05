@@ -161,7 +161,7 @@
         Isso irá impactar na exibição do seu produto.
       </p>
     </div>
-    <p-footer>
+    <ng-template #footer>
       <button
         (click)="statusProductDialogVisible = false"
         class="btn btn-secondary me-2"
@@ -171,7 +171,7 @@
       <button (click)="confirmToggleStatusProduct()" class="btn btn-primary">
         Confirmar
       </button>
-    </p-footer>
+    </ng-template>
   </p-dialog>
 </div>
 

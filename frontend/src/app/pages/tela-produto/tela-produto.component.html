@@ -2,52 +2,8 @@
   <p-toast />
   <div *ngIf="existsProduct" class="main-container-products">
     @for (product of products; track $index) {
-    <div class="card">
-      <div
-        class="body-card"
-        role="button"
-        (mouseenter)="toggleHover(product, true)"
-        (mouseleave)="toggleHover(product, false)"
-      >
-        <div class="card-cont">
-          <i
-            class="fa-heart heart-icon heart-icon-{{ product.id }} {{
-              product.isFavorite ? 'fas' : 'far'
-            }}"
-            (click)="toggleFavorite(product)"
-          ></i>
-          <div routerLink="/detalhe-produto/{{ product.id }}">
-            <div>
-              <img
-                class="rounded img"
-                src="{{ product.capaUrl.sm }}"
-                alt="Foto do {{ product.name }}"
-              />
-            </div>
-            <div class="mt-3">
-              <h5>
-                {{ product.name.slice(0, 15)
-                }}<span *ngIf="product.name.length > 15">...</span>
-              </h5>
-              <h3 class="text-color">R$ {{ product.price }}</h3>
-            </div>
-          </div>
-
-          <div
-            class="message mt-3 d-flex justify-content-center align-items-center"
-            [ngClass]="{ show: product.isHovered }"
-          >
-            <button
-              class="btn btn-outline-light w-100 m-3"
-              (click)="addToCart(product)"
-            >
-              <i class="bx bx-cart-add"></i>
-              Comprar
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="glass"></div>
+    <div class="block">
+      <app-card-product [product]="product"></app-card-product>
     </div>
     }
   </div>
@@ -63,3 +19,4 @@
     </div>
   </div>
 </div>
+

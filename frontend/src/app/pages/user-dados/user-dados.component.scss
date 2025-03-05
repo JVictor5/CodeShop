@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .user {
   display: flex;
@@ -22,14 +22,14 @@
       height: 80%;
       background: linear-gradient(
         90deg,
-        $purpleColor 20%,
-        $boderPurpleColor 50%,
-        $purpleColor 80%
+        style.$purpleColor 20%,
+        style.$boderPurpleColor 50%,
+        style.$purpleColor 80%
       );
       border-top-right-radius: 20px;
       border-bottom-left-radius: 20px;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
-      border: 1px solid $purpleColor;
+      border: 1px solid style.$purpleColor;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -47,7 +47,7 @@
     .card {
       width: 99%;
       height: 99%;
-      background-color: $blackColor;
+      background-color: style.$blackColor;
       border-top-right-radius: 20px;
       border-bottom-left-radius: 20px;
       display: flex;
@@ -66,14 +66,14 @@
       .card-details {
         width: 90%;
         height: 90%;
-        color: $blackColor;
+        color: style.$blackColor;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         h1 {
-          color: $whiteColor;
+          color: style.$whiteColor;
         }
         .values {
           margin-top: 1rem;
@@ -87,16 +87,16 @@
           p-floatLabel {
             width: 100%;
             label {
-              color: $whiteColor;
+              color: style.$whiteColor;
             }
 
             input {
               width: 100%;
               padding: 0.5rem;
-              border: 3px solid $purpleColor;
+              border: 3px solid style.$purpleColor;
 
               &:disabled {
-                color: $blackColor;
+                color: style.$blackColor;
                 opacity: 0.9;
               }
             }
@@ -109,13 +109,13 @@
           height: 2.8125rem;
           font-size: 1.125rem;
           border-radius: 10px;
-          border: 2px solid $purpleColor;
+          border: 2px solid style.$purpleColor;
           cursor: pointer;
           transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out;
 
           &:hover {
-            background-color: $purpleColor;
-            color: $whiteColor;
+            background-color: style.$purpleColor;
+            color: style.$whiteColor;
           }
         }
       }
@@ -163,24 +163,24 @@
         transition: background-color 0.3s ease-in-out;
 
         &.save {
-          color: $whiteColor;
-          background-color: $greenColor;
-          border: 1px solid $greenColor;
+          color: style.$whiteColor;
+          background-color: style.$greenColor;
+          border: 1px solid style.$greenColor;
 
           &:hover {
-            background-color: $hoverGreenColor;
-            border: 1px solid $hoverGreenColor;
+            background-color: style.$hoverGreenColor;
+            border: 1px solid style.$hoverGreenColor;
           }
         }
 
         &.cancel {
-          color: $whiteColor;
-          background-color: $RedColor;
-          border: 1px solid $RedColor;
+          color: style.$whiteColor;
+          background-color: style.$RedColor;
+          border: 1px solid style.$RedColor;
 
           &:hover {
-            background-color: $hoverRedColor;
-            border: 1px solid $hoverRedColor;
+            background-color: style.$hoverRedColor;
+            border: 1px solid style.$hoverRedColor;
           }
         }
       }
@@ -188,8 +188,8 @@
   }
 
   ::ng-deep .p-dialog {
-    border: 2px solid $boderPurpleColor;
-    box-shadow: 0 0 10px $boderPurpleColor;
+    border: 2px solid style.$boderPurpleColor;
+    box-shadow: 0 0 10px style.$boderPurpleColor;
 
     .p-dialog-header-close {
       display: none;
@@ -201,7 +201,7 @@
       }
 
       &::-webkit-scrollbar-thumb {
-        background-color: $blackColor;
+        background-color: style.$blackColor;
         border-radius: 1.25rem;
       }
     }
@@ -219,7 +219,7 @@
 }
 .error {
   width: 100%;
-  color: $RedColor;
+  color: style.$RedColor;
   font-size: 0.875rem;
   padding: 0;
 }

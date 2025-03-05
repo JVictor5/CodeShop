@@ -10,12 +10,24 @@ import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { environment } from '../environment/environment';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
+import { ptBrTranslations } from './core/translate/primeng-locale';
+import CustomTheme from '../scss/my-primeng';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      translation: ptBrTranslations,
+      theme: {
+        preset: CustomTheme,
+      },
+    }),
     provideToastr(),
     provideClientHydration(),
     provideEnvironmentNgxMask(),

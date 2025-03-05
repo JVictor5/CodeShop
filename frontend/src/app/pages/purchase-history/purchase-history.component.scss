@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .pag {
   min-height: 100vh;
@@ -10,7 +10,7 @@
   }
   hr {
     border-radius: 15px;
-    border-top: 5px solid $boderPurpleColor;
+    border-top: 5px solid style.$boderPurpleColor;
     width: 80%;
     margin: 20px auto;
   }
@@ -52,7 +52,7 @@
     }
 
     .btn-go-home {
-      background-color: $purpleColor;
+      background-color: style.$purpleColor;
       color: white;
       border: none;
       padding: 0.8rem 2rem;
@@ -62,7 +62,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: $hoverPurpleColor;
+        background-color: style.$hoverPurpleColor;
       }
     }
   }
@@ -104,7 +104,7 @@
         font-weight: bold;
 
         &.success {
-          color: $greenColor;
+          color: style.$greenColor;
         }
 
         &.pending {
@@ -112,7 +112,7 @@
         }
 
         &.failed {
-          color: $RedColor;
+          color: style.$RedColor;
         }
       }
     }
@@ -123,7 +123,7 @@
     margin-top: 10px;
     display: flex;
     align-items: center;
-    color: $purpleColor;
+    color: style.$purpleColor;
     font-weight: bold;
 
     .arrow {
@@ -199,11 +199,11 @@
           font-weight: bold;
 
           &.success {
-            color: $greenColor;
+            color: style.$greenColor;
           }
 
           &.failed {
-            color: $RedColor;
+            color: style.$RedColor;
           }
         }
       }

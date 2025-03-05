@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .profile-banner {
   width: 100%;
@@ -26,7 +26,7 @@
     gap: 1rem;
 
     .textShop {
-      color: $whiteColor;
+      color: style.$whiteColor;
       h2 {
         font-size: 3.5rem;
         font-weight: bold;
@@ -44,7 +44,7 @@
       position: relative;
       border-radius: 25%;
       overflow: hidden;
-      border: 3px solid $whiteColor;
+      border: 3px solid style.$whiteColor;
       img {
         width: 100%;
         height: 100%;
@@ -83,7 +83,7 @@
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
-    background-color: $blackColor;
+    background-color: style.$blackColor;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -104,8 +104,8 @@
   padding: 10px;
   text-align: center;
   border: black 3px solid;
-  background-color: $blackColor;
-  color: $whiteColor;
+  background-color: style.$blackColor;
+  color: style.$whiteColor;
 }
 
 .main-container-products {
@@ -200,7 +200,7 @@
       width: 220px;
       height: 300px;
       transform: rotate(0deg) translateY(50%);
-      background: linear-gradient(90deg, $purpleColor, transparent);
+      background: linear-gradient(90deg, style.$purpleColor, transparent);
       transition: opacity 300ms;
       animation: rotation_9018 3000ms infinite linear;
       animation-play-state: paused;
@@ -214,7 +214,7 @@
       width: 220px;
       height: 300px;
       transform: rotate(0deg) translateY(-50%);
-      background: linear-gradient(90deg, transparent, $purpleColor);
+      background: linear-gradient(90deg, transparent, style.$purpleColor);
       transition: opacity 300ms;
       animation: rotation_9019 3000ms infinite linear;
       animation-play-state: paused;
@@ -271,7 +271,7 @@
     width: 100%;
     height: 50px;
     border-radius: 5px;
-    background-color: $blackColor;
+    background-color: style.$blackColor;
     opacity: 0;
     visibility: hidden;
     display: none;
@@ -289,13 +289,13 @@
     }
 
     button {
-      color: $whiteColor;
-      border: $greenColor 1px solid;
-      background-color: $greenColor;
+      color: style.$whiteColor;
+      border: style.$greenColor 1px solid;
+      background-color: style.$greenColor;
 
       &:hover {
-        background-color: $hoverGreenColor;
-        border: $hoverGreenColor 1px solid;
+        background-color: style.$hoverGreenColor;
+        border: style.$hoverGreenColor 1px solid;
       }
     }
   }
@@ -310,7 +310,7 @@
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease;
-    background-color: $blackColor;
+    background-color: style.$blackColor;
     border-radius: 0 0 0 10px;
 
     .heart-icon,
@@ -327,12 +327,12 @@
       justify-content: center;
 
       &:hover {
-        color: $purpleColor;
+        color: style.$purpleColor;
       }
     }
     .heart-icon.fas {
-      color: $RedColor;
-      border-color: $RedColor;
+      color: style.$RedColor;
+      border-color: style.$RedColor;
     }
   }
 
@@ -393,21 +393,21 @@
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
-    background-color: $purpleColor;
+    background-color: style.$purpleColor;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: $hoverPurpleColor;
+      background-color: style.$hoverPurpleColor;
     }
   }
 }
 // modal edit profile
-::ng-deep .p-dialog {
-  border: 2px solid $boderPurpleColor;
-  box-shadow: 0 0 10px $boderPurpleColor;
+:host ::ng-deep .p-dialog {
+  border: 2px solid style.$boderPurpleColor;
+  box-shadow: 0 0 10px style.$boderPurpleColor;
 
   .p-dialog-header-close {
     display: none;
@@ -419,7 +419,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: $blackColor;
+      background-color: style.$blackColor;
       border-radius: 1.25rem;
     }
   }
@@ -466,24 +466,24 @@
       transition: background-color 0.3s ease-in-out;
 
       &.save {
-        color: $whiteColor;
-        background-color: $greenColor;
-        border: 1px solid $greenColor;
+        color: style.$whiteColor;
+        background-color: style.$greenColor;
+        border: 1px solid style.$greenColor;
 
         &:hover {
-          background-color: $hoverGreenColor;
-          border: 1px solid $hoverGreenColor;
+          background-color: style.$hoverGreenColor;
+          border: 1px solid style.$hoverGreenColor;
         }
       }
 
       &.cancel {
-        color: $whiteColor;
-        background-color: $RedColor;
-        border: 1px solid $RedColor;
+        color: style.$whiteColor;
+        background-color: style.$RedColor;
+        border: 1px solid style.$RedColor;
 
         &:hover {
-          background-color: $hoverRedColor;
-          border: 1px solid $hoverRedColor;
+          background-color: style.$hoverRedColor;
+          border: 1px solid style.$hoverRedColor;
         }
       }
     }
@@ -498,7 +498,7 @@
   top: 10px;
   left: 10px;
   transition: opacity 0.3s ease;
-  background-color: $blackColor;
+  background-color: style.$blackColor;
   padding: 5px;
   border-bottom-right-radius: 5px;
   i {

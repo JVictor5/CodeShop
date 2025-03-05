@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .main {
   display: flex;
@@ -18,20 +18,8 @@
   }
 }
 
-::ng-deep
-  .p-carousel
-  .p-carousel-indicators
-  .p-carousel-indicator.p-highlight
-  button {
-  background-color: $purpleColor !important;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-}
-::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator button {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
+.p-carousel .p-carousel-indicator-active .p-carousel-indicator-button{
+  background-color: style.$purpleColor !important;
 }
 
 .box {
@@ -58,9 +46,9 @@
     .icon {
       width: 150px;
       height: 150px;
-      color: $blackColor;
+      color: style.$blackColor;
       border-radius: 50%;
-      border: 5px solid $blackColor;
+      border: 5px solid style.$blackColor;
       margin: auto;
       transition: transform 0.3s ease, color 0.3s ease,
         background-color 0.3s ease, border 0.3s ease;
@@ -71,9 +59,9 @@
       cursor: pointer;
       &:hover {
         transform: scale(1.1);
-        color: $whiteColor;
-        background-color: $purpleColor;
-        border: 5px solid $purpleColor;
+        color: style.$whiteColor;
+        background-color: style.$purpleColor;
+        border: 5px solid style.$purpleColor;
       }
 
       i {
@@ -91,149 +79,18 @@
   }
 }
 
-.text {
-  margin: auto 0 auto 3%;
-}
-
-.product-card {
-  text-align: center;
-  margin: 0 10px;
-}
-
-.product-card img {
-  max-width: 100%;
-  height: auto;
-}
-.img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  margin: 0 auto;
-}
 .custom-carousel-size .card-total {
-  height: 22rem;
+  height: 24rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.card {
-  width: 15.625rem;
-  height: 20rem;
-  background: #171717;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 0px 3px 1px #00000088;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: 1;
-  .glass {
-    position: absolute;
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: rgba(23, 23, 23, 0.2);
-    backdrop-filter: blur(50px);
-    z-index: 1;
-    transition-duration: 0.5s;
-  }
-  &:hover {
-    transform: scale(1.05);
-    z-index: 2;
-    box-shadow: 0px 0px 10px 3px #00000088;
-
-    .message {
-      display: block;
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
-  &::before {
-    opacity: 1;
-    content: "";
-    position: absolute;
-    display: block;
-    width: 220px;
-    height: 300px;
-    transform: rotate(0deg) translateY(50%);
-    background: linear-gradient(90deg, $purpleColor, transparent);
-    transition: opacity 300ms;
-    animation: rotation_9018 3000ms infinite linear;
-    animation-play-state: paused;
-  }
-
-  &::after {
-    opacity: 1;
-    content: "";
-    position: absolute;
-    display: block;
-    width: 220px;
-    height: 300px;
-    transform: rotate(0deg) translateY(-50%);
-    background: linear-gradient(90deg, transparent, $purpleColor);
-    transition: opacity 300ms;
-    animation: rotation_9019 3000ms infinite linear;
-    animation-play-state: paused;
-  }
-
-  &:hover::before,
-  &:hover::after {
-    opacity: 1;
-    animation-play-state: running;
-  }
-}
-
-.body-card {
-  border-radius: 10px;
-  background: #171717;
-  width: 246px;
-  height: 314px;
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 1;
-  padding: 20px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  .card-cont {
-    width: 100%;
-    height: 100%;
-  }
-  &::before {
-    opacity: 0;
-    transition: opacity 300ms;
-    content: " ";
-    display: block;
-    background: #fff5;
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    filter: blur(50px);
-  }
-
-  &:hover::before {
-    opacity: 1;
-  }
-}
-
-.card:hover .glass {
-  opacity: 0;
 }
 
 .message {
   width: 100%;
   height: 50px;
   border-radius: 5px;
-  background-color: $blackColor;
+  background-color: style.$blackColor;
   opacity: 0;
   visibility: hidden;
   display: none;
@@ -251,55 +108,13 @@
   }
 
   button {
-    color: $whiteColor;
-    border: $greenColor 1px solid;
-    background-color: $greenColor;
+    color: style.$whiteColor;
+    border: style.$greenColor 1px solid;
+    background-color: style.$greenColor;
 
     &:hover {
-      background-color: $hoverGreenColor;
-      border: $hoverGreenColor 1px solid;
+      background-color: style.$hoverGreenColor;
+      border: style.$hoverGreenColor 1px solid;
     }
-  }
-}
-
-.heart-icon {
-  z-index: 1000;
-  font-size: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  transition: color 0.3s ease, border-color 0.3s ease;
-  visibility: hidden;
-  opacity: 0;
-  background-color: $blackColor;
-}
-
-.heart-icon.fas {
-  color: $RedColor;
-  border-color: $RedColor;
-}
-
-.card:hover .heart-icon {
-  visibility: visible;
-  opacity: 1;
-}
-
-@keyframes rotation_9018 {
-  0% {
-    transform: rotate(0deg) translateY(50%);
-  }
-  100% {
-    transform: rotate(360deg) translateY(50%);
-  }
-}
-
-@keyframes rotation_9019 {
-  0% {
-    transform: rotate(0deg) translateY(-50%);
-  }
-  100% {
-    transform: rotate(360deg) translateY(-50%);
   }
 }

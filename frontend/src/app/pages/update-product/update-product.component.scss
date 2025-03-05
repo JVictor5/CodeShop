@@ -19,7 +19,7 @@
 
 .card-animation::after,
 .card-animation::before {
-  content: '';
+  content: "";
   position: absolute;
   height: 102%;
   width: 102%;
@@ -52,7 +52,7 @@
   z-index: 0;
 }
 
-[type=radio] {
+[type="radio"] {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -73,13 +73,13 @@ p-fileUpload img {
   height: 200px;
 }
 
-[type=radio]+.card:hover {
+[type="radio"] + .card:hover {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
   transform: scale(1.025);
   z-index: 2;
 }
 
-[type=radio]:checked+.card {
+[type="radio"]:checked + .card {
   outline: 2px solid #290e4d !important;
 }
 
@@ -88,9 +88,19 @@ li {
 }
 
 li:hover {
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 .margin-right {
   margin-right: 5px;
+}
+
+// button next pag
+
+:host ::ng-deep .p-button {
+  color: white !important;
+}
+
+:host ::ng-deep .p-button:hover {
+  background-color: #290e4d !important;
 }

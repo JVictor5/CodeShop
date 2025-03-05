@@ -1,7 +1,7 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .containner {
-  background-color: $blackColor;
+  background-color: style.$blackColor;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,7 @@
     border-radius: 40px;
     padding: 25px 35px;
     border: 5px solid #fff;
-    box-shadow: $purpleColor 0px 30px 30px -20px;
+    box-shadow: style.$purpleColor 0px 30px 30px -20px;
     margin: 20px;
   }
 
@@ -27,7 +27,7 @@
     text-align: center;
     font-weight: 900;
     font-size: 30px;
-    color: $hoverPurpleColor;
+    color: style.$hoverPurpleColor;
   }
 
   label {
@@ -47,13 +47,13 @@
 
       &:focus {
         outline: none;
-        border-inline: 2px solid $boderPurpleColor; /* Corrigido para $borderPurpleColor */
+        border-inline: 2px solid style.$boderPurpleColor; /* Corrigido para style.$borderPurpleColor */
       }
     }
   }
 
   .error {
-    color: $RedColor;
+    color: style.$RedColor;
     font-size: 14px;
     margin-top: 5px;
   }
@@ -62,23 +62,23 @@
     display: block;
     width: 100%;
     font-weight: bold;
-    background: linear-gradient(45deg, $hoverPurpleColor 0%, $purpleColor 100%);
+    background: linear-gradient(45deg, style.$hoverPurpleColor 0%, style.$purpleColor 100%);
     color: white;
     padding-block: 15px;
     margin: 20px auto;
     border-radius: 20px;
-    box-shadow: $purpleColor 0px 20px 10px -15px;
+    box-shadow: style.$purpleColor 0px 20px 10px -15px;
     border: none;
     transition: all 0.2s ease-in-out;
 
     &:hover {
       transform: scale(1.03);
-      box-shadow: $purpleColor 0px 23px 10px -20px;
+      box-shadow: style.$purpleColor 0px 23px 10px -20px;
     }
 
     &:active {
       transform: scale(0.95);
-      box-shadow: $purpleColor 0px 15px 10px -10px;
+      box-shadow: style.$purpleColor 0px 15px 10px -10px;
     }
   }
 
@@ -93,7 +93,7 @@
       cursor: pointer;
       user-select: none;
       overflow: hidden;
-      color: $greenColor;
+      color: style.$greenColor;
       z-index: 1;
       font-family: inherit;
       font-weight: 500;
@@ -108,7 +108,7 @@
         height: 100%;
         background: transparent;
         z-index: -1;
-        border: 4px solid $greenColor;
+        border: 4px solid style.$greenColor;
 
         &::before {
           content: "";
@@ -116,7 +116,7 @@
           position: absolute;
           width: 8%;
           height: 500%;
-          background: $whiteColor;
+          background: style.$whiteColor;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%) rotate(-60deg);
@@ -125,12 +125,12 @@
       }
 
       &:hover {
-        color: $whiteColor;
+        color: style.$whiteColor;
 
         span::before {
           transform: translate(-50%, -50%) rotate(-90deg);
           width: 100%;
-          background: $greenColor;
+          background: style.$greenColor;
         }
       }
 
@@ -143,7 +143,7 @@
 
     .error {
       width: 380px;
-      color: $RedColor;
+      color: style.$RedColor;
       font-size: 0.875rem;
       padding: 0;
     }

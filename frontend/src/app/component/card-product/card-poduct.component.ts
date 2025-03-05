@@ -1,75 +1,31 @@
-import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models/product';
-import { CarouselModule } from 'primeng/carousel';
+import { Component, inject, Input } from '@angular/core';
 import { FavoriteProdutsService } from '../../core/services/favoriteProducts.service';
 import { AuthService } from '../../core/services/auth.service';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { CartService } from '../../core/services/shoppingCart.service';
-import { CardProductComponent } from '../../component/card-product/card-poduct.component';
+import { MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { Product } from '../../core/models/product';
+
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    CarouselModule,
-    ToastModule,
-    CardProductComponent,
-  ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [MessageService],
-  encapsulation: ViewEncapsulation.None,
+  selector: 'app-card-product',
+  imports: [CommonModule, RouterModule, ToastModule],
+  templateUrl: './card-poduct.component.html',
+  styleUrl: './card-poduct.component.scss',
 })
-export class HomeComponent {
-  recentProducts: Product[] = [];
+export class CardProductComponent {
+  private favoriteProductsService = inject(FavoriteProdutsService);
+  private authService = inject(AuthService);
+  private messageService = inject(MessageService);
+  private cartService = inject(CartService);
+
+  @Input() product!: Product;
   userId: string = '';
   favoriteProductIds: Set<string> = new Set();
 
-  responsiveOptions = [
-    {
-      breakpoint: '1705px',
-      numVisible: 5,
-      numScroll: 3,
-    },
-    {
-      breakpoint: '1400px',
-      numVisible: 4,
-      numScroll: 2,
-    },
-    {
-      breakpoint: '1120px',
-      numVisible: 3,
-      numScroll: 1,
-    },
-    {
-      breakpoint: '870px',
-      numVisible: 2,
-      numScroll: 1,
-    },
-    {
-      breakpoint: '605px',
-      numVisible: 1,
-      numScroll: 1,
-    },
-  ];
-
-  constructor(
-    private productService: ProductService,
-    private favoriteProductsService: FavoriteProdutsService,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private cartService: CartService
-  ) {}
-
   ngOnInit(): void {
-    this.loadRecentProducts();
     this.authService.currentUser.subscribe(async (user) => {
       if (user) {
         this.userId = user.uid;
@@ -78,9 +34,12 @@ export class HomeComponent {
     });
   }
 
-  async loadRecentProducts() {
-    this.recentProducts = await this.productService.getRecentProducts();
-    this.updateFavoriteIcons();
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
   }
 
   async loadFavoriteProducts() {
@@ -99,13 +58,8 @@ export class HomeComponent {
   toggleHover(product: any, isHovering: boolean) {
     product.isHovered = isHovering;
   }
-
-  showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({
-      severity: severity,
-      summary: summary,
-      detail: detail,
-    });
+  updateFavoriteIcons() {
+    this.product.isFavorite = this.favoriteProductIds.has(this.product.id);
   }
 
   toggleFavorite(product: any) {
@@ -134,6 +88,7 @@ export class HomeComponent {
       console.warn('Elemento heartIcon não encontrado!');
     }
   }
+
   addToCart(product: any) {
     this.cartService.addItem({
       id: product.id,
@@ -146,10 +101,5 @@ export class HomeComponent {
       type: product.category,
     });
   }
-
-  updateFavoriteIcons() {
-    this.recentProducts.forEach((product) => {
-      product.isFavorite = this.favoriteProductIds.has(product.id);
-    });
-  }
 }
+

@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 // Variáveis
 $primary-color: #8c00ff;
 $secondary-color: #ab37f8;
@@ -186,14 +186,14 @@ form {
 
   &.ng-invalid {
     i {
-      color: $RedColor;
+      color: style.$RedColor;
     }
 
     input {
-      color: $RedColor;
+      color: style.$RedColor;
 
       &::placeholder {
-        color: $RedColor;
+        color: style.$RedColor;
       }
     }
   }
@@ -224,8 +224,8 @@ form {
 
 .btn {
   width: 150px;
-  background-color: $purpleColor;
-  border: 2px solid $boderPurpleColor;
+  background-color: style.$purpleColor;
+  border: 2px solid style.$boderPurpleColor;
   outline: none;
   height: 49px;
   border-radius: 49px;
@@ -237,7 +237,7 @@ form {
   transition: 0.5s;
 
   &:hover {
-    background-color: $hoverPurpleColor;
+    background-color: style.$hoverPurpleColor;
   }
 
   &.transparent {
@@ -459,16 +459,16 @@ form {
 
 .error {
   width: 380px;
-  color: $RedColor;
+  color: style.$RedColor;
   font-size: 0.875rem;
   padding: 0;
 }
 .login-error {
-  color: $RedColor;
+  color: style.$RedColor;
   margin-bottom: 0.3125rem;
 }
 .error-message {
-  color: $RedColor;
+  color: style.$RedColor;
   font-size: 0.9rem;
   margin-top: 1rem;
   text-align: center;

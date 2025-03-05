@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as style;
 
 .user-codes-container {
   padding: 20px;
@@ -11,7 +11,7 @@
   }
   hr {
     border-radius: 15px;
-    border-top: 5px solid $boderPurpleColor;
+    border-top: 5px solid style.$boderPurpleColor;
     width: 80%;
     margin: 20px auto;
   }
@@ -23,7 +23,7 @@
   }
 
   .product-card {
-    background-color: $whiteColor;
+    background-color: style.$whiteColor;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
@@ -32,7 +32,7 @@
     text-align: center;
 
     &:hover {
-      border: 1px solid $purpleColor;
+      border: 1px solid style.$purpleColor;
       transform: translateY(-5px);
     }
 
@@ -71,7 +71,7 @@
     }
 
     .code-container {
-      border: 1px solid $purpleColor;
+      border: 1px solid style.$purpleColor;
       display: flex;
       align-items: center;
       border-radius: 8px;
@@ -93,14 +93,14 @@
         transition: color 0.2s;
 
         &:hover {
-          color: $purpleColor;
+          color: style.$purpleColor;
         }
       }
     }
 
     .refund-button {
       padding: 8px 12px;
-      background-color: $RedColor;
+      background-color: style.$RedColor;
       color: white;
       border: none;
       border-radius: 5px;
@@ -113,7 +113,7 @@
       }
 
       &:not(:disabled):hover {
-        background-color: $hoverRedColor;
+        background-color: style.$hoverRedColor;
       }
     }
   }
@@ -161,23 +161,23 @@
     }
 
     .p-button-confirm {
-      border: 2px solid $greenColor;
-      background-color: $greenColor;
+      border: 2px solid style.$greenColor;
+      background-color: style.$greenColor;
 
       &:hover {
-        background-color: $hoverGreenColor;
-        border: 2px solid $hoverGreenColor;
+        background-color: style.$hoverGreenColor;
+        border: 2px solid style.$hoverGreenColor;
       }
     }
 
     .p-button-cancel {
       margin-right: 5px;
-      border: 2px solid $RedColor;
-      background-color: $RedColor;
+      border: 2px solid style.$RedColor;
+      background-color: style.$RedColor;
 
       &:hover {
-        background-color: $hoverRedColor;
-        border: 2px solid $hoverRedColor;
+        background-color: style.$hoverRedColor;
+        border: 2px solid style.$hoverRedColor;
       }
     }
   }
@@ -217,7 +217,7 @@
     }
 
     .btn-go-home {
-      background-color: $purpleColor;
+      background-color: style.$purpleColor;
       color: white;
       border: none;
       padding: 0.8rem 2rem;
@@ -227,7 +227,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: $hoverPurpleColor;
+        background-color: style.$hoverPurpleColor;
       }
     }
   }

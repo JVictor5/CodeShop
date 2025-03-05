@@ -13,6 +13,7 @@ export interface Product extends Model {
   genres?: string[];
   keys: string[];
   isFavorite?: boolean;
+  isHovered?: boolean;
   minimumSystemRequirements?: {
     os: string;
     cpu: string;

@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -16,7 +22,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { BadgeModule } from 'primeng/badge';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -42,11 +48,11 @@ import { FastAverageColor } from 'fast-average-color';
     FormsModule,
     CalendarModule,
     DialogModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.scss',
-  providers: [MessageService, PrimeNGConfig]
+  providers: [MessageService],
 })
 export class UpdateProductComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -54,7 +60,6 @@ export class UpdateProductComponent implements OnInit {
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
-  private primengConfig = inject(PrimeNGConfig);
   productId: string = '';
   shopId: string = '';
 
@@ -63,8 +68,8 @@ export class UpdateProductComponent implements OnInit {
   playerModes = playerModes;
 
   // variável que recebe url após a inserção no supabase
-  capaUrl: { sm: string; lg: string; } = { sm: '', lg: '' };
-  capaDestaqueUrl: { sm: string, lg: string } = { sm: '', lg: '' };
+  capaUrl: { sm: string; lg: string } = { sm: '', lg: '' };
+  capaDestaqueUrl: { sm: string; lg: string } = { sm: '', lg: '' };
 
   selectedCapa: File[] = [];
   selectedCapaDestaque: File[] = [];
@@ -74,7 +79,7 @@ export class UpdateProductComponent implements OnInit {
   showCapaDestaqueInput: boolean = false;
 
   // variáveis de manipulação do dropzone
-  unchangedImages: { sm: string[]; lg: string[]; } = { sm: [], lg: [] };
+  unchangedImages: { sm: string[]; lg: string[] } = { sm: [], lg: [] };
   newImages: any[] = [];
   deletedImages: string[] = [];
   uploadedImages: any[] = [];
@@ -104,18 +109,19 @@ export class UpdateProductComponent implements OnInit {
   backgroundColorCardAnimation!: string;
   colorCardAnimation!: string;
 
+
   ngOnInit(): void {
     this.step1FormGroup = this.form.get('step1') as FormGroup;
     this.step2FormGroup = this.form.get('step2') as FormGroup;
     this.step3FormGroup = this.form.get('step3') as FormGroup;
     this.step4FormGroup = this.form.get('step4') as FormGroup;
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.productId = params.get('id') ?? '';
     });
     const product = this.loadProduct();
     this.getProductMedia();
-    product.then(p => {
+    product.then((p) => {
       this.form.patchValue({
         step1: {
           category: p.category,
@@ -129,10 +135,10 @@ export class UpdateProductComponent implements OnInit {
         },
         step3: {
           titleDestaque: p.titleDestaque,
-          descriptionDestaque: p.descriptionDestaque
-        }
+          descriptionDestaque: p.descriptionDestaque,
+        },
       });
-      this.showGameGenres = (p.category === 'Jogos');
+      this.showGameGenres = p.category === 'Jogos';
       if (this.showGameGenres) {
         this.form.patchValue({
           step2: {
@@ -148,26 +154,20 @@ export class UpdateProductComponent implements OnInit {
             recommendedStorage: p.recommendedSystemRequirements?.storage,
             recommendedMemory: p.recommendedSystemRequirements?.memory,
             recommendedGpu: p.recommendedSystemRequirements?.gpu,
-          }
+          },
         });
       }
       this.currentCapa = p.capaUrl.sm;
       this.currentCapaDestaque = p.capaDestaqueUrl.sm;
       this.capaUrl = { sm: p.capaUrl.sm, lg: p.capaUrl.lg };
-      this.capaDestaqueUrl = { sm: p.capaDestaqueUrl.sm, lg: p.capaDestaqueUrl.lg };
+      this.capaDestaqueUrl = {
+        sm: p.capaDestaqueUrl.sm,
+        lg: p.capaDestaqueUrl.lg,
+      };
       this.keys = p.keys;
       this.quantity = this.keys.length;
       this.beforeUpdateImages = p.imgUrls.sm;
       this.shopId = p.idUser;
-    });
-
-    this.primengConfig.setTranslation({
-      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
-      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      dayNamesMin: ['Do', 'Se', 'Te', 'Qa', 'Qi', 'Se', 'Sa'],
-      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      dateFormat: "dd/mm/yy"
     });
   }
 
@@ -177,7 +177,11 @@ export class UpdateProductComponent implements OnInit {
   }
 
   async getProductMedia() {
-    const productMedia = await this.imgService.getProductMedia(this.productId, 'images', 'sm');
+    const productMedia = await this.imgService.getProductMedia(
+      this.productId,
+      'images',
+      'sm'
+    );
     if (productMedia) {
       this.uploadedImages = productMedia;
     }
@@ -212,11 +216,11 @@ export class UpdateProductComponent implements OnInit {
       imgUrls: [[] as string[], Validators.required],
       titleDestaque: ['', Validators.required],
       capaDestaqueUrl: ['', Validators.required],
-      descriptionDestaque: ['', Validators.required]
+      descriptionDestaque: ['', Validators.required],
     }),
     step4: this.builder.group({
       keysInput: ['', Validators.required],
-    })
+    }),
   });
 
   /**
@@ -226,7 +230,11 @@ export class UpdateProductComponent implements OnInit {
    * @param detail Descrição
    */
   showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
   }
 
   /**
@@ -248,25 +256,42 @@ export class UpdateProductComponent implements OnInit {
       } else if (!this.fValue.step2.price) {
         this.showToast('error', 'Atenção', 'Preencha o campo preço!');
       } else if (!this.fValue.step2.storeForActivation) {
-        this.showToast('error', 'Atenção', 'Preencha o campo loja para ativação!');
+        this.showToast(
+          'error',
+          'Atenção',
+          'Preencha o campo loja para ativação!'
+        );
       } else if (!this.fValue.step2.releaseDate) {
         this.showToast('error', 'Atenção', 'Escolha uma data de lançamento!');
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
         this.showToast('error', 'Atenção', 'Escolha gêneros para o jogo!');
-      } else if (this.showGameGenres && this.fValue.step2.playerModes.length == 0) {
-        this.showToast('error', 'Atenção', 'Escolha modos de jogadores para o jogo!');
-      } else if (this.showGameGenres && (!this.fValue.step2.minimumCpu
-        || !this.fValue.step2.minimumGpu
-        || !this.fValue.step2.minimumMemory
-        || !this.fValue.step2.minimumOs
-        || !this.fValue.step2.minimumStorage
-        || !this.fValue.step2.recommendedCpu
-        || !this.fValue.step2.recommendedGpu
-        || !this.fValue.step2.recommendedMemory
-        || !this.fValue.step2.recommendedStorage
-        || !this.fValue.step2.recommendedOs
-      )) {
-        this.showToast('error', 'Atenção', 'Preencha os requisitos de sistema!');
+      } else if (
+        this.showGameGenres &&
+        this.fValue.step2.playerModes.length == 0
+      ) {
+        this.showToast(
+          'error',
+          'Atenção',
+          'Escolha modos de jogadores para o jogo!'
+        );
+      } else if (
+        this.showGameGenres &&
+        (!this.fValue.step2.minimumCpu ||
+          !this.fValue.step2.minimumGpu ||
+          !this.fValue.step2.minimumMemory ||
+          !this.fValue.step2.minimumOs ||
+          !this.fValue.step2.minimumStorage ||
+          !this.fValue.step2.recommendedCpu ||
+          !this.fValue.step2.recommendedGpu ||
+          !this.fValue.step2.recommendedMemory ||
+          !this.fValue.step2.recommendedStorage ||
+          !this.fValue.step2.recommendedOs)
+      ) {
+        this.showToast(
+          'error',
+          'Atenção',
+          'Preencha os requisitos de sistema!'
+        );
       } else {
         this.activeIndex++;
       }
@@ -290,7 +315,11 @@ export class UpdateProductComponent implements OnInit {
           setTimeout(() => {
             this.activeIndex++;
             setTimeout(() => {
-              this.showToast('success', 'Conclusão', 'Chegamos ao fim! Obrigado por confiar na CodeShop.');
+              this.showToast(
+                'success',
+                'Conclusão',
+                'Chegamos ao fim! Obrigado por confiar na CodeShop.'
+              );
             }, 400);
           }, 1000);
         }
@@ -299,10 +328,11 @@ export class UpdateProductComponent implements OnInit {
   }
 
   validateImage(fileType: string): boolean {
-    if (fileType == "image/png"
-      || fileType == "image/jpg"
-      || fileType == "image/jpeg"
-      || fileType == "image/webp"
+    if (
+      fileType == 'image/png' ||
+      fileType == 'image/jpg' ||
+      fileType == 'image/jpeg' ||
+      fileType == 'image/webp'
     ) {
       return true;
     } else {
@@ -337,25 +367,26 @@ export class UpdateProductComponent implements OnInit {
 
   // Função para detectar mudança de categoria e mostrar o select de gêneros de jogos
   onProductCategoryChange(category: string): void {
-    this.showGameGenres = (category === 'Jogos');
+    this.showGameGenres = category === 'Jogos';
   }
 
   // Função para aplicar a cor ao card final do produto
   applyColorToDiv(): void {
     const fac = new FastAverageColor();
-    fac.getColorAsync(this.capaUrl.sm)
-      .then(color => {
+    fac
+      .getColorAsync(this.capaUrl.sm)
+      .then((color) => {
         this.backgroundColorCardAnimation = color.rgba;
         this.colorCardAnimation = color.isDark ? '#fff' : '#000';
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   scrollToTop(): void {
     window.scrollTo({
-      top: 0
+      top: 0,
     });
   }
 
@@ -375,12 +406,14 @@ export class UpdateProductComponent implements OnInit {
     this.beforeUpdateImages.splice(index, 1);
   }
 
-
   // Função para adicionar as chaves do produto
   addKeys(): void {
-    const keysInput: string | undefined = this.form.get('step4.keysInput')?.value;
+    const keysInput: string | undefined =
+      this.form.get('step4.keysInput')?.value;
     if (keysInput) {
-      const newKeys = keysInput.split(/[\s,]+/).filter(key => key.trim() !== '');
+      const newKeys = keysInput
+        .split(/[\s,]+/)
+        .filter((key) => key.trim() !== '');
 
       if (this.editedIndex !== null) {
         this.keys[this.editedIndex] = newKeys[0];
@@ -419,7 +452,7 @@ export class UpdateProductComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 
-  // -- Início - Funções para o dropzone e a manipulação de imagens  
+  // -- Início - Funções para o dropzone e a manipulação de imagens
   onUpload(event: any) {
     for (let file of event.files) {
       this.uploadedImages.push(file);
@@ -431,7 +464,11 @@ export class UpdateProductComponent implements OnInit {
 
   onSelectedFiles(event: any) {
     this.pendingImages.push(...event.files);
-    this.showToast('info', 'Escolha feita', 'Não se esqueça de fazer o upload.');
+    this.showToast(
+      'info',
+      'Escolha feita',
+      'Não se esqueça de fazer o upload.'
+    );
   }
 
   // Função para formatar o tamanho do arquivo
@@ -446,7 +483,12 @@ export class UpdateProductComponent implements OnInit {
   }
 
   // Função para remover arquivo antes do upload
-  onRemoveTemplatingFile(event: Event, file: any, removeFileCallback: Function, index: number) {
+  onRemoveTemplatingFile(
+    event: Event,
+    file: any,
+    removeFileCallback: Function,
+    index: number
+  ) {
     this.pendingImages.splice(index, 1);
     removeFileCallback(index);
   }
@@ -506,16 +548,16 @@ export class UpdateProductComponent implements OnInit {
   formatNameSearch(name: string): string {
     // Mapeamento dos números para sua versão escrita
     const numberMap: { [key: string]: string } = {
-      "0": "zero",
-      "1": "um",
-      "2": "dois",
-      "3": "três",
-      "4": "quatro",
-      "5": "cinco",
-      "6": "seis",
-      "7": "sete",
-      "8": "oito",
-      "9": "nove",
+      '0': 'zero',
+      '1': 'um',
+      '2': 'dois',
+      '3': 'três',
+      '4': 'quatro',
+      '5': 'cinco',
+      '6': 'seis',
+      '7': 'sete',
+      '8': 'oito',
+      '9': 'nove',
     };
 
     // Substituir números por sua versão escrita
@@ -524,11 +566,11 @@ export class UpdateProductComponent implements OnInit {
     // Substituir caracteres acentuados pela versão sem acento e transformar em minúsculo
     formattedName = formattedName
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
 
     // Remover espaços em branco e caracteres especiais
-    formattedName = formattedName.replace(/[\s\W_]+/g, "");
+    formattedName = formattedName.replace(/[\s\W_]+/g, '');
 
     return formattedName;
   }
@@ -548,8 +590,12 @@ export class UpdateProductComponent implements OnInit {
           storeForActivation: this.fValue.step2.storeForActivation,
           keys: this.keys,
           quantity: this.quantity,
-          playerModes: Array.isArray(this.fValue.step2.playerModes) ? this.fValue.step2.playerModes : [this.fValue.step2.playerModes],
-          genres: Array.isArray(this.fValue.step2.genres) ? this.fValue.step2.genres : [this.fValue.step2.genres],
+          playerModes: Array.isArray(this.fValue.step2.playerModes)
+            ? this.fValue.step2.playerModes
+            : [this.fValue.step2.playerModes],
+          genres: Array.isArray(this.fValue.step2.genres)
+            ? this.fValue.step2.genres
+            : [this.fValue.step2.genres],
           minimumSystemRequirements: {
             os: this.fValue.step2.minimumOs,
             cpu: this.fValue.step2.minimumCpu,
@@ -566,10 +612,10 @@ export class UpdateProductComponent implements OnInit {
           },
           releaseDate: {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
-            bruteFormat: this.fValue.step2.releaseDate
+            bruteFormat: this.fValue.step2.releaseDate,
           },
           titleDestaque: this.fValue.step3.titleDestaque,
-          descriptionDestaque: this.fValue.step3.descriptionDestaque
+          descriptionDestaque: this.fValue.step3.descriptionDestaque,
         };
       } else {
         formValue = {
@@ -585,17 +631,21 @@ export class UpdateProductComponent implements OnInit {
           quantity: this.quantity,
           releaseDate: {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
-            bruteFormat: this.fValue.step2.releaseDate
+            bruteFormat: this.fValue.step2.releaseDate,
           },
           titleDestaque: this.fValue.step3.titleDestaque,
-          descriptionDestaque: this.fValue.step3.descriptionDestaque
+          descriptionDestaque: this.fValue.step3.descriptionDestaque,
         };
       }
       await this.productService.update(formValue);
       const id = this.productId;
 
       if (this.selectedCapa.length > 0) {
-        const message = await this.imgService.deleteProductMedia(id, 'capa', this.currentCapa);
+        const message = await this.imgService.deleteProductMedia(
+          id,
+          'capa',
+          this.currentCapa
+        );
         if (message == 'Success') {
           const capaUrlArray = await this.imgService.uploadProductMedia(
             id,
@@ -604,17 +654,21 @@ export class UpdateProductComponent implements OnInit {
           );
           this.capaUrl = {
             sm: capaUrlArray.sm[0],
-            lg: capaUrlArray.lg[0]
-          }
+            lg: capaUrlArray.lg[0],
+          };
           await this.productService.update({
             id,
-            capaUrl: this.capaUrl
+            capaUrl: this.capaUrl,
           });
         }
       }
 
       if (this.selectedCapaDestaque.length > 0) {
-        const message = await this.imgService.deleteProductMedia(id, 'capa-destaque', this.currentCapaDestaque);
+        const message = await this.imgService.deleteProductMedia(
+          id,
+          'capa-destaque',
+          this.currentCapaDestaque
+        );
         if (message == 'Success') {
           const capaDestaqueUrlArray = await this.imgService.uploadProductMedia(
             id,
@@ -623,11 +677,11 @@ export class UpdateProductComponent implements OnInit {
           );
           this.capaDestaqueUrl = {
             sm: capaDestaqueUrlArray.sm[0],
-            lg: capaDestaqueUrlArray.lg[0]
-          }
+            lg: capaDestaqueUrlArray.lg[0],
+          };
           await this.productService.update({
             id,
-            capaDestaqueUrl: this.capaDestaqueUrl
+            capaDestaqueUrl: this.capaDestaqueUrl,
           });
         }
       }
@@ -636,18 +690,22 @@ export class UpdateProductComponent implements OnInit {
       // lógica para remover as imagens apagadas no supabase e persistir no firebase somente as inalteradas
       if (this.deletedImages.length > 0) {
         this.deletedImages.forEach(async (img) => {
-          const message = await this.imgService.deleteProductMedia(id, 'images', img);
+          const message = await this.imgService.deleteProductMedia(
+            id,
+            'images',
+            img
+          );
           if (message != 'Success') {
             console.error('Erro ao apagar imagem:', img);
           }
         });
         const unchangedImages = {
           sm: this.unchangedImages.sm,
-          lg: this.unchangedImages.lg
-        }
+          lg: this.unchangedImages.lg,
+        };
         await this.productService.update({
           id,
-          imgUrls: unchangedImages
+          imgUrls: unchangedImages,
         });
       }
 
@@ -660,11 +718,11 @@ export class UpdateProductComponent implements OnInit {
         );
         const imgUrls = {
           sm: [...this.unchangedImages.sm, ...newImgs.sm],
-          lg: [...this.unchangedImages.lg, ...newImgs.lg]
+          lg: [...this.unchangedImages.lg, ...newImgs.lg],
         };
         await this.productService.update({
           id,
-          imgUrls
+          imgUrls,
         });
       }
 

@@ -1,4 +1,4 @@
-import { Component, inject, ElementRef, ViewChild, } from '@angular/core';
+import { Component, inject, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -17,7 +17,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { BadgeModule } from 'primeng/badge';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
@@ -46,14 +46,15 @@ import { RouterModule } from '@angular/router';
     TooltipModule,
     CalendarModule,
     DialogModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
-  providers: [MessageService, PrimeNGConfig]
+  providers: [MessageService],
 })
 export class CreateProductComponent {
-  @ViewChild('cardAnimationRef', { static: false }) cardAnimationRef!: ElementRef;
+  @ViewChild('cardAnimationRef', { static: false })
+  cardAnimationRef!: ElementRef;
 
   private productService = inject(ProductService);
   private authService = inject(AuthService);
@@ -61,7 +62,7 @@ export class CreateProductComponent {
   private imgService = inject(ImgService);
   private builder = inject(NonNullableFormBuilder);
   private messageService = inject(MessageService);
-  private primengConfig = inject(PrimeNGConfig);
+  // private primengConfig = inject(PrimeNGConfig);
 
   // variáveis que buscam os dados para popular o multi-select
   genres = gameGenres;
@@ -72,8 +73,8 @@ export class CreateProductComponent {
   userInfo: any;
 
   // variáveis que recebem url após a inserção no supabase
-  capaUrl: { sm: string, lg: string } = { sm: '', lg: '' };
-  capaDestaqueUrl: { sm: string, lg: string } = { sm: '', lg: '' };
+  capaUrl: { sm: string; lg: string } = { sm: '', lg: '' };
+  capaDestaqueUrl: { sm: string; lg: string } = { sm: '', lg: '' };
 
   // variáveis de manipulação do dropzone
   selectedCapa: File[] = [];
@@ -108,24 +109,22 @@ export class CreateProductComponent {
       this.userInfo = await this.userRepository.getById(`${this.idUser}`);
     });
 
-    this.primengConfig.setTranslation({
-      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
-      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      dayNamesMin: ['Do', 'Se', 'Te', 'Qa', 'Qi', 'Se', 'Sa'],
-      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      dateFormat: "dd/mm/yy"
-    });
+    // this.primengConfig.setTranslation({
+    //   dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+    //   dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    //   dayNamesMin: ['Do', 'Se', 'Te', 'Qa', 'Qi', 'Se', 'Sa'],
+    //   monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    //   monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    //   dateFormat: "dd/mm/yy"
+    // });
   }
 
-  /**
-   * Função destinada a mostrar os pop-ups.
-   * @param severity gravidade da mensagem que implica no tema do pop-up
-   * @param summary Título
-   * @param detail Descrição
-   */
   showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail });
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+    });
   }
 
   /**
@@ -133,13 +132,22 @@ export class CreateProductComponent {
    * @param index Índice atual do stepper
    */
   async onNextStep(index: number) {
+    console.log(index);
     if (index == 0) {
+      console.log(this.step1FormGroup.value);
       if (!this.fValue.step1.category) {
         this.showToast('error', 'Atenção', 'Escolha uma categoria!');
       } else {
+        console.log(this.activeIndex);
         this.activeIndex++;
+        console.log(this.activeIndex);
+
         setTimeout(() => {
-          this.showToast('info', 'Descrição', 'Agora vamos conhecer melhor o seu produto.');
+          this.showToast(
+            'info',
+            'Descrição',
+            'Agora vamos conhecer melhor o seu produto.'
+          );
         }, 400);
       }
     } else if (index == 1) {
@@ -150,30 +158,51 @@ export class CreateProductComponent {
       } else if (!this.fValue.step2.price) {
         this.showToast('error', 'Atenção', 'Preencha o campo preço!');
       } else if (!this.fValue.step2.storeForActivation) {
-        this.showToast('error', 'Atenção', 'Preencha o campo loja para ativação!');
+        this.showToast(
+          'error',
+          'Atenção',
+          'Preencha o campo loja para ativação!'
+        );
       } else if (!this.fValue.step2.releaseDate) {
         this.showToast('error', 'Atenção', 'Escolha uma data de lançamento!');
       } else if (this.showGameGenres && this.fValue.step2.genres.length == 0) {
         this.showToast('error', 'Atenção', 'Escolha gêneros para o jogo!');
-      } else if (this.showGameGenres && this.fValue.step2.playerModes.length == 0) {
-        this.showToast('error', 'Atenção', 'Escolha modos de jogadores para o jogo!');
-      } else if (this.showGameGenres && (!this.fValue.step2.minimumCpu
-        || !this.fValue.step2.minimumGpu
-        || !this.fValue.step2.minimumMemory
-        || !this.fValue.step2.minimumOs
-        || !this.fValue.step2.minimumStorage
-        || !this.fValue.step2.recommendedCpu
-        || !this.fValue.step2.recommendedGpu
-        || !this.fValue.step2.recommendedMemory
-        || !this.fValue.step2.recommendedStorage
-        || !this.fValue.step2.recommendedOs
-      )) {
-        this.showToast('error', 'Atenção', 'Preencha os requisitos de sistema!');
+      } else if (
+        this.showGameGenres &&
+        this.fValue.step2.playerModes.length == 0
+      ) {
+        this.showToast(
+          'error',
+          'Atenção',
+          'Escolha modos de jogadores para o jogo!'
+        );
+      } else if (
+        this.showGameGenres &&
+        (!this.fValue.step2.minimumCpu ||
+          !this.fValue.step2.minimumGpu ||
+          !this.fValue.step2.minimumMemory ||
+          !this.fValue.step2.minimumOs ||
+          !this.fValue.step2.minimumStorage ||
+          !this.fValue.step2.recommendedCpu ||
+          !this.fValue.step2.recommendedGpu ||
+          !this.fValue.step2.recommendedMemory ||
+          !this.fValue.step2.recommendedStorage ||
+          !this.fValue.step2.recommendedOs)
+      ) {
+        this.showToast(
+          'error',
+          'Atenção',
+          'Preencha os requisitos de sistema!'
+        );
       } else {
         this.activeIndex++;
         this.scrollToTop();
         setTimeout(() => {
-          this.showToast('info', 'Mídia', 'Ótimo! Agora vamos deixar o produto a cara dele.');
+          this.showToast(
+            'info',
+            'Mídia',
+            'Ótimo! Agora vamos deixar o produto a cara dele.'
+          );
         }, 700);
       }
     } else if (index == 2) {
@@ -194,7 +223,11 @@ export class CreateProductComponent {
       } else {
         this.activeIndex++;
         setTimeout(() => {
-          this.showToast('info', 'Códigos', 'Excelente! Informe a seguir as chaves de acesso para o produto.');
+          this.showToast(
+            'info',
+            'Códigos',
+            'Excelente! Informe a seguir as chaves de acesso para o produto.'
+          );
         }, 400);
       }
     } else if (index == 3) {
@@ -207,7 +240,11 @@ export class CreateProductComponent {
           setTimeout(() => {
             this.activeIndex++;
             setTimeout(() => {
-              this.showToast('success', 'Conclusão', 'Chegamos ao fim! Obrigado por confiar na CodeShop.');
+              this.showToast(
+                'success',
+                'Conclusão',
+                'Chegamos ao fim! Obrigado por confiar na CodeShop.'
+              );
             }, 400);
           }, 1000);
         }
@@ -217,43 +254,51 @@ export class CreateProductComponent {
 
   // Função para detectar mudança de categoria e mostrar o select de gêneros de jogos
   onProductCategoryChange(category: string): void {
-    this.showGameGenres = (category === 'Jogos');
+    this.showGameGenres = category === 'Jogos';
   }
 
   // Função para aplicar a cor ao card final do produto
   applyColorToDiv(): void {
     const fac = new FastAverageColor();
-    fac.getColorAsync(this.capaUrl.sm)
-      .then(color => {
+    fac
+      .getColorAsync(this.capaUrl.sm)
+      .then((color) => {
         this.cardAnimationRef.nativeElement.style.backgroundColor = color.rgba;
-        this.cardAnimationRef.nativeElement.style.color = color.isDark ? '#fff' : '#000';
+        this.cardAnimationRef.nativeElement.style.color = color.isDark
+          ? '#fff'
+          : '#000';
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   scrollToTop(): void {
     window.scrollTo({
-      top: 0
+      top: 0,
     });
   }
 
   onVisibleModalWelcome() {
     this.visibleModalWelcome = false;
     setTimeout(() => {
-      this.showToast('info', 'Início', 'Escolha uma categoria para seu produto.');
+      this.showToast(
+        'info',
+        'Início',
+        'Escolha uma categoria para seu produto.'
+      );
     }, 400);
   }
 
   // -- Início - Funções para manipulação de imagens
 
   validateImage(fileType: string): boolean {
-    if (fileType == "image/png"
-      || fileType == "image/jpg"
-      || fileType == "image/jpeg"
-      || fileType == "image/webp"
-      || fileType == "image/avif"
+    if (
+      fileType == 'image/png' ||
+      fileType == 'image/jpg' ||
+      fileType == 'image/jpeg' ||
+      fileType == 'image/webp' ||
+      fileType == 'image/avif'
     ) {
       return true;
     } else {
@@ -279,7 +324,7 @@ export class CreateProductComponent {
       this.selectedVideos = Array.from(event.target.files);
     }
   }
-  
+
   onCapaDestaqueChange(event: any) {
     if (event.target.files.length > 0) {
       let fileType = event.target.files[0].type;
@@ -295,7 +340,7 @@ export class CreateProductComponent {
 
   // -- Fim - Funções para manipulação de imagens
 
-  // -- Início - Funções para o dropzone e a manipulação de imagens  
+  // -- Início - Funções para o dropzone e a manipulação de imagens
 
   // Função para tratar o evento de upload bem-sucedido
   onTemplatedUpload(event: any) {
@@ -307,7 +352,11 @@ export class CreateProductComponent {
   // Função para tratar a seleção de arquivos
   onSelectedFiles(event: any) {
     this.pendingImages.push(...event.files);
-    this.showToast('info', 'Escolha feita', 'Não se esqueça de fazer o upload.');
+    this.showToast(
+      'info',
+      'Escolha feita',
+      'Não se esqueça de fazer o upload.'
+    );
   }
 
   // Função para formatar o tamanho do arquivo
@@ -322,7 +371,12 @@ export class CreateProductComponent {
   }
 
   // Função para remover arquivo antes do upload
-  onRemoveTemplatingFile(event: Event, file: any, removeFileCallback: Function, index: number) {
+  onRemoveTemplatingFile(
+    event: Event,
+    file: any,
+    removeFileCallback: Function,
+    index: number
+  ) {
     removeFileCallback(index);
   }
 
@@ -349,7 +403,9 @@ export class CreateProductComponent {
   addKeys(): void {
     const keysInput = this.form.get('step4.keysInput')?.value;
     if (keysInput) {
-      const newKeys = keysInput.split(/[\s,]+/).filter(key => key.trim() !== '');
+      const newKeys = keysInput
+        .split(/[\s,]+/)
+        .filter((key) => key.trim() !== '');
       this.keys.push(...newKeys);
       this.quantity = this.keys.length;
       this.form.get('step4.keysInput')?.reset();
@@ -401,11 +457,11 @@ export class CreateProductComponent {
       imgUrls: [[] as string[], Validators.required],
       titleDestaque: ['', Validators.required],
       capaDestaqueUrl: ['', Validators.required],
-      descriptionDestaque: ['', Validators.required]
+      descriptionDestaque: ['', Validators.required],
     }),
     step4: this.builder.group({
       keysInput: ['', Validators.required],
-    })
+    }),
   });
 
   get f() {
@@ -419,16 +475,16 @@ export class CreateProductComponent {
   formatNameSearch(name: string): string {
     // Mapeamento dos números para sua versão escrita
     const numberMap: { [key: string]: string } = {
-      "0": "zero",
-      "1": "um",
-      "2": "dois",
-      "3": "três",
-      "4": "quatro",
-      "5": "cinco",
-      "6": "seis",
-      "7": "sete",
-      "8": "oito",
-      "9": "nove",
+      '0': 'zero',
+      '1': 'um',
+      '2': 'dois',
+      '3': 'três',
+      '4': 'quatro',
+      '5': 'cinco',
+      '6': 'seis',
+      '7': 'sete',
+      '8': 'oito',
+      '9': 'nove',
     };
 
     // Substituir números por sua versão escrita
@@ -437,11 +493,11 @@ export class CreateProductComponent {
     // Substituir caracteres acentuados pela versão sem acento e transformar em minúsculo
     formattedName = formattedName
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
 
     // Remover espaços em branco e caracteres especiais
-    formattedName = formattedName.replace(/[\s\W_]+/g, "");
+    formattedName = formattedName.replace(/[\s\W_]+/g, '');
 
     return formattedName;
   }
@@ -464,8 +520,12 @@ export class CreateProductComponent {
           capaUrl: { sm: '', lg: '' },
           imgUrls: { sm: [] as string[], lg: [] as string[] },
           videosUrls: [''],
-          playerModes: Array.isArray(this.fValue.step2.playerModes) ? this.fValue.step2.playerModes : [this.fValue.step2.playerModes],
-          genres: Array.isArray(this.fValue.step2.genres) ? this.fValue.step2.genres : [this.fValue.step2.genres],
+          playerModes: Array.isArray(this.fValue.step2.playerModes)
+            ? this.fValue.step2.playerModes
+            : [this.fValue.step2.playerModes],
+          genres: Array.isArray(this.fValue.step2.genres)
+            ? this.fValue.step2.genres
+            : [this.fValue.step2.genres],
           minimumSystemRequirements: {
             os: this.fValue.step2.minimumOs,
             cpu: this.fValue.step2.minimumCpu,
@@ -482,12 +542,12 @@ export class CreateProductComponent {
           },
           releaseDate: {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
-            bruteFormat: this.fValue.step2.releaseDate
+            bruteFormat: this.fValue.step2.releaseDate,
           },
           titleDestaque: this.fValue.step3.titleDestaque,
           descriptionDestaque: this.fValue.step3.descriptionDestaque,
           capaDestaqueUrl: { sm: '', lg: '' },
-          status: true
+          status: true,
         };
       } else {
         formValue = {
@@ -505,12 +565,12 @@ export class CreateProductComponent {
           videosUrls: [''],
           releaseDate: {
             dateFormat: this.formatDate(this.fValue.step2.releaseDate),
-            bruteFormat: this.fValue.step2.releaseDate
+            bruteFormat: this.fValue.step2.releaseDate,
           },
           titleDestaque: this.fValue.step3.titleDestaque,
           descriptionDestaque: this.fValue.step3.descriptionDestaque,
           capaDestaqueUrl: { sm: '', lg: '' },
-          status: true
+          status: true,
         };
       }
 
@@ -523,8 +583,8 @@ export class CreateProductComponent {
       );
       this.capaUrl = {
         sm: capaUrlArray.sm[0],
-        lg: capaUrlArray.lg[0]
-      }
+        lg: capaUrlArray.lg[0],
+      };
       const capaDestaqueUrlArray = await this.imgService.uploadProductMedia(
         id,
         'capa-destaque',
@@ -532,8 +592,8 @@ export class CreateProductComponent {
       );
       this.capaDestaqueUrl = {
         sm: capaDestaqueUrlArray.sm[0],
-        lg: capaDestaqueUrlArray.lg[0]
-      }
+        lg: capaDestaqueUrlArray.lg[0],
+      };
       const imgUrls = await this.imgService.uploadProductMedia(
         id,
         'images',
